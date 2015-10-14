@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 /**
  * @author Javier Mart�n Hern�ndez
- *	Clase que unifica GridPanel y GraphicPath a fin de dibujar un camino sobre una rejilla.
+ *	Clase que unifica GridPanel y GraphicState.
  */
 public class GridPathPanel extends GridPanel {
 	private static final long serialVersionUID = 6081079377279937021L;

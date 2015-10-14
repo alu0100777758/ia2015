@@ -7,7 +7,7 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 /**
  * @author Javier Mart�n Hern�ndez
- *	Clase encargada de almacenar y dibujar un camino en base a un objeto que presente la interfaz CoordinateSystem2D.
+ *	Clase encargada de almacenar y dibujar un estado en base a un objeto que presente la interfaz CoordinateSystem2D.
  */
 public class GraphicState {
 	private ArrayList<Point2D> points = new ArrayList<Point2D>();

@@ -11,6 +11,11 @@ public class DrawableCircle extends Circle implements Drawable {
 	DrawableCircle(double radius, Point2D center) {
 		super(radius, center);
 	}
+	/**
+	 * @param radius
+	 * @param center
+	 * @param filled
+	 */
 	DrawableCircle(double radius, Point2D center, boolean filled) {
 		super(radius, center);
 		this.filled = filled;
