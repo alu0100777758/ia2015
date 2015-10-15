@@ -2,7 +2,11 @@ package es.ull.etsii.ia.interface_;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 /**
@@ -10,20 +14,28 @@ import javax.swing.JPanel;
  *	Clase encargada de representar una rejilla de densidad definida capaz de actuar como sistema de coordenadas.
  */
 public class GridPanel extends JPanel implements CoordinateSystem2D {
+	private static final String DEFAULT_BACKGROUND = "img/lawn.png";		//	imagen por defecto para el fondo
 	private static final long serialVersionUID = -8427977059756274679L;
+	private BufferedImage backgroundImage;
 	private int vPoints;
 	private int hPoints;
 	private double vSize;
-	private double hSize;
 	private static int DEFAULT_SIZE = 50;
 	private static int PADDING = 1;
 	private Color color = Color.BLACK;
+	private boolean backgroundPresent = true;
 	
 	public GridPanel(){
 		setBackground(Color.WHITE);
 		setBorder(BorderFactory.createEmptyBorder(PADDING,PADDING,PADDING,PADDING + 2));
 		setvPoints(DEFAULT_SIZE);
 		sethPoints(DEFAULT_SIZE);
+		try {
+			setBackgroundImage(ImageIO.read(new File(DEFAULT_BACKGROUND)));
+		} catch (IOException e) {
+			setBackgroundPresent(false);
+			System.out.println("imgloadFails");
+		}
 	}
 	public int getvPoints() {
 		return vPoints;
@@ -52,6 +64,8 @@ public class GridPanel extends JPanel implements CoordinateSystem2D {
 		for(int i = 0 ; i < hPoints; i++){
 			g.drawLine((int)(i*hSize+x),y, (int)(i*hSize+x),(int)h);
 		}
+		Actor.setHcellSize((int)hSize);
+		Actor.setVcellSize((int)vSize);
 	}
 	public void updateSizes(){
 		vSize = (double)(getHeight()-(getInsets().top + getInsets().bottom))/(vPoints - 1);
@@ -61,6 +75,8 @@ public class GridPanel extends JPanel implements CoordinateSystem2D {
 	public void paint(Graphics g){
 		super.paint(g);
 		updateSizes();
+		if(isBackgroundPresent())
+			g.drawImage(backgroundImage,0,0,getWidth(),getHeight(),null);
 		drawGrid(g);
 	}
 	public Point2D getPointFor(int x, int y){
@@ -93,5 +109,30 @@ public class GridPanel extends JPanel implements CoordinateSystem2D {
 	public Point2D getCellCenter(Point2D point) {
 		return getPointFor(point).add(hSize/2,vSize/2 );
 	}
-	
+	//		Getters & setters
+	public BufferedImage getBackgroundImage() {
+		return backgroundImage;
+	}
+	public void setBackgroundImage(BufferedImage backgroundImage) {
+		this.backgroundImage = backgroundImage;
+	}
+	public boolean isBackgroundPresent() {
+		return backgroundPresent;
+	}
+	public void setBackgroundPresent(boolean backgroundPresent) {
+		this.backgroundPresent = backgroundPresent;
+	}
+	public double getvSize() {
+		return vSize;
+	}
+	public void setvSize(double vSize) {
+		this.vSize = vSize;
+	}
+	public double gethSize() {
+		return hSize;
+	}
+	public void sethSize(double hSize) {
+		this.hSize = hSize;
+	}
+	private double hSize;
 }

@@ -18,7 +18,7 @@ public final class Control {
 	public static final Point2D[] DIRECTION_POINTS = { new Point2D(-1, 0),
 			new Point2D(1, 0), new Point2D(0, 1), new Point2D(0, -1) };
 	private RandomPathWindow window = new RandomPathWindow();
-	private GridPathPanel grid = new GridPathPanel();
+	private GridStatusPanel grid = new GridStatusPanel();
 	private GridControls gridControls = new GridControls();
 	private ControlsEventManager controlPanelEventManager;
 	private TimerEventManager timerManager;
