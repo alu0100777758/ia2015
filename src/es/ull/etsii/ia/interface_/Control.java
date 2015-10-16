@@ -12,11 +12,15 @@ import javax.swing.Timer;
  *	Clase encargada de gestionar la l�gica del programa.
  */
 public final class Control {
+	private static final Point2D SOUTH = new Point2D(0, -1);
+	private static final Point2D NORTH = new Point2D(0, 1);
+	private static final Point2D EAST = new Point2D(1, 0);
+	private static final Point2D WEST = new Point2D(-1, 0);
 	private Random rand = new Random();
 	private static Control instance = null;
 	private int stepDelay = 1000;
-	public static final Point2D[] DIRECTION_POINTS = { new Point2D(-1, 0),
-			new Point2D(1, 0), new Point2D(0, 1), new Point2D(0, -1) };
+	public static final Point2D[] DIRECTION_POINTS = { WEST,
+			EAST, NORTH, SOUTH };
 	private RandomPathWindow window = new RandomPathWindow();
 	private GridStatusPanel grid = new GridStatusPanel();
 	private GridControls gridControls = new GridControls();
