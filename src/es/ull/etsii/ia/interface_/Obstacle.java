@@ -1,5 +1,10 @@
 package es.ull.etsii.ia.interface_;
 
-public interface Obstacle {
+public class Obstacle extends Actor {
+
+	public Obstacle(CoordinateSystem2D coordinates) {
+		super(coordinates);
+		
+	}
 
 }

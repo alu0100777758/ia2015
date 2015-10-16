@@ -14,7 +14,7 @@ public abstract class Actor implements Drawable, Positionable {
 	public static final int EAST = 90;
 	public static final int WEST = -90;
 	public static final int SOUTH = 180;
-	private int facing = EAST;
+	private int facing = SOUTH;
 	private Point2D position;
 	private BufferedImage sprite;//<----
 	private String spritePath;//<----

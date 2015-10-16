@@ -7,9 +7,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class StateControls extends JPanel implements ActionListener {
-	private JButton obstacle = new JButton("obst");
+	private JButton obstacle = new JButton("Team1");
 	private JButton goal = new JButton("goal");
-	private JButton initPoint = new JButton("init");
+	private JButton initPoint = new JButton("Team2");
 	private JButton[] buttons = { obstacle, goal, initPoint };
 	private short selected = 0;
 

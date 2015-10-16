@@ -38,7 +38,7 @@ public class GridControls extends JPanel {
 	public static final String BORDER_CHECK_TOOLTIP_TEXT = "<html>Si lo desmarca la simulaci�n podr� seguir avanzando aunque se llegue<br> a un borde, no obstante  se detendr� si intenta salirse del per�metro</html>";
 	public GridControls() {
 		super.setMaximumSize(new Dimension(25, getMaximumSize().height));
-		GridLayout layout = new GridLayout(15, 1);
+		GridLayout layout = new GridLayout(13, 1);
 		layout.setVgap(10);
 		setLayout(layout);
 		JPanel dimensions = new JPanel();
