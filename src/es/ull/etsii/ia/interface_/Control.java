@@ -143,7 +143,7 @@ public final class Control {
 	/**
 	 *  m�todo encargado de avanzar a una posicion aleatoria factible para el camino actual.
 	 */
-	public void randStep() {
+	public void launchTick() {
 		try {
 			grid.path.addRelative(randomMove());
 			grid.repaint();
@@ -186,7 +186,7 @@ public final class Control {
 				stepTimer.stop();
 				break walkingOngrid;
 			}
-			randStep();
+			launchTick();
 		}
 	}
 
@@ -213,7 +213,7 @@ public final class Control {
 				stepTimer.setDelay(stepsDelay);
 			}
 		}
-		randStep();
+		launchTick();
 		stepTimer.start();
 		walking = true;
 	}
