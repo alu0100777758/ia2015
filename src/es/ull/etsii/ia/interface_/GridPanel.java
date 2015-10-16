@@ -21,7 +21,7 @@ public class GridPanel extends JPanel implements CoordinateSystem2D {
 	private int hPoints;
 	private double vSize;
 	private static int DEFAULT_SIZE = 50;
-	private static int PADDING = 1;
+	private static int PADDING = 5;
 	private Color color = Color.BLACK;
 	private boolean backgroundPresent = true;
 	

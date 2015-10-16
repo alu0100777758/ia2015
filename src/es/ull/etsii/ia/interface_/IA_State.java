@@ -92,6 +92,6 @@ public class IA_State {
 					(int) coordinates.getCellCenter(point).y());
 		}
 		g.drawPolyline(polygon.xpoints, polygon.ypoints, points.size());
-		new Robo_Player((short)0,points.get(points.size() - 1),coordinates).paint(g);
+		new Robo_Player((short)1,points.get(points.size() - 1),coordinates).paint(g);
 	}
 }

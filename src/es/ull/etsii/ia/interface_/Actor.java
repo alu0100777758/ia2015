@@ -9,9 +9,10 @@ import javax.imageio.ImageIO;
 
 public abstract class Actor implements Drawable, Positionable {
 	private Point2D position;
-	private BufferedImage sprite;
-	private String spritePath;
+	private BufferedImage sprite;//<----
+	private String spritePath;//<----
 	private static int hcellSize;
+	private static int vcellSize;
 	private CoordinateSystem2D coordinates;
 	public Actor(CoordinateSystem2D coordinates){
 		setCoordinates(coordinates);
@@ -39,7 +40,7 @@ public abstract class Actor implements Drawable, Positionable {
 	public static void setVcellSize(int vcellSize) {
 		Actor.vcellSize = vcellSize;
 	}
-	private static int vcellSize;
+	
 	
 	@Override
 	public void paint(Graphics g) {

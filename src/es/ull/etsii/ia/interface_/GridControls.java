@@ -23,8 +23,8 @@ public class GridControls extends JPanel {
 	JTextArea hPathStart = new JTextArea(1,5);
 	JButton setPathStart = new JButton("Establecer");
 	JButton startPath = new JButton("Empezar");
-	JButton stopPath = new JButton("Finalizar");
-	JButton randColor = new JButton("Color");
+	
+	
 	JButton selectColor = new JButton("Seleccionar");
 	JButton reset = new JButton("reset");
 	JTextArea delayMillis = new JTextArea(1,10);
@@ -62,9 +62,9 @@ public class GridControls extends JPanel {
 		add(borderCheck);
 		add(revisitCheck);
 		add(startPath);
-		add(stopPath);
+	
 		add(reset);
-		add(randColor);
+		
 		add(selectColor);
 		add(new StateControls(listener));
 		borderCheck.setSelected(true);
@@ -77,8 +77,7 @@ public class GridControls extends JPanel {
 		setDimensions.addActionListener(listener);
 		setPathStart.addActionListener(listener);
 		startPath.addActionListener(listener);
-		stopPath.addActionListener(listener);
-		randColor.addActionListener(listener);
+		
 		selectColor.addActionListener(listener);
 		reset.addActionListener(listener);
 	}
