@@ -1,6 +1,8 @@
 package es.ull.etsii.ia.interface_;
 
 import java.awt.Graphics;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +10,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public abstract class Actor implements Drawable, Positionable {
+	public static final int NORTH = 0;
+	public static final int EAST = 90;
+	public static final int WEST = -90;
+	public static final int SOUTH = 180;
+	private int facing = EAST;
 	private Point2D position;
 	private BufferedImage sprite;
 	private String spritePath;
@@ -45,7 +52,7 @@ public abstract class Actor implements Drawable, Positionable {
 	public void paint(Graphics g) {
 		Point2D point = coordinates.getPointFor(getPos());	
 		// TODO usar coordinates para todos los argumentos del drawImage
-		g.drawImage(getSprite(),(int)point.x(),(int)point.y(),getHcellSize(),getVcellSize(),null);
+		g.drawImage(rotate(getSprite(),facing),(int)point.x(),(int)point.y(),getHcellSize(),getVcellSize(),null);
 	}
 
 	@Override
@@ -79,6 +86,14 @@ public abstract class Actor implements Drawable, Positionable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public BufferedImage rotate(BufferedImage image, int grades){
+		double rotationRequired = Math.toRadians (grades);
+		double locationX = image.getWidth() / 2;
+		double locationY = image.getHeight() / 2;
+		AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+		return op.filter(image, null);
 	}
 	public void setPosition(Point2D position) {
 		this.position = position;
