@@ -21,8 +21,9 @@ public abstract class Actor implements Drawable, Positionable {
 	private static int hcellSize;
 	private static int vcellSize;
 	private CoordinateSystem2D coordinates;
-	public Actor(CoordinateSystem2D coordinates){
+	public Actor(CoordinateSystem2D coordinates, int face){
 		setCoordinates(coordinates);
+		setFacing(face);
 	}
 	public CoordinateSystem2D getCoordinates() {
 		return coordinates;
@@ -53,6 +54,7 @@ public abstract class Actor implements Drawable, Positionable {
 	public void paint(Graphics g) {
 		Point2D point = coordinates.getPointFor(getPos());	
 		// TODO usar coordinates para todos los argumentos del drawImage
+		System.out.println("pintando en: " + point + "desde :" + getPos());
 		g.drawImage(rotate(getSprite(),facing),(int)point.x(),(int)point.y(),getHcellSize(),getVcellSize(),null);
 	}
 
@@ -77,14 +79,11 @@ public abstract class Actor implements Drawable, Positionable {
 	public void setSpritePath(String spritePath) {
 		this.spritePath = spritePath;
 	}
-	public Point2D getPosition() {
-		return position;
-	}
 	public void loadSprite(){
 		try {
 			setSprite(ImageIO.read(new File(getSpritePath())));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("failed at load");
 			e.printStackTrace();
 		}
 	}
@@ -96,10 +95,10 @@ public abstract class Actor implements Drawable, Positionable {
 		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 		return op.filter(image, null);
 	}
-	public void setPosition(Point2D position) {
-		this.position = position;
+	public int getFacing() {
+		return facing;
 	}
-	public void setPosition(double x, double y) {
-		this.position = new Point2D(x, y);
+	public void setFacing(int facing) {
+		this.facing = facing;
 	}
 }

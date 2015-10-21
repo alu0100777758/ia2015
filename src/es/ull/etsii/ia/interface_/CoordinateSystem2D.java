@@ -13,4 +13,6 @@ public interface CoordinateSystem2D {
 	public Point2D toSystem(Point2D point);
 	public int getHBounds();
 	public int getVBounds();
+	public double getHsize();
+	public double getVsize();
 }

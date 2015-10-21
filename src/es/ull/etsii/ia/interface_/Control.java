@@ -112,6 +112,7 @@ public final class Control {
 	public void clickedIn(Point2D point) {
 		grid.path.clear();
 		grid.path.setStart(grid.toSystem(point));
+		grid.path.getActors().add(new Robo_Player((short) 1,grid.toSystem(point), grid, Actor.NORTH));
 		grid.repaint();
 	}
 
