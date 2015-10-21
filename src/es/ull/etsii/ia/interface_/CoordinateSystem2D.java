@@ -11,4 +11,6 @@ public interface CoordinateSystem2D {
 	public boolean inSystem(Point2D point);
 	public boolean atBorder(Point2D point);
 	public Point2D toSystem(Point2D point);
+	public int getHBounds();
+	public int getVBounds();
 }

@@ -8,6 +8,7 @@ public class LaunchIA_Proyect {
 	public static void main(String[] args) {
 		Control control = Control.getInstance();
 		control.play();
+		
 	}
 
 }

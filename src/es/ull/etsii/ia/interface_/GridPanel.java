@@ -135,4 +135,13 @@ public class GridPanel extends JPanel implements CoordinateSystem2D {
 		this.hSize = hSize;
 	}
 	private double hSize;
+
+	@Override
+	public int getHBounds() {
+		return gethPoints();
+	}
+	@Override
+	public int getVBounds() {
+		return getvPoints();
+	}
 }

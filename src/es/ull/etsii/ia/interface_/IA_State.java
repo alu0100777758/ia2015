@@ -10,17 +10,17 @@ import java.util.ArrayList;
  *	Clase encargada de almacenar y dibujar un estado en base a un objeto que presente la interfaz CoordinateSystem2D.
  */
 public class IA_State {
-	private Actor mapState [][];
-	private ArrayList<Point2D> points = new ArrayList<Point2D>();
+	private Actor mapState [][];									//	Matriz donde se almacena la visión global del mapa.
+	private ArrayList<Point2D> points = new ArrayList<Point2D>();//TODO meter en roboPlayer
 	private CoordinateSystem2D coordinates = null;
 	private Color color;
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
+	
 	public IA_State(CoordinateSystem2D coordinates) {
 		this.coordinates = coordinates;
+		setMapState(new Actor[getCoordinates().getVBounds()][getCoordinates().getHBounds()]);
+//		for(Actor [] actArray : getMapState())
+//			for(Actor act : actArray)
+//				act = new Actor();
 		setColor(Color.RED);
 	}
 
@@ -93,5 +93,29 @@ public class IA_State {
 		}
 		g.drawPolyline(polygon.xpoints, polygon.ypoints, points.size());
 		new Robo_Player((short)1,points.get(points.size() - 1),coordinates).paint(g);
+		for ( int i = 0; i < getMapState().length;i++){
+			for(int j = 0; i < getMapState().length;i++){
+				if(getMapState()[i][j] != null)
+					getMapState()[i][j].paint(g);
+			}
+		}
+	}
+	// ******************Getters & Setters********************
+	public Actor[][] getMapState() {
+		return mapState;
+	}
+
+	public void setMapState(Actor mapState[][]) {
+		this.mapState = mapState;
+	}
+	public CoordinateSystem2D getCoordinates() {
+		return coordinates;
+	}
+
+	public void setCoordinates(CoordinateSystem2D coordinates) {
+		this.coordinates = coordinates;
+	}
+	public void setColor(Color color) {
+		this.color = color;
 	}
 }
