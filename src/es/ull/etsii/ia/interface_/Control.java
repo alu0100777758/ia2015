@@ -7,9 +7,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
 /**
- * @author Javier Mart�n Hern�ndez
- *	Clase encargada de gestionar la l�gica del programa.
+ * @author Javier Mart�n Hern�ndez Clase encargada de gestionar la l�gica del
+ *         programa.
  */
 public final class Control {
 	private static final Point2D SOUTH = new Point2D(0, -1);
@@ -19,8 +20,7 @@ public final class Control {
 	private Random rand = new Random();
 	private static Control instance = null;
 	private int stepDelay = 1000;
-	public static final Point2D[] DIRECTION_POINTS = { WEST,
-			EAST, NORTH, SOUTH };
+	public static final Point2D[] DIRECTION_POINTS = { WEST, EAST, NORTH, SOUTH };
 	private RandomPathWindow window = new RandomPathWindow();
 	private GridStatusPanel grid = new GridStatusPanel();
 	private GridControls gridControls = new GridControls();
@@ -29,6 +29,16 @@ public final class Control {
 	private Timer stepTimer;
 	private boolean walking = false;
 	private MouseControl mouseControl = new MouseControl();
+
+	private Robo_Player last_bot;
+
+	public Robo_Player getLast_bot() {
+		return last_bot;
+	}
+
+	public void setLast_bot(Robo_Player last_bot) {
+		this.last_bot = last_bot;
+	}
 
 	public TimerEventManager getTimerManager() {
 		return timerManager;
@@ -74,7 +84,7 @@ public final class Control {
 	}
 
 	/**
-	 *  m�todo que construye la interfaz.
+	 * m�todo que construye la interfaz.
 	 */
 	public void buildInterface() {
 		JPanel mainPanel = new JPanel();
@@ -83,7 +93,7 @@ public final class Control {
 		mainPanel.add(gridControls);
 		window.add(mainPanel);
 	}
-	
+
 	/**
 	 * m�todo encargado de inicializar los diferentes gestores de eventos.
 	 */
@@ -91,9 +101,10 @@ public final class Control {
 		setControlPanelEventManager(new ControlsEventManager(gridControls));
 		setTimerManager(new TimerEventManager());
 	}
-	
+
 	/**
-	 * M�todo que desarrolla todos los pasos necesarios para lanzar la aplicaci�n tal como se define.
+	 * M�todo que desarrolla todos los pasos necesarios para lanzar la
+	 * aplicaci�n tal como se define.
 	 */
 	public void play() {
 		buildInterface();
@@ -102,23 +113,29 @@ public final class Control {
 		grid.turnOnPath();
 		setStepTimer(new Timer(stepDelay, timerManager));
 		grid.addMouseListener(mouseControl);
+		grid.addMouseMotionListener(mouseControl);
 		window.setVisible(true);
 	}
-	
+
 	/**
-	 * @param point punto donde se ha detectado un click
-	 * m�todo lanzado por el gestor de eventos del rat�n a fin de situar la posici�n inicial del camino en base a la posici�n del rat�n.
+	 * @param point
+	 *            punto donde se ha detectado un click m�todo lanzado por el
+	 *            gestor de eventos del rat�n a fin de situar la posici�n
+	 *            inicial del camino en base a la posici�n del rat�n.
 	 */
 	public void clickedIn(Point2D point) {
 		grid.path.clear();
 		grid.path.setStart(grid.toSystem(point));
-		grid.path.getActors().add(new Robo_Player((short) 1,grid.toSystem(point), grid, Actor.NORTH));
+		grid.path.getActors().add(
+				new Robo_Player((short) 1, grid.toSystem(point), grid,
+						Actor.NORTH));
 		grid.repaint();
 	}
 
 	/**
-	 * @return Point2D 
-	 * m�todo que devuelve una posicion aleatoria v�lida para el estado actual del programa (punto que se sumar� al ultimo punto incluido en el camino);
+	 * @return Point2D m�todo que devuelve una posicion aleatoria v�lida para el
+	 *         estado actual del programa (punto que se sumar� al ultimo punto
+	 *         incluido en el camino);
 	 */
 	public Point2D randomMove() {
 		Point2D randomPoint = DIRECTION_POINTS[rand.nextInt(4)];
@@ -135,9 +152,11 @@ public final class Control {
 	}
 
 	/**
-	 * @param x n�mero de filas.
-	 * @param y n�mero de columnas.
-	 * m�todo encargado de actualizar la densidad de la rejilla.
+	 * @param x
+	 *            n�mero de filas.
+	 * @param y
+	 *            n�mero de columnas. m�todo encargado de actualizar la densidad
+	 *            de la rejilla.
 	 */
 	public void setGridPointsDensity(int x, int y) {
 		grid.sethPoints(x);
@@ -146,7 +165,8 @@ public final class Control {
 	}
 
 	/**
-	 *  m�todo encargado de avanzar a una posicion aleatoria factible para el camino actual.
+	 * m�todo encargado de avanzar a una posicion aleatoria factible para el
+	 * camino actual.
 	 */
 	public void launchTick() {
 		try {
@@ -165,8 +185,7 @@ public final class Control {
 	}
 
 	/**
-	 * @return Color 
-	 * m�todo que devuelve un color aleatorio
+	 * @return Color m�todo que devuelve un color aleatorio
 	 */
 	public Color getRandomColor() {
 		return new Color(rand.nextInt(256), rand.nextInt(256),
@@ -174,8 +193,8 @@ public final class Control {
 	}
 
 	/**
-	 * @return Color
-	 * m�todo que devuelve el color seleccionado por el usuario desde un dialogo de selecci�n de color.
+	 * @return Color m�todo que devuelve el color seleccionado por el usuario
+	 *         desde un dialogo de selecci�n de color.
 	 */
 	public Color getColorFromDialog() {
 		return JColorChooser.showDialog(window, "Choose Background Color",
@@ -224,7 +243,8 @@ public final class Control {
 	}
 
 	/**
-	 * m�todo encargado de actualizar el punto inicial (desde el panel de controles)
+	 * m�todo encargado de actualizar el punto inicial (desde el panel de
+	 * controles)
 	 */
 	void trySetPathStart() {
 		int x = 0, y = 0;
@@ -240,7 +260,6 @@ public final class Control {
 			}
 		}
 	}
-
 
 	void setPathStart(int x, int y) {
 		grid.updatePath();
@@ -261,5 +280,32 @@ public final class Control {
 				setGridPointsDensity(x, y);
 			}
 		}
+	}
+
+	public void clickPressed(Point2D point) {
+		if (getLast_bot() == null) {
+			setLast_bot(new Robo_Player((short) 1, grid.toSystem(point), grid,
+					Actor.NORTH));
+			grid.path.getActors().add(getLast_bot());
+			window.repaint();
+		}	
+	}
+
+	public void clickReleased(Point2D point2d) {
+		setLast_bot(null);
+	}
+
+	public void dragged(Point2D point) {
+		if(getLast_bot() != null){
+			Point2D difference = grid.toSystem(point).substract(
+					getLast_bot().getPos());
+			System.out.println("difference : " + difference);
+			if (difference.x() < 0)
+				getLast_bot().setFacing(Actor.WEST);
+			else
+				getLast_bot().setFacing(Actor.EAST);
+			window.repaint();
+		}
+		
 	}
 }

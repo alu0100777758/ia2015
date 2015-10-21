@@ -52,10 +52,12 @@ public abstract class Actor implements Drawable, Positionable {
 	
 	@Override
 	public void paint(Graphics g) {
-		Point2D point = coordinates.getPointFor(getPos());	
+		Point2D point = coordinates.getPointFor(getPos()).getRounded();	
 		// TODO usar coordinates para todos los argumentos del drawImage
 		System.out.println("pintando en: " + point + "desde :" + getPos());
-		g.drawImage(rotate(getSprite(),facing),(int)point.x(),(int)point.y(),getHcellSize(),getVcellSize(),null);
+		Point2D destPoint = coordinates.getPointFor(getPos().add(Point2D.UNIT));
+		Point2D sizeMarker = destPoint.substract(point).getRounded();
+		g.drawImage(rotate(getSprite(),facing),(int)point.x(),(int)point.y(),(int)sizeMarker.x(),(int)sizeMarker.y(),null);
 	}
 
 	@Override

@@ -4,9 +4,9 @@ package es.ull.etsii.ia.interface_;
  *	Clase que representacion un punto en el plano con precisi�n doble.
  */
 public class Point2D {
+	public static final Point2D UNIT= new Point2D(1,1);
 	private double x = 0;
 	private double y = 0;
-
 	public Point2D(double x, double y) {
 		this.x = x;
 		this.y = y;
@@ -14,6 +14,9 @@ public class Point2D {
 
 	public double x() {
 		return this.x;
+	}
+	public Point2D getRounded(){
+		return new Point2D(Math.round(x()), Math.round(y()));
 	}
 
 	public double y() {

@@ -19,6 +19,24 @@ public class IA_State {
 																	// roboPlayer
 	private CoordinateSystem2D coordinates = null;
 	private Color color;
+	private boolean delineated = false;
+	private Point2D workingSize;
+	public Point2D getWorkingSize() {
+		return workingSize;
+	}
+
+	public void setWorkingSize(Point2D workingSize) {
+		this.workingSize = workingSize;
+	}
+
+	public boolean isDelineated() {
+		return delineated;
+	}
+
+	public void setDelineated(boolean delineated) {
+		this.delineated = delineated;
+	}
+
 	public ArrayList<Actor> getActors() {
 		return actors;
 	}
@@ -35,6 +53,7 @@ public class IA_State {
 
 	public IA_State(CoordinateSystem2D coordinates) {
 		this.coordinates = coordinates;
+		
 		// setMapState(new Actor[getCoordinates().getVBounds()][getCoordinates()
 		// .getHBounds()]);
 		// for (int i = 0; i < getMapState().length; i++) {
@@ -51,6 +70,7 @@ public class IA_State {
 		// for(Actor [] actArray : getMapState())
 		// for(Actor act : actArray)
 		// act = new Actor();
+		setWorkingSize(getCoordinates().getPointBounds());
 		setColor(Color.RED);
 	}
 
@@ -110,7 +130,8 @@ public class IA_State {
 	public void drawPath(Graphics originalG) {
 		Graphics2D g = (Graphics2D) originalG.create();
 		g.setColor(color);
-		drawLines(g);
+		if(!isDelineated())
+			drawLines(g);
 		// new DrawableCircle(3, coordinates.getPointFor(points.get(0)), true)
 		// .paint(g);
 		new DrawableCircle(3, coordinates.getCellCenter(points.get(0)), true)
@@ -132,15 +153,19 @@ public class IA_State {
 	private void drawLines(Graphics2D g) {
 		setMapState(new Actor[getCoordinates().getVBounds()][getCoordinates()
 				.getHBounds()]);
-		new Corner(getCoordinates(),new Point2D(0,0),Actor.NORTH).paint(g);;
-		
-		for (int i = 1; i < getCoordinates().getVBounds() - 3; i++) {
-			for (int j = 1; j < getCoordinates().getHBounds() -3 ; j++) {
-				if (((j == 1) || (j + 3) == getCoordinates().getVBounds() ) && i > 1 )
-					new Sideline(getCoordinates(), new Point2D(i, j),Actor.NORTH).paint(g);
-				System.out.println("analizando celda (" + i + "," + j + ")");
-			}
+		new Corner(getCoordinates(),new Point2D(1,1),Actor.NORTH).paint(g);
+		new Corner(getCoordinates(),new Point2D(getCoordinates().getHBounds()-3,1),Actor.EAST).paint(g);
+		new Corner(getCoordinates(),new Point2D(1,getCoordinates().getVBounds()-3),Actor.WEST).paint(g);
+		new Corner(getCoordinates(),new Point2D(getCoordinates().getHBounds()-3,getCoordinates().getVBounds()-3),Actor.SOUTH).paint(g);
+		for (int i = 2; i < getCoordinates().getVBounds() - 3; i++) {
+			new Sideline(getCoordinates(), new Point2D(i, 1),Actor.NORTH).paint(g);
+			new Sideline(getCoordinates(), new Point2D(i,getCoordinates().getVBounds()-3),Actor.NORTH).paint(g);
 		}
+		for (int j = 2; j < getCoordinates().getHBounds() -3 ; j++) {
+			new Sideline(getCoordinates(), new Point2D(1, j),Actor.WEST).paint(g);
+			new Sideline(getCoordinates(), new Point2D(getCoordinates().getHBounds()-3,j),Actor.WEST).paint(g);
+		}
+		setDelineated(true);
 	}
 
 	// ******************Getters & Setters********************

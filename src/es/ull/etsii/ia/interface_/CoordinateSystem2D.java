@@ -15,4 +15,5 @@ public interface CoordinateSystem2D {
 	public int getVBounds();
 	public double getHsize();
 	public double getVsize();
+	public Point2D getPointBounds();
 }

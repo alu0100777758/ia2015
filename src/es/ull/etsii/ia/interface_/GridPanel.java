@@ -152,4 +152,9 @@ public class GridPanel extends JPanel implements CoordinateSystem2D {
 	public double getVsize() {
 		return vSize;
 	}
+	@Override
+	public Point2D getPointBounds() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
