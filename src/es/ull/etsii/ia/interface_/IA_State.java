@@ -6,6 +6,12 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.util.ArrayList;
 
+import es.ull.etsii.ia.interface_.Actors.Actor;
+import es.ull.etsii.ia.interface_.Actors.Corner;
+import es.ull.etsii.ia.interface_.Actors.Sideline;
+import es.ull.etsii.ia.interface_.geometry.Point2D;
+import es.ull.etsii.ia.interface_.geometry.drawable.DrawableCircle;
+
 /**
  * @author Javier Mart�n Hern�ndez Clase encargada de almacenar y dibujar un
  *         estado en base a un objeto que presente la interfaz
@@ -21,6 +27,17 @@ public class IA_State {
 	private Color color;
 	private boolean delineated = false;
 	private Point2D workingSize;
+	private ArrayList<Actor> actors = new ArrayList<Actor>();
+	private int turnPointer = 0;
+	
+	public int getTurnPointer() {
+		return turnPointer;
+	}
+
+	public void setTurnPointer(int turnPointer) {
+		this.turnPointer = turnPointer;
+	}
+
 	public Point2D getWorkingSize() {
 		return workingSize;
 	}
@@ -49,27 +66,8 @@ public class IA_State {
 		return color;
 	}
 
-	private ArrayList<Actor> actors = new ArrayList<Actor>();
-
 	public IA_State(CoordinateSystem2D coordinates) {
 		this.coordinates = coordinates;
-		
-		// setMapState(new Actor[getCoordinates().getVBounds()][getCoordinates()
-		// .getHBounds()]);
-		// for (int i = 0; i < getMapState().length; i++) {
-		// for (int j = 0; j < getMapState()[i].length; j++) {
-		// if (i == 0)
-		// getMapState()[i][j] = new Sideline(getCoordinates(),
-		// new Point2D(i, j));
-		// System.out.println("analizando celda (" + i + "," + j + ")");
-		// }
-		// }
-		// getMapState()[0][5] = new Sideline(getCoordinates(),
-		// new Point2D(0, 6));
-		// System.out.println("" + getMapState()[0].length);
-		// for(Actor [] actArray : getMapState())
-		// for(Actor act : actArray)
-		// act = new Actor();
 		setWorkingSize(getCoordinates().getPointBounds());
 		setColor(Color.RED);
 	}
@@ -130,8 +128,10 @@ public class IA_State {
 	public void drawPath(Graphics originalG) {
 		Graphics2D g = (Graphics2D) originalG.create();
 		g.setColor(color);
-		if(!isDelineated())
+		if(!getWorkingSize().equals(getCoordinates().getPointBounds())){
 			drawLines(g);
+			setWorkingSize(getCoordinates().getPointBounds());
+		}
 		// new DrawableCircle(3, coordinates.getPointFor(points.get(0)), true)
 		// .paint(g);
 		new DrawableCircle(3, coordinates.getCellCenter(points.get(0)), true)
@@ -153,17 +153,17 @@ public class IA_State {
 	private void drawLines(Graphics2D g) {
 		setMapState(new Actor[getCoordinates().getVBounds()][getCoordinates()
 				.getHBounds()]);
-		new Corner(getCoordinates(),new Point2D(1,1),Actor.NORTH).paint(g);
-		new Corner(getCoordinates(),new Point2D(getCoordinates().getHBounds()-3,1),Actor.EAST).paint(g);
-		new Corner(getCoordinates(),new Point2D(1,getCoordinates().getVBounds()-3),Actor.WEST).paint(g);
-		new Corner(getCoordinates(),new Point2D(getCoordinates().getHBounds()-3,getCoordinates().getVBounds()-3),Actor.SOUTH).paint(g);
+		new Corner(getCoordinates(),new Point2D(1,1),Actor.FACE_NORTH).paint(g);
+		new Corner(getCoordinates(),new Point2D(getCoordinates().getHBounds()-3,1),Actor.FACE_EAST).paint(g);
+		new Corner(getCoordinates(),new Point2D(1,getCoordinates().getVBounds()-3),Actor.FACE_WEST).paint(g);
+		new Corner(getCoordinates(),new Point2D(getCoordinates().getHBounds()-3,getCoordinates().getVBounds()-3),Actor.FACE_SOUTH).paint(g);
 		for (int i = 2; i < getCoordinates().getVBounds() - 3; i++) {
-			new Sideline(getCoordinates(), new Point2D(i, 1),Actor.NORTH).paint(g);
-			new Sideline(getCoordinates(), new Point2D(i,getCoordinates().getVBounds()-3),Actor.NORTH).paint(g);
+			new Sideline(getCoordinates(), new Point2D(i, 1),Actor.FACE_NORTH).paint(g);
+			new Sideline(getCoordinates(), new Point2D(i,getCoordinates().getVBounds()-3),Actor.FACE_NORTH).paint(g);
 		}
 		for (int j = 2; j < getCoordinates().getHBounds() -3 ; j++) {
-			new Sideline(getCoordinates(), new Point2D(1, j),Actor.WEST).paint(g);
-			new Sideline(getCoordinates(), new Point2D(getCoordinates().getHBounds()-3,j),Actor.WEST).paint(g);
+			new Sideline(getCoordinates(), new Point2D(1, j),Actor.FACE_WEST).paint(g);
+			new Sideline(getCoordinates(), new Point2D(getCoordinates().getHBounds()-3,j),Actor.FACE_WEST).paint(g);
 		}
 		setDelineated(true);
 	}
@@ -187,5 +187,17 @@ public class IA_State {
 
 	public void setColor(Color color) {
 		this.color = color;
+	}
+
+	public void tick() {
+		if(getActors().get(getTurnPointer()).tick())
+			incrementTurn();
+		
+	}
+
+	private void incrementTurn() {
+		turnPointer++;
+		if(getTurnPointer() >= getActors().size())
+			setTurnPointer(0);
 	}
 }

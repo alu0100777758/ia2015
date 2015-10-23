@@ -8,9 +8,18 @@ import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import es.ull.etsii.ia.interface_.Actors.Actor;
+import es.ull.etsii.ia.interface_.Actors.Ball;
+import es.ull.etsii.ia.interface_.Actors.Robo_Player;
+import es.ull.etsii.ia.interface_.geometry.Point2D;
+import es.ull.etsii.ia.interface_.gui.GridControls;
+import es.ull.etsii.ia.interface_.listeners.ControlsEventManager;
+import es.ull.etsii.ia.interface_.listeners.MouseControl;
+import es.ull.etsii.ia.interface_.listeners.TimerEventManager;
+
 /**
- * @author Javier Martï¿½n Hernï¿½ndez Clase encargada de gestionar la lï¿½gica del
- *         programa.
+ * @author Javier Martï¿½n Hernï¿½ndez Clase encargada de gestionar la lï¿½gica
+ *         del programa.
  */
 public final class Control {
 	private static final Point2D SOUTH = new Point2D(0, -1);
@@ -31,6 +40,15 @@ public final class Control {
 	private MouseControl mouseControl = new MouseControl();
 
 	private Robo_Player last_bot;
+	private Ball ball;
+	
+	public Ball getBall() {
+		return ball;
+	}
+
+	public void setBall(Ball ball) {
+		this.ball = ball;
+	}
 
 	public Robo_Player getLast_bot() {
 		return last_bot;
@@ -128,14 +146,14 @@ public final class Control {
 		grid.path.setStart(grid.toSystem(point));
 		grid.path.getActors().add(
 				new Robo_Player((short) 1, grid.toSystem(point), grid,
-						Actor.NORTH));
+						Actor.FACE_NORTH));
 		grid.repaint();
 	}
 
 	/**
-	 * @return Point2D mï¿½todo que devuelve una posicion aleatoria vï¿½lida para el
-	 *         estado actual del programa (punto que se sumarï¿½ al ultimo punto
-	 *         incluido en el camino);
+	 * @return Point2D mï¿½todo que devuelve una posicion aleatoria vï¿½lida
+	 *         para el estado actual del programa (punto que se sumarï¿½ al
+	 *         ultimo punto incluido en el camino);
 	 */
 	public Point2D randomMove() {
 		Point2D randomPoint = DIRECTION_POINTS[rand.nextInt(4)];
@@ -155,8 +173,8 @@ public final class Control {
 	 * @param x
 	 *            nï¿½mero de filas.
 	 * @param y
-	 *            nï¿½mero de columnas. mï¿½todo encargado de actualizar la densidad
-	 *            de la rejilla.
+	 *            nï¿½mero de columnas. mï¿½todo encargado de actualizar la
+	 *            densidad de la rejilla.
 	 */
 	public void setGridPointsDensity(int x, int y) {
 		grid.sethPoints(x);
@@ -169,27 +187,19 @@ public final class Control {
 	 * camino actual.
 	 */
 	public void launchTick() {
-		try {
-			grid.path.addRelative(randomMove());
+//		try {
+			grid.path.tick();
 			grid.repaint();
 			if (gridControls.borderCheck.isSelected() && grid.atBorder())
 				walking = false;
-		} catch (OutOfSystemException e) {
-			walking = false;
-		}
+//		} catch (OutOfSystemException e) {
+//			walking = false;
+//		}
 	}
 
 	public void setPathColor(Color color) {
 		grid.pathColor(color);
 		grid.repaint();
-	}
-
-	/**
-	 * @return Color mï¿½todo que devuelve un color aleatorio
-	 */
-	public Color getRandomColor() {
-		return new Color(rand.nextInt(256), rand.nextInt(256),
-				rand.nextInt(256));
 	}
 
 	/**
@@ -202,9 +212,9 @@ public final class Control {
 	}
 
 	/**
-	 * mï¿½todo encargado de avanzar en el camino.
+	 * mï¿½todo encargado de avanzar en la simulación.
 	 */
-	void stepForward() {
+	public void stepForward() {
 		walkingOngrid: {
 			if (!walking) {
 				stepTimer.stop();
@@ -217,7 +227,7 @@ public final class Control {
 	/**
 	 * mï¿½todo que reinicia y limpia el camino mostrado por pantalla.
 	 */
-	void reset() {
+	public void reset() {
 		grid.updatePath();
 		grid.repaint();
 	}
@@ -225,7 +235,7 @@ public final class Control {
 	/**
 	 * mï¿½todo encargado de comenzar la simulaciï¿½n.
 	 */
-	void tryToRunWithDelay() {
+	public void tryToRunWithDelay() {
 		int stepsDelay = 0;
 		boolean parseError = false;
 		try {
@@ -246,7 +256,7 @@ public final class Control {
 	 * mï¿½todo encargado de actualizar el punto inicial (desde el panel de
 	 * controles)
 	 */
-	void trySetPathStart() {
+	public void trySetPathStart() {
 		int x = 0, y = 0;
 		boolean parseError = false;
 		try {
@@ -267,7 +277,7 @@ public final class Control {
 		grid.repaint();
 	}
 
-	void trySetGridPoints() {
+	public void trySetGridPoints() {
 		int x = 0, y = 0;
 		boolean parseError = false;
 		try {
@@ -284,11 +294,21 @@ public final class Control {
 
 	public void clickPressed(Point2D point) {
 		if (getLast_bot() == null) {
-			setLast_bot(new Robo_Player((short) 1, grid.toSystem(point), grid,
-					Actor.NORTH));
+			System.out.println("actor : " + gridControls.getActorType());
+			if(gridControls.getActorType() < 2){
+			setLast_bot(new Robo_Player((short) gridControls.getActorType(), grid.toSystem(point), grid,
+					Actor.FACE_NORTH));
 			grid.path.getActors().add(getLast_bot());
+			}
+			else{
+				if(getBall() == null){
+					setBall(new Ball(grid,  grid.toSystem(point)));
+					grid.path.getActors().add(getBall());
+				}
+			}
+				
 			window.repaint();
-		}	
+		}
 	}
 
 	public void clickReleased(Point2D point2d) {
@@ -296,16 +316,25 @@ public final class Control {
 	}
 
 	public void dragged(Point2D point) {
-		if(getLast_bot() != null){
+		if (getLast_bot() != null) {
 			Point2D difference = grid.toSystem(point).substract(
 					getLast_bot().getPos());
 			System.out.println("difference : " + difference);
-			if (difference.x() < 0)
-				getLast_bot().setFacing(Actor.WEST);
-			else
-				getLast_bot().setFacing(Actor.EAST);
-			window.repaint();
+			if (Math.abs(difference.x()) > Math.abs(difference.y())) {
+				if (difference.x() < 0)
+					getLast_bot().setFacing(Actor.FACE_WEST);
+				else
+					getLast_bot().setFacing(Actor.FACE_EAST);
+			}
+			else{
+				if (difference.y() < 0)
+					getLast_bot().setFacing(Actor.FACE_NORTH);
+				else
+					getLast_bot().setFacing(Actor.FACE_SOUTH);
+			}
 		}
-		
+		else if(getBall() != null)
+			getBall().setPos(grid.toSystem(point));
+		window.repaint();
 	}
 }

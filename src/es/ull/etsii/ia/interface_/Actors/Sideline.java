@@ -1,6 +1,9 @@
-package es.ull.etsii.ia.interface_;
+package es.ull.etsii.ia.interface_.Actors;
 
 import java.awt.Graphics;
+
+import es.ull.etsii.ia.interface_.CoordinateSystem2D;
+import es.ull.etsii.ia.interface_.geometry.Point2D;
 
 public class Sideline extends Obstacle {
 	public static final String SPRITE_PATH = "img/sideLine.png";
@@ -9,7 +12,7 @@ public class Sideline extends Obstacle {
 		setSpritePath(SPRITE_PATH);
 		loadSprite();
 		setPos(pos);
-		System.out.println("creando raya en  " + getPos() + "con pos = " + pos);
+//		System.out.println("creando raya en  " + getPos() + "con pos = " + pos);
 	}
 //	@Override
 //	public void paint(Graphics g) {

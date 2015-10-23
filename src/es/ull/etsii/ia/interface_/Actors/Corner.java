@@ -1,4 +1,7 @@
-package es.ull.etsii.ia.interface_;
+package es.ull.etsii.ia.interface_.Actors;
+
+import es.ull.etsii.ia.interface_.CoordinateSystem2D;
+import es.ull.etsii.ia.interface_.geometry.Point2D;
 
 public class Corner extends Obstacle {
 	public static final String SPRITE_PATH = "img/corner.png";

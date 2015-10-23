@@ -9,6 +9,9 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+
+import es.ull.etsii.ia.interface_.Actors.Actor;
+import es.ull.etsii.ia.interface_.geometry.Point2D;
 /**
  * @author Javier Mart�n Hern�ndez
  *	Clase encargada de representar una rejilla de densidad definida capaz de actuar como sistema de coordenadas.
@@ -154,7 +157,6 @@ public class GridPanel extends JPanel implements CoordinateSystem2D {
 	}
 	@Override
 	public Point2D getPointBounds() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Point2D(getHBounds(), getVBounds());
 	}
 }

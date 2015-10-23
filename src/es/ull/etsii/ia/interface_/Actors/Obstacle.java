@@ -1,4 +1,6 @@
-package es.ull.etsii.ia.interface_;
+package es.ull.etsii.ia.interface_.Actors;
+
+import es.ull.etsii.ia.interface_.CoordinateSystem2D;
 
 public class Obstacle extends Actor {
 

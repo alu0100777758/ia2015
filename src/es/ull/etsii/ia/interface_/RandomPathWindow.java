@@ -13,7 +13,7 @@ public class RandomPathWindow extends JFrame {
 
 	RandomPathWindow(){
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-		setTitle("Camino Aleatorio");
+		setTitle("CellRoboCup");
 		setSize(750, 750);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

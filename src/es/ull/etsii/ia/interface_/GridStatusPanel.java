@@ -2,6 +2,8 @@ package es.ull.etsii.ia.interface_;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
+import es.ull.etsii.ia.interface_.geometry.Point2D;
 /**
  * @author Javier Mart�n Hern�ndez
  *	Clase que unifica GridPanel y GraphicState.

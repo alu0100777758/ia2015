@@ -1,4 +1,4 @@
-package es.ull.etsii.ia.interface_;
+package es.ull.etsii.ia.interface_.Actors;
 
 import java.awt.Graphics;
 import java.awt.geom.AffineTransform;
@@ -9,12 +9,27 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import es.ull.etsii.ia.interface_.CoordinateSystem2D;
+import es.ull.etsii.ia.interface_.Positionable;
+import es.ull.etsii.ia.interface_.geometry.Point2D;
+import es.ull.etsii.ia.interface_.geometry.drawable.Drawable;
+
 public abstract class Actor implements Drawable, Positionable {
+	public static final int FACE_NORTH = 0;
+	public static final int FACE_EAST = 90;
+	public static final int FACE_WEST = -90;
+	public static final int FACE_SOUTH = 180;
+	public static final int FACE [] = { FACE_NORTH, FACE_EAST, FACE_WEST, FACE_SOUTH};
+	public static final Point2D MOVEMENT_SOUTH = new Point2D(0, -1);
+	public static final Point2D MOVEMENT_NORTH = new Point2D(0, 1);
+	public static final Point2D MOVEMENT_EAST = new Point2D(1, 0);
+	public static final Point2D MOVEMENT_WEST = new Point2D(-1, 0);
+	public static final Point2D MOVEMENT [] = {MOVEMENT_NORTH, MOVEMENT_EAST, MOVEMENT_WEST, MOVEMENT_SOUTH};
 	public static final int NORTH = 0;
-	public static final int EAST = 90;
-	public static final int WEST = -90;
-	public static final int SOUTH = 180;
-	private int facing = SOUTH;
+	public static final int EAST = 1;
+	public static final int WEST = 2;
+	public static final int SOUTH = 3;
+	private int facing = FACE_SOUTH;
 	private Point2D position;
 	private BufferedImage sprite;//<----
 	private String spritePath;//<----
@@ -54,7 +69,7 @@ public abstract class Actor implements Drawable, Positionable {
 	public void paint(Graphics g) {
 		Point2D point = coordinates.getPointFor(getPos()).getRounded();	
 		// TODO usar coordinates para todos los argumentos del drawImage
-		System.out.println("pintando en: " + point + "desde :" + getPos());
+//		System.out.println("pintando en: " + point + "desde :" + getPos());
 		Point2D destPoint = coordinates.getPointFor(getPos().add(Point2D.UNIT));
 		Point2D sizeMarker = destPoint.substract(point).getRounded();
 		g.drawImage(rotate(getSprite(),facing),(int)point.x(),(int)point.y(),(int)sizeMarker.x(),(int)sizeMarker.y(),null);
@@ -102,5 +117,8 @@ public abstract class Actor implements Drawable, Positionable {
 	}
 	public void setFacing(int facing) {
 		this.facing = facing;
+	}
+	public boolean tick(){
+		return true;
 	}
 }
