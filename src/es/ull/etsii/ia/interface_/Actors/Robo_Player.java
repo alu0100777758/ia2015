@@ -6,7 +6,6 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javafx.geometry.Rectangle2D;
 import es.ull.etsii.ia.interface_.CoordinateSystem2D;
 import es.ull.etsii.ia.interface_.OutOfSystemException;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
@@ -86,6 +85,16 @@ public class Robo_Player extends Actor {
 				getPos().add(MOVEMENT_SOUTH));
 		getEvaluatedPoints().add(
 				new DrawableRectangle(getRandomColor(), pos2.x(), pos2.y(),
+						diff.x(), diff.y()));
+		Point2D pos3 = getCoordinates().getPointFor(
+				getPos().add(MOVEMENT_EAST));
+		getEvaluatedPoints().add(
+				new DrawableRectangle(getRandomColor(), pos3.x(), pos3.y(),
+						diff.x(), diff.y()));
+		Point2D pos4 = getCoordinates().getPointFor(
+				getPos().add(MOVEMENT_WEST));
+		getEvaluatedPoints().add(
+				new DrawableRectangle(getRandomColor(), pos4.x(), pos4.y(),
 						diff.x(), diff.y()));
 		
 		}
