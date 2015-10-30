@@ -54,7 +54,7 @@ public class GridStatusPanel extends GridPanel {
 	public void paint(Graphics g){
 		super.paint(g);
 		if(pathON)
-			path.drawPath(g);
+			path.drawState(g);
 	}
 //	public void paintComponent(Graphics g){
 //		super.paintComponent(g);

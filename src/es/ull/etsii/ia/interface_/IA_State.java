@@ -83,12 +83,26 @@ public class IA_State implements SensitiveEnviroment {
 		getActors().add(actor);
 		getMapState().set((int)actor.getPos().x(),(int)actor.getPos().y(), actor);
 	}
-	public void drawPath(Graphics originalG) {
+	public void drawState(Graphics originalG) {
 		Graphics2D g = (Graphics2D) originalG.create();
 		g.setColor(color);
 			drawLines(g);
+			drawGoals((Graphics2D)g.create());
 		for (Actor act : getActors())
 			act.paint(g);
+	}
+
+	private void drawGoals(Graphics2D g) {
+		int size = getCoordinates().getVBounds()/3;
+		int ypos = getCoordinates().getVBounds()-size % 2 == 0 ? (getCoordinates().getVBounds()-size)/2 : (getCoordinates().getVBounds() - 1 - size )/2; 
+		Point2D topLeft = getCoordinates().getPointFor(0, ypos);
+		Point2D bottomLeft = new Point2D(getCoordinates().getCellCenter(new Point2D(1,0)).x(),getCoordinates().getPointFor(new Point2D(0,ypos+size)).y());
+		Point2D topRight = 	new Point2D(getCoordinates().getCellCenter(new Point2D(getCoordinates().getHBounds()-3,0)).x(),getCoordinates().getPointFor(new Point2D(0,ypos)).y());
+		Point2D bottomRight = getCoordinates().getPointFor(getCoordinates().getHBounds()-1, ypos + size);
+		g.setColor(new Color(1, 1, 1, (float)0.7)); // TODO limpiar
+		g.fillRect((int)topLeft.x(), (int)topLeft.y(), (int)(bottomLeft.x()-topLeft.x()), (int)(bottomLeft.y() - topLeft.y()));
+		g.fillRect((int)topRight.x(), (int)topRight.y(), (int)(bottomRight.x()-topRight.x()), (int)(bottomRight.y() - topRight.y()));
+
 	}
 
 	private void drawLines(Graphics2D gr) {

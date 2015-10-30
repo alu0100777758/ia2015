@@ -22,14 +22,9 @@ import es.ull.etsii.ia.interface_.listeners.TimerEventManager;
  *         del programa.
  */
 public final class Control {
-	private static final Point2D SOUTH = new Point2D(0, -1);
-	private static final Point2D NORTH = new Point2D(0, 1);
-	private static final Point2D EAST = new Point2D(1, 0);
-	private static final Point2D WEST = new Point2D(-1, 0);
 //	private Random rand = new Random();
 	private static Control instance = null;
 	private int stepDelay = 1000;
-	public static final Point2D[] DIRECTION_POINTS = { WEST, EAST, NORTH, SOUTH };
 	private CellRoboCup window = new CellRoboCup();
 	private GridStatusPanel grid = new GridStatusPanel();
 	private GridControls gridControls = new GridControls();
@@ -165,7 +160,7 @@ public final class Control {
 	}
 
 	/**
-	 * mï¿½todo encargado de avanzar en la simulación.
+	 * mï¿½todo encargado de avanzar en la simulaciï¿½n.
 	 */
 	public void stepForward() {
 		walkingOngrid: {
