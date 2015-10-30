@@ -1,5 +1,5 @@
 /**
- * Proporciona las clases necesarias para representar los diferentes actores de la simulación.
+ * Proporciona las clases necesarias para representar los diferentes actores de la simulaciï¿½n.
  * <p>
  * @since 1.0
  */

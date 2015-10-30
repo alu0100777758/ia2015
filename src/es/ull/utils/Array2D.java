@@ -62,7 +62,7 @@ public class Array2D<Type> {
 		this.array = array;
 	}
 
-	protected int getRows() {
+	public int getRows() {
 		return rows;
 	}
 
@@ -70,7 +70,7 @@ public class Array2D<Type> {
 		this.rows = m;
 	}
 
-	protected int getColumns() {
+	public int getColumns() {
 		return columns;
 	}
 

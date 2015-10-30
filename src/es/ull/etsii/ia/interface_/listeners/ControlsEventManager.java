@@ -47,15 +47,19 @@ public class ControlsEventManager implements ActionListener {
 		if (e.getSource().getClass().equals(JButton.class)) {
 			JButton pulsedButton = (JButton) e.getSource();
 			if (pulsedButton.equals(gridControls.setDimensions)) {
-				Control.getInstance().trySetGridPoints();
+				Control.getInstance().updateDimension();
 			} else if (pulsedButton.equals(gridControls.setPathStart)) {
 
 				Control.getInstance().trySetPathStart();
 			} else if (pulsedButton.equals(gridControls.startPath)) {
-				if (isStart())
+				if (isStart()){
 					Control.getInstance().setWalking(false);
-				else
+					pulsedButton.setText(GridControls.START_TEXT);
+				}
+				else{
 					Control.getInstance().tryToRunWithDelay();
+					pulsedButton.setText(GridControls.STOP_TEXT);
+				}
 				setStart(!isStart());
 			} else if (pulsedButton.equals(gridControls.selectColor)) {
 				Control.getInstance().setPathColor(

@@ -38,32 +38,10 @@ public abstract class Actor implements Drawable, Positionable {
 	private static int vcellSize;
 	private CoordinateSystem2D coordinates;
 	private ArrayList<MovementListener> movListeners = new ArrayList<>();
+	
 	public Actor(CoordinateSystem2D coordinates, int face){
 		setCoordinates(coordinates);
 		setFacing(face);
-	}
-	public CoordinateSystem2D getCoordinates() {
-		return coordinates;
-	}
-
-	public void setCoordinates(CoordinateSystem2D coordinates) {
-		this.coordinates = coordinates;
-	}
-
-	public static int getHcellSize() {
-		return hcellSize;
-	}
-
-	public static void setHcellSize(int hcellSize) {
-		Actor.hcellSize = hcellSize;
-	}
-
-	public static int getVcellSize() {
-		return vcellSize;
-	}
-
-	public static void setVcellSize(int vcellSize) {
-		Actor.vcellSize = vcellSize;
 	}
 	
 	
@@ -79,29 +57,6 @@ public abstract class Actor implements Drawable, Positionable {
 	}
 	public void addMovListener( MovementListener listener){
 		getMovListeners().add(listener);
-	}
-	@Override
-	public Point2D getPos() {
-		return position;
-	}
-
-	@Override
-	public void setPos(Point2D newpos) {
-		this.position = newpos;
-		for(MovementListener listener : getMovListeners())
-			listener.updated();
-	}
-	public BufferedImage getSprite() {
-		return sprite;
-	}
-	public void setSprite(BufferedImage sprite) {
-		this.sprite = sprite;
-	}
-	public String getSpritePath() {
-		return spritePath;
-	}
-	public void setSpritePath(String spritePath) {
-		this.spritePath = spritePath;
 	}
 	public void loadSprite(){
 		try {
@@ -120,6 +75,29 @@ public abstract class Actor implements Drawable, Positionable {
 		return op.filter(image, null);
 	}
 	// ******************Getters & Setters********************
+	@Override
+	public Point2D getPos() {
+		return position;
+	}
+	
+	@Override
+	public void setPos(Point2D newpos) {
+		this.position = newpos;
+		for(MovementListener listener : getMovListeners())
+			listener.updated();
+	}
+	public BufferedImage getSprite() {
+		return sprite;
+	}
+	public void setSprite(BufferedImage sprite) {
+		this.sprite = sprite;
+	}
+	public String getSpritePath() {
+		return spritePath;
+	}
+	public void setSpritePath(String spritePath) {
+		this.spritePath = spritePath;
+	}
 	public int getFacing() {
 		return facing;
 	}
@@ -134,6 +112,29 @@ public abstract class Actor implements Drawable, Positionable {
 	}
 	public void setMovListeners(ArrayList<MovementListener> movListeners) {
 		this.movListeners = movListeners;
+	}
+	public CoordinateSystem2D getCoordinates() {
+		return coordinates;
+	}
+	
+	public void setCoordinates(CoordinateSystem2D coordinates) {
+		this.coordinates = coordinates;
+	}
+	
+	public static int getHcellSize() {
+		return hcellSize;
+	}
+	
+	public static void setHcellSize(int hcellSize) {
+		Actor.hcellSize = hcellSize;
+	}
+	
+	public static int getVcellSize() {
+		return vcellSize;
+	}
+	
+	public static void setVcellSize(int vcellSize) {
+		Actor.vcellSize = vcellSize;
 	}
 	
 }

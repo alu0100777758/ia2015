@@ -2,15 +2,13 @@ package es.ull.etsii.ia.interface_;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
-import es.ull.etsii.ia.interface_.geometry.Point2D;
 /**
  * @author Javier Mart�n Hern�ndez
  *	Clase que unifica GridPanel y GraphicState.
  */
 public class GridStatusPanel extends GridPanel {
 	private static final long serialVersionUID = 6081079377279937021L;
-	IA_State path;
+	IA_State state;
 	boolean pathON = false;
 	public GridStatusPanel(){
 	}
@@ -34,7 +32,7 @@ public class GridStatusPanel extends GridPanel {
 //		}
 //	}
 	public boolean pathIsBroken(){
-		if(path == null)
+		if(state == null)
 			return false;
 //		return (path.isAtBorder() || path.isOut());
 		return true;
@@ -43,18 +41,18 @@ public class GridStatusPanel extends GridPanel {
 //		return path.isAtBorder();
 //	}
 	public void pathColor(Color color){
-		path.setColor(color);
+		state.setColor(color);
 	}
 	public void turnOnPath(){
 		GridPanel grid = this;
-		path = new IA_State(grid);
+		state = new IA_State(grid);
 		pathON = true;
 //		updatePath();
 	}
 	public void paint(Graphics g){
 		super.paint(g);
 		if(pathON)
-			path.drawState(g);
+			state.drawState(g);
 	}
 //	public void paintComponent(Graphics g){
 //		super.paintComponent(g);
@@ -62,4 +60,21 @@ public class GridStatusPanel extends GridPanel {
 //		if(pathON)
 //			path.drawPath(g);
 //	}
+	public void reset() {
+		getState().reset();
+	}
+	// ******************Getters & Setters********************
+	public IA_State getState() {
+		return state;
+	}
+	public void setState(IA_State state) {
+		this.state = state;
+	}
+	public boolean isPathON() {
+		return pathON;
+	}
+	public void setPathON(boolean pathON) {
+		this.pathON = pathON;
+	}
+	
 }

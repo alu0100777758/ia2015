@@ -114,8 +114,11 @@ public class IA_State implements SensitiveEnviroment {
 		g.drawRect((int)topleft.x(), (int)topleft.y(), (int)(bottonRight.x()-topleft.x()),(int)(bottonRight.y()-topleft.y()));
 	}
 
+	/**
+	 * Metodo encargado de distribuir el tiempo de ejecución a cada agente.
+	 */
 	public void tick() {
-		if (getActors().get(getTurnPointer()).tick())
+		if (!getActors().isEmpty() && getActors().get(getTurnPointer()).tick())
 			incrementTurn();
 
 	}
@@ -180,6 +183,12 @@ public class IA_State implements SensitiveEnviroment {
 	public Array2D<Actor> getVision(Actor sensor) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void reset() {
+		setMapState(new Array2D<Actor>(getMapState().getRows(), getMapState().getColumns()));
+		getActors().clear();
+		setTurnPointer(0);
 	}
 	
 	

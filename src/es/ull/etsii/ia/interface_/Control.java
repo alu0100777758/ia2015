@@ -1,7 +1,6 @@
 package es.ull.etsii.ia.interface_;
 
 import java.awt.Color;
-import java.util.Random;
 
 import javax.swing.BoxLayout;
 import javax.swing.JColorChooser;
@@ -92,9 +91,9 @@ public final class Control {
 	public void clickedIn(Point2D point) {
 //		grid.path.clear();
 //		grid.path.setStart(grid.toSystem(point));
-		grid.path.getActors().add(
+		grid.state.getActors().add(
 				new Robo_Player((short) 1, grid.toSystem(point), grid,
-						Actor.FACE_NORTH, grid.path));
+						Actor.FACE_NORTH, grid.state));
 		grid.repaint();
 	}
 
@@ -136,7 +135,7 @@ public final class Control {
 	 */
 	public void launchTick() {
 //		try {
-			grid.path.tick();
+			grid.state.tick();
 			grid.repaint();
 //			if (gridControls.borderCheck.isSelected() && grid.atBorder())
 //				walking = false;
@@ -177,7 +176,8 @@ public final class Control {
 	 * m�todo que reinicia y limpia el camino mostrado por pantalla.
 	 */
 	public void reset() {
-//		grid.updatePath();
+		setBall(null);
+		grid.reset();
 		grid.repaint();
 	}
 
@@ -226,12 +226,12 @@ public final class Control {
 		grid.repaint();
 	}
 
-	public void trySetGridPoints() {
+	public void updateDimension() {
 		int x = 0, y = 0;
 		boolean parseError = false;
 		try {
-			x = gridControls.gethPoints();
-			y = gridControls.getvPoints();
+			x = gridControls.gethPoints() + 1;
+			y = gridControls.getvPoints() + 1;
 		} catch (NumberFormatException exception) {
 			parseError = true;
 		} finally {
@@ -245,14 +245,22 @@ public final class Control {
 		if (getLast_bot() == null) {
 			System.out.println("actor : " + gridControls.getActorType());
 			if(gridControls.getActorType() < 2){
-			setLast_bot(new Robo_Player((short) gridControls.getActorType(), grid.toSystem(point), grid,
-					Actor.FACE_NORTH, grid.path));
-			grid.path.addActor(getLast_bot());
+				Point2D inSystem = grid.toSystem(point);
+				Robo_Player robot;
+				try {
+					robot = (Robo_Player)grid.state.getMapState().get((int)inSystem.x(), (int)inSystem.y());
+					robot.setTeam(gridControls.getActorType());
+				} catch (Exception e) {
+				robot = (Robo_Player)grid.state.getMapState().get((int)inSystem.x(), (int)inSystem.y());
+			setLast_bot(new Robo_Player((short) gridControls.getActorType(), inSystem, grid,
+					Actor.FACE_NORTH, grid.state));
+			grid.state.addActor(getLast_bot());
+				}
 			}
 			else{
 				if(getBall() == null){
 					setBall(new Ball(grid,  grid.toSystem(point)));
-					grid.path.getActors().add(getBall());
+					grid.state.getActors().add(getBall());
 				}
 			}
 				

@@ -6,11 +6,20 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+/**
+ * @author alu4550
+ * Define la clase encargada de representar la interfaz de usuario referente al estado actual de la simulacion.
+ *
+ */
 public class StateControls extends JPanel implements ActionListener {
-	private JButton obstacle = new JButton("Rojos");
-	private JButton goal = new JButton("Balón");
-	private JButton initPoint = new JButton("Azules");
-	private JButton[] buttons = { obstacle, initPoint,  goal};
+	public static final String TEAM2_TEXT = "Azules";
+	public static final long serialVersionUID = 1L;
+	public static final String BALL_TEXT = "Balón";
+	public static final String TEAM1_TEXT = "Rojos";
+	private JButton team1 = new JButton(TEAM1_TEXT);
+	private JButton ball = new JButton(BALL_TEXT);
+	private JButton team2 = new JButton(TEAM2_TEXT);
+	private JButton[] buttons = { team1, team2,  ball};
 	private int selected = 0;
 
 
@@ -27,9 +36,9 @@ public class StateControls extends JPanel implements ActionListener {
 	}
 
 	protected void addListener(ActionListener listener) {
-		obstacle.addActionListener(listener);
-		goal.addActionListener(listener);
-		initPoint.addActionListener(listener);
+		team1.addActionListener(listener);
+		ball.addActionListener(listener);
+		team2.addActionListener(listener);
 	}
 
 	@Override

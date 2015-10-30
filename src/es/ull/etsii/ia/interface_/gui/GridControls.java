@@ -5,12 +5,10 @@ import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 /**
  * @author Javier Mart�n Hern�ndez Clase encargada de dibujar y configurar
@@ -18,16 +16,20 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
  */
 public class GridControls extends JPanel {
 	private static final long serialVersionUID = -7807762227293272654L;
+	public static final String RESET_TEXT = "reset";
+	public static final String SET_DIMENSIONS_TEXT = "Establecer";
+	public static final String START_TEXT = "Empezar";
+	public static final String STOP_TEXT = "Pausar";
 	ActionListener listener = null;
 	JTextArea vPointsSelector = new JTextArea(1, 5);
 	JTextArea hPointsSelector = new JTextArea(1, 5);
-	public JButton setDimensions = new JButton("Establecer");
+	public JButton setDimensions = new JButton(SET_DIMENSIONS_TEXT);
 	JTextArea vPathStart = new JTextArea(1, 5);
 	JTextArea hPathStart = new JTextArea(1, 5);
-	public JButton setPathStart = new JButton("Establecer");
-	public JButton startPath = new JButton("Empezar");
-	public JButton selectColor = new JButton("Seleccionar");
-	public JButton reset = new JButton("reset");
+	public JButton setPathStart = new JButton(SET_DIMENSIONS_TEXT);
+	public JButton startPath = new JButton(START_TEXT);
+	public JButton selectColor = new JButton("Seleccionar"); // TODO incluir seleccion de agentes
+	public JButton reset = new JButton(RESET_TEXT);
 	public JSlider fps = new JSlider(1, 60, 1);
 	JTextArea delayMillis = new JTextArea(1, 10);
 //	public JCheckBox borderCheck = new JCheckBox("Parada en borde");
@@ -76,12 +78,13 @@ public class GridControls extends JPanel {
 		fps.setMinorTickSpacing(1);
 		fps.setPaintTicks(true);
 		fps.setPaintLabels(true);
+		add(new JLabel("     Frames por segundo"));
 		add(fps);
 //		add(borderCheck);
 //		add(revisitCheck);
 		add(startPath);
 		add(reset);
-		add(selectColor);
+//		add(selectColor);
 		setStateInput(new StateControls(listener));
 		add(getStateInput());
 //		borderCheck.setSelected(true);
