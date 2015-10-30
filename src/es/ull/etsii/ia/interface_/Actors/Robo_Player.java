@@ -1,13 +1,14 @@
 package es.ull.etsii.ia.interface_.Actors;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Random;
 
 import es.ull.etsii.ia.interface_.CoordinateSystem2D;
-import es.ull.etsii.ia.interface_.OutOfSystemException;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 import es.ull.etsii.ia.interface_.geometry.drawable.DrawableCircle;
 import es.ull.etsii.ia.interface_.geometry.drawable.DrawableRectangle;
@@ -20,10 +21,11 @@ public class Robo_Player extends Actor {
 														// equipacion
 	private ArrayList<Point2D> points = new ArrayList<Point2D>();
 	private ArrayList<DrawableRectangle> evaluated = new ArrayList<DrawableRectangle>();
-	private boolean evaluation = true;
-	private boolean mode;
-	private SensitiveEnviroment map ;
+	private boolean evaluation = false;
+	private boolean mode = true;
+	private SensitiveEnviroment map;
 	private Array2D<Actor> view;
+	private int team = 0;
 
 	public boolean isEvaluation() {
 		return evaluation;
@@ -46,11 +48,7 @@ public class Robo_Player extends Actor {
 		super(coordinates, face);
 		setPos(point);
 		// System.out.println(point);
-		if (team == 0)
-			setSpritePath(T1);
-		else if (team == 1)
-			setSpritePath(T2);
-		loadSprite();
+		setTeam(team);
 		setStart(point);
 		setMap(map);
 	}
@@ -59,13 +57,12 @@ public class Robo_Player extends Actor {
 	 * @return boolean true si ha terminado de efectuar todas sus acciones.
 	 */
 	public boolean tick() {
-		mode = !mode;
 		if (mode) {
+			evaluate();
+		} else
 			randomMove();
-			return true;
-		}
-		evaluate();
-		return false;
+		mode = !mode;
+		return mode;
 	}
 
 	protected void evaluate() {
@@ -73,39 +70,50 @@ public class Robo_Player extends Actor {
 		getEvaluatedPoints().clear();
 		Point2D pos = getCoordinates().getPointFor(getPos());
 		Point2D diff = diffPoint(pos);
-		for(int i = 0; i < 3 ; i++){
-		getEvaluatedPoints().add(new DrawableRectangle(getRandomColor(), pos.x(), pos.y(), diff.x(),
-						diff.y()));
-		Point2D pos1 = getCoordinates().getPointFor(
-				getPos().add(MOVEMENT_NORTH));
-		getEvaluatedPoints().add(
-				new DrawableRectangle(getRandomColor(), pos1.x(), pos1.y(), diff.x(),
-						diff.y()));
-		Point2D pos2 = getCoordinates().getPointFor(
-				getPos().add(MOVEMENT_SOUTH));
-		getEvaluatedPoints().add(
-				new DrawableRectangle(getRandomColor(), pos2.x(), pos2.y(),
-						diff.x(), diff.y()));
-		Point2D pos3 = getCoordinates().getPointFor(
-				getPos().add(MOVEMENT_EAST));
-		getEvaluatedPoints().add(
-				new DrawableRectangle(getRandomColor(), pos3.x(), pos3.y(),
-						diff.x(), diff.y()));
-		Point2D pos4 = getCoordinates().getPointFor(
-				getPos().add(MOVEMENT_WEST));
-		getEvaluatedPoints().add(
-				new DrawableRectangle(getRandomColor(), pos4.x(), pos4.y(),
-						diff.x(), diff.y()));
-		
+		for (int i = 0; i < 3; i++) {
+			getEvaluatedPoints().add(
+					new DrawableRectangle(getRandomColor(), pos.x(), pos.y(),
+							diff.x(), diff.y()));
+			Point2D pos1 = getCoordinates().getPointFor(
+					getPos().add(MOVEMENT_NORTH));
+			getEvaluatedPoints().add(
+					new DrawableRectangle(getRandomColor(), pos1.x(), pos1.y(),
+							diff.x(), diff.y()));
+			Point2D pos2 = getCoordinates().getPointFor(
+					getPos().add(MOVEMENT_SOUTH));
+			getEvaluatedPoints().add(
+					new DrawableRectangle(getRandomColor(), pos2.x(), pos2.y(),
+							diff.x(), diff.y()));
+			Point2D pos3 = getCoordinates().getPointFor(
+					getPos().add(MOVEMENT_EAST));
+			getEvaluatedPoints().add(
+					new DrawableRectangle(getRandomColor(), pos3.x(), pos3.y(),
+							diff.x(), diff.y()));
+			Point2D pos4 = getCoordinates().getPointFor(
+					getPos().add(MOVEMENT_WEST));
+			getEvaluatedPoints().add(
+					new DrawableRectangle(getRandomColor(), pos4.x(), pos4.y(),
+							diff.x(), diff.y()));
+
 		}
 	}
-	public Color getRandomColor(){
+
+	public Color getRandomColor() {
 		return new Color(new Random().nextInt(16581375));
 	}
 
 	@Override
-	public void paint(Graphics g) {
-		new DrawableCircle(3, getCoordinates().getCellCenter(points.get(0)),
+	public void paint(Graphics goriginal) {
+		if (getTeam() == 0)
+			setSpritePath(T1);
+		else if (getTeam() == 1)
+			setSpritePath(T2);
+		loadSprite();
+		Graphics2D g = (Graphics2D) goriginal.create();
+		g.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND,
+				BasicStroke.JOIN_ROUND));
+		g.setColor(getSpritePath() == T1 ? Color.RED : Color.BLUE);
+		new DrawableCircle(6, getCoordinates().getCellCenter(points.get(0)),
 				true).paint(g);
 		Polygon polygon = new Polygon();
 		for (Point2D point : points) {
@@ -177,7 +185,6 @@ public class Robo_Player extends Actor {
 		}
 		return false;
 	}
-	
 	// ******************Getters & Setters********************
 	public ArrayList<Point2D> getPoints() {
 		return points;
@@ -202,4 +209,13 @@ public class Robo_Player extends Actor {
 	public void setView(Array2D<Actor> view) {
 		this.view = view;
 	}
+
+	public int getTeam() {
+		return team;
+	}
+
+	public void setTeam(int team) {
+		this.team = team;
+	}
+	
 }

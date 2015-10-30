@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.Shape;
 
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 
 public class DrawableRectangle extends Rectangle implements Drawable {
+	private static final long serialVersionUID = 1L;
 	private Color color;
 	public DrawableRectangle(Color color,double arg0, double arg1,double arg2,  double arg3) {
 		setPos(new Point2D(arg0, arg1));
