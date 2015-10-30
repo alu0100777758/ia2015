@@ -21,26 +21,27 @@ import es.ull.etsii.ia.interface_.listeners.TimerEventManager;
  *         del programa.
  */
 public final class Control {
-//	private Random rand = new Random();
-	private static Control instance = null;
-	private int stepDelay = 1000;
-	private CellRoboCup window = new CellRoboCup();
-	private GridStatusPanel grid = new GridStatusPanel();
-	private GridControls gridControls = new GridControls();
-	private ControlsEventManager controlPanelEventManager;
-	private TimerEventManager timerManager;
-	private Timer stepTimer;
-	private boolean walking = false;
-	private MouseControl mouseControl = new MouseControl();
-
-	private Robo_Player last_bot;
-	private Ball ball;
+	private static Control instance = null;					//	Instancia Singleton.
+	private int stepDelay = GridControls.DEFAULT_FPS*1000;	//	Delay por defecto.
+	private CellRoboCup window = new CellRoboCup();			//	Ventana de la aplicacion.
+	private GridStatusPanel grid = new GridStatusPanel();	// 	Panel donde se dibuja la simulacion.
+	private GridControls gridControls = new GridControls();	// 	Panel donde se dibujan los controles.
+	private ControlsEventManager controlPanelEventManager;	// 	Manejador de eventos de los controles.
+	private TimerEventManager timerManager;					//	Manejador de eventos del temporizador.
+	private Timer stepTimer;								//	Temporizador de turnos
+	private boolean walking = false;						//	True si la simulacion se encuentra en ejecucion.
+	private MouseControl mouseControl = new MouseControl();	//	Manejador de eventos del raton.
+	private Robo_Player last_bot;							// 	Robo player en proceso de orientacion. 
+	private Ball ball;										// 	Unica pelota de la simulacion.
 	
 	
 
 	private Control() {
 	}
 
+	/**
+	 * @return Instancia singleton de la clase
+	 */
 	public static Control getInstance() {
 		if (instance == null) {
 			instance = new Control();
@@ -83,40 +84,6 @@ public final class Control {
 	}
 
 	/**
-	 * @param point
-	 *            punto donde se ha detectado un click m�todo lanzado por el
-	 *            gestor de eventos del rat�n a fin de situar la posici�n
-	 *            inicial del camino en base a la posici�n del rat�n.
-	 */
-	public void clickedIn(Point2D point) {
-//		grid.path.clear();
-//		grid.path.setStart(grid.toSystem(point));
-		grid.state.getActors().add(
-				new Robo_Player((short) 1, grid.toSystem(point), grid,
-						Actor.FACE_NORTH, grid.state));
-		grid.repaint();
-	}
-
-	/**
-	 * @return Point2D m�todo que devuelve una posicion aleatoria v�lida
-	 *         para el estado actual del programa (punto que se sumar� al
-	 *         ultimo punto incluido en el camino);
-	 */
-	public Point2D randomMove() {
-//		Point2D randomPoint = DIRECTION_POINTS[rand.nextInt(4)];
-//		if ((!gridControls.revisitCheck.isSelected())
-//				&& grid.path.hasVisited(grid.path.getLast().add(randomPoint))) {
-			try {
-				return randomMove();
-			} catch (StackOverflowError e) {
-				setWalking(false);
-				return new Point2D(0, 0);
-			}
-//		}
-//		return randomPoint;
-	}
-
-	/**
 	 * @param x
 	 *            n�mero de filas.
 	 * @param y
@@ -124,14 +91,13 @@ public final class Control {
 	 *            densidad de la rejilla.
 	 */
 	public void setGridPointsDensity(int x, int y) {
-		grid.sethPoints(x);
-		grid.setvPoints(y);
-		grid.repaint();
+		getGrid().sethPoints(x);
+		getGrid().setvPoints(y);
+		getGrid().repaint();
 	}
 
 	/**
-	 * m�todo encargado de avanzar a una posicion aleatoria factible para el
-	 * camino actual.
+	 * metodo encargado de marcar el inicio de turno de la simulacion.
 	 */
 	public void launchTick() {
 //		try {
@@ -173,7 +139,7 @@ public final class Control {
 	}
 
 	/**
-	 * m�todo que reinicia y limpia el camino mostrado por pantalla.
+	 * m�todo que reinicia y limpia el estado mostrado por pantalla.
 	 */
 	public void reset() {
 		setBall(null);
@@ -201,31 +167,6 @@ public final class Control {
 		walking = true;
 	}
 
-	/**
-	 * m�todo encargado de actualizar el punto inicial (desde el panel de
-	 * controles)
-	 */
-	public void trySetPathStart() {
-		int x = 0, y = 0;
-		boolean parseError = false;
-		try {
-			x = gridControls.gethStart();
-			y = gridControls.getvStart();
-		} catch (NumberFormatException exception) {
-			parseError = true;
-		} finally {
-			if (!parseError) {
-				setPathStart(x, y);
-			}
-		}
-	}
-
-	void setPathStart(int x, int y) {
-//		grid.updatePath();
-//		grid.setStart(new Point2D(x, y));
-		grid.repaint();
-	}
-
 	public void updateDimension() {
 		int x = 0, y = 0;
 		boolean parseError = false;
@@ -243,24 +184,23 @@ public final class Control {
 
 	public void clickPressed(Point2D point) {
 		if (getLast_bot() == null) {
-			System.out.println("actor : " + gridControls.getActorType());
 			if(gridControls.getActorType() < 2){
-				Point2D inSystem = grid.toSystem(point);
+				Point2D inSystem = getGrid().toSystem(point);
 				Robo_Player robot;
 				try {
-					robot = (Robo_Player)grid.state.getMapState().get((int)inSystem.x(), (int)inSystem.y());
+					robot = (Robo_Player)getGrid().getState().getMapState().get((int)inSystem.x(), (int)inSystem.y());
 					robot.setTeam(gridControls.getActorType());
 				} catch (Exception e) {
-				robot = (Robo_Player)grid.state.getMapState().get((int)inSystem.x(), (int)inSystem.y());
-			setLast_bot(new Robo_Player((short) gridControls.getActorType(), inSystem, grid,
-					Actor.FACE_NORTH, grid.state));
-			grid.state.addActor(getLast_bot());
+				robot = (Robo_Player)getGrid().getState().getMapState().get((int)inSystem.x(), (int)inSystem.y());
+			setLast_bot(new Robo_Player((short) gridControls.getActorType(), inSystem, getGrid(),
+					Actor.FACE_NORTH, getGrid().getState()));
+			getGrid().getState().addActor(getLast_bot());
 				}
 			}
 			else{
 				if(getBall() == null){
-					setBall(new Ball(grid,  grid.toSystem(point)));
-					grid.state.getActors().add(getBall());
+					setBall(new Ball(getGrid(),  getGrid().toSystem(point)));
+					getGrid().getState().getActors().add(getBall());
 				}
 			}
 				
@@ -343,4 +283,29 @@ public final class Control {
 	public void setWalking(boolean walking) {
 		this.walking = walking;
 	}
+
+	public GridStatusPanel getGrid() {
+		return grid;
+	}
+
+	public void setGrid(GridStatusPanel grid) {
+		this.grid = grid;
+	}
+
+	public GridControls getGridControls() {
+		return gridControls;
+	}
+
+	public void setGridControls(GridControls gridControls) {
+		this.gridControls = gridControls;
+	}
+
+	public CellRoboCup getWindow() {
+		return window;
+	}
+
+	public void setWindow(CellRoboCup window) {
+		this.window = window;
+	}
+	
 }

@@ -48,9 +48,6 @@ public class ControlsEventManager implements ActionListener {
 			JButton pulsedButton = (JButton) e.getSource();
 			if (pulsedButton.equals(gridControls.setDimensions)) {
 				Control.getInstance().updateDimension();
-			} else if (pulsedButton.equals(gridControls.setPathStart)) {
-
-				Control.getInstance().trySetPathStart();
 			} else if (pulsedButton.equals(gridControls.startPath)) {
 				if (isStart()){
 					Control.getInstance().setWalking(false);

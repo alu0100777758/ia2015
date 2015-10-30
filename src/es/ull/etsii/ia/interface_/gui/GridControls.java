@@ -15,6 +15,7 @@ import javax.swing.JTextArea;
  *         el panel de controles.
  */
 public class GridControls extends JPanel {
+	public static final int DEFAULT_FPS = 1;
 	private static final long serialVersionUID = -7807762227293272654L;
 	public static final String RESET_TEXT = "reset";
 	public static final String SET_DIMENSIONS_TEXT = "Establecer";
@@ -30,7 +31,7 @@ public class GridControls extends JPanel {
 	public JButton startPath = new JButton(START_TEXT);
 	public JButton selectColor = new JButton("Seleccionar"); // TODO incluir seleccion de agentes
 	public JButton reset = new JButton(RESET_TEXT);
-	public JSlider fps = new JSlider(1, 60, 1);
+	public JSlider fps = new JSlider(1, 60, DEFAULT_FPS);
 	JTextArea delayMillis = new JTextArea(1, 10);
 //	public JCheckBox borderCheck = new JCheckBox("Parada en borde");
 //	public JCheckBox revisitCheck = new JCheckBox("Revisita");
