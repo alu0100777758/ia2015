@@ -13,8 +13,8 @@ import javax.swing.JTextArea;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 /**
- * @author Javier Mart�n Hern�ndez Clase encargada de dibujar y configurar
- *         el panel de controles.
+ * @author Javier Martin Hernandez y Tomas Rodriguez 
+ * 		   Clase encargada de dibujar y configurar el panel de controles.
  */
 public class GridControls extends JPanel {
 	private static final long serialVersionUID = -7807762227293272654L;

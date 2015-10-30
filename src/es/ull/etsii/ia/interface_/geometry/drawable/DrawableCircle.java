@@ -6,7 +6,7 @@ import es.ull.etsii.ia.interface_.geometry.Circle;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 
 /**
- * @author Javier Mart�n Hern�ndez
+ * @author Javier Martin Hernandez y Tomas Rodriguez
  *	Clase encargada de representar un circulo con la capacidad de dibujarse en pantalla.
  */
 public class DrawableCircle extends Circle implements Drawable {

@@ -1,7 +1,8 @@
 package es.ull.etsii.ia.interface_.geometry;
 
 /**
- * @author Javier Mart�n Hern�ndez Clase que representa un c�rculo.
+ * @author Javier Martin Hernandez y Tomas Rodriguez
+ * 		   Clase que representa un circulo.
  */
 public class Circle extends Geometry {
 	private Point2D center;

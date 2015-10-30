@@ -1,7 +1,7 @@
 package es.ull.etsii.ia.interface_.geometry;
 /**
- * @author Javier Mart�n Hern�ndez
- *	Clase que representacion un punto en el plano con precisi�n doble.
+ * @author Javier Martin Hernandez y Tomas Rodriguez
+ *	Clase que representacion un punto en el plano con precision doble.
  */
 public class Point2D {
 	public static final Point2D UNIT= new Point2D(1,1);
