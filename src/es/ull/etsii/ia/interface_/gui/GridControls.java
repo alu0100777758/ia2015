@@ -11,8 +11,8 @@ import javax.swing.JSlider;
 import javax.swing.JTextArea;
 
 /**
- * @author Javier Mart�n Hern�ndez Clase encargada de dibujar y configurar
- *         el panel de controles.
+ * @author Javier Martin Hernandez y Tomas Rodriguez 
+ * 		   Clase encargada de dibujar y configurar el panel de controles.
  */
 public class GridControls extends JPanel {
 	public static final int DEFAULT_FPS = 1;

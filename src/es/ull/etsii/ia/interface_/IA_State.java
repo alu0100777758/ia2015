@@ -12,8 +12,8 @@ import es.ull.etsii.ia.interface_.geometry.Point2D;
 import es.ull.utils.Array2D;
 
 /**
- * @author Javier Mart�n Hern�ndez Clase encargada de almacenar y dibujar un
- *         estado en base a un objeto que presente la interfaz
+ * @author Javier Martin Hernandez y Tomas Rodriguez 
+ * 		   Clase encargada de almacenar y dibujar un estado en base a un objeto que presente la interfaz
  *         CoordinateSystem2D.
  */
 public class IA_State implements SensitiveEnviroment {

@@ -3,7 +3,7 @@ package es.ull.etsii.ia.interface_;
 import java.awt.Color;
 import java.awt.Graphics;
 /**
- * @author Javier Mart�n Hern�ndez
+ * @author Javier Martin Hernandez y Tomas Rodriguez
  *	Clase que unifica GridPanel y GraphicState.
  */
 public class GridStatusPanel extends GridPanel {

@@ -17,8 +17,8 @@ import es.ull.etsii.ia.interface_.listeners.MouseControl;
 import es.ull.etsii.ia.interface_.listeners.TimerEventManager;
 
 /**
- * @author Javier Mart�n Hern�ndez Clase encargada de gestionar la l�gica
- *         del programa.
+ * @author Javier Martin Hernandez y Tomas Rodriguez Martin 
+ * Clase encargada de gestionar la logica del programa.
  */
 public final class Control {
 	private static Control instance = null;					//	Instancia Singleton.

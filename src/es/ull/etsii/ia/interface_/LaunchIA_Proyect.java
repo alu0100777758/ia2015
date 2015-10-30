@@ -2,8 +2,8 @@ package es.ull.etsii.ia.interface_;
 
 public class LaunchIA_Proyect {
 	/**
-	 * @author Javier Mart�n Hern�ndez
-	 *	Clase encargada de lanzar la aplicaci�n.
+	 * @author Javier Martin Hernandez y Tomas Rodriguez 
+	 *	Clase encargada de lanzar la aplicacion.
 	 */
 	public static void main(String[] args) {
 		Control control = Control.getInstance();

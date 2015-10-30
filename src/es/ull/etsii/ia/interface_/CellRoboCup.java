@@ -4,8 +4,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 /**
- * @author Javier Mart�n Hern�ndez
- *	Clase que representa la ventana de la aplicaci�n.
+ * @author Javier Martin Hernandez y Tomas  Rodriguez Martin
+ *	Clase que representa la ventana de la aplicacion.
  */
 
 public class CellRoboCup extends JFrame {

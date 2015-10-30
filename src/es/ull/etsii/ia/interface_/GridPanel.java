@@ -13,24 +13,24 @@ import javax.swing.JPanel;
 import es.ull.etsii.ia.interface_.Actors.Actor;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 /**
- * @author Javier Martï¿½n Hernï¿½ndez
+ * @author Javier Martin Hernandez y Tomas Rodriguez
  *	Clase encargada de representar una rejilla de densidad definida capaz de actuar como sistema de coordenadas.
  */
 public class GridPanel extends JPanel implements CoordinateSystem2D {
 	private static final String DEFAULT_BACKGROUND = "img/lawn.png";		//	imagen por defecto para el fondo
 	private static final long serialVersionUID = -8427977059756274679L;
 	private BufferedImage backgroundImage;
-	private int vPoints;
-	private int hPoints;
+	private int vPoints;//lineas verticales del grid
+	private int hPoints;//horizontales
 	private double vSize;
 	private double hSize;
 	private static int DEFAULT_SIZE = 50;
-	private static int PADDING = 5;
+	private static int PADDING = 5;//margen entre ventana y grid
 	private Color color = Color.BLACK;
 	private boolean backgroundPresent = true;								//	Denota si es necesario dibujar una imagen de fondo
 	
 	public GridPanel(){
-		setBackground(Color.WHITE);
+		//setBackground(Color.WHITE);
 		setBorder(BorderFactory.createEmptyBorder(PADDING,PADDING,PADDING,PADDING + 2));
 		setvPoints(DEFAULT_SIZE);
 		sethPoints(DEFAULT_SIZE);
@@ -43,7 +43,7 @@ public class GridPanel extends JPanel implements CoordinateSystem2D {
 	}
 	/**
 	 * @param g
-	 * método encargado de dibujar graficamente la rejilla.
+	 * mï¿½todo encargado de dibujar graficamente la rejilla.
 	 */
 	public void drawGrid(Graphics g){
 		 int x = getInsets().left;
@@ -61,7 +61,7 @@ public class GridPanel extends JPanel implements CoordinateSystem2D {
 		Actor.setVcellSize((int)vSize);
 	}
 	/**
-	 * método encargado de actualizar el tamaño útil de la rejilla.
+	 * mï¿½todo encargado de actualizar el tamaï¿½o ï¿½til de la rejilla.
 	 */
 	public void updateSizes(){
 		vSize = (double)(getHeight()-(getInsets().top + getInsets().bottom))/(vPoints - 1);
