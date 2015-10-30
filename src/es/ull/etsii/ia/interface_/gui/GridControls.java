@@ -104,7 +104,7 @@ public class GridControls extends JPanel {
 		this.listener = listener;
 		updateListener();
 	}
-
+	// ******************Getters & Setters********************
 	public int gethPoints() {
 		return Integer.parseInt(hPointsSelector.getText());
 	}

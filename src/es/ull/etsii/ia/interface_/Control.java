@@ -26,7 +26,7 @@ public final class Control {
 	private static final Point2D NORTH = new Point2D(0, 1);
 	private static final Point2D EAST = new Point2D(1, 0);
 	private static final Point2D WEST = new Point2D(-1, 0);
-	private Random rand = new Random();
+//	private Random rand = new Random();
 	private static Control instance = null;
 	private int stepDelay = 1000;
 	public static final Point2D[] DIRECTION_POINTS = { WEST, EAST, NORTH, SOUTH };
@@ -42,54 +42,7 @@ public final class Control {
 	private Robo_Player last_bot;
 	private Ball ball;
 	
-	public Ball getBall() {
-		return ball;
-	}
-
-	public void setBall(Ball ball) {
-		this.ball = ball;
-	}
-
-	public Robo_Player getLast_bot() {
-		return last_bot;
-	}
-
-	public void setLast_bot(Robo_Player last_bot) {
-		this.last_bot = last_bot;
-	}
-
-	public TimerEventManager getTimerManager() {
-		return timerManager;
-	}
-
-	public void setTimerManager(TimerEventManager timerManager) {
-		this.timerManager = timerManager;
-	}
-
-	public Timer getStepTimer() {
-		return stepTimer;
-	}
-
-	public void setStepTimer(Timer stepTimer) {
-		this.stepTimer = stepTimer;
-	}
-
-	public ControlsEventManager getControlPanelEventManager() {
-		return controlPanelEventManager;
-	}
-
-	public void setControlPanelEventManager(
-			ControlsEventManager controlPanelEventManager) {
-		this.controlPanelEventManager = controlPanelEventManager;
-	}
-
-	public boolean isWalking() {
-		return walking;
-	}
-
-	public void setWalking(boolean walking) {
-		this.walking = walking;
-	}
+	
 
 	private Control() {
 	}
@@ -156,7 +109,7 @@ public final class Control {
 	 *         ultimo punto incluido en el camino);
 	 */
 	public Point2D randomMove() {
-		Point2D randomPoint = DIRECTION_POINTS[rand.nextInt(4)];
+//		Point2D randomPoint = DIRECTION_POINTS[rand.nextInt(4)];
 //		if ((!gridControls.revisitCheck.isSelected())
 //				&& grid.path.hasVisited(grid.path.getLast().add(randomPoint))) {
 			try {
@@ -337,5 +290,54 @@ public final class Control {
 		else if(getBall() != null)
 			getBall().setPos(grid.toSystem(point));
 		window.repaint();
+	}
+	// ******************Getters & Setters********************
+	public Ball getBall() {
+		return ball;
+	}
+
+	public void setBall(Ball ball) {
+		this.ball = ball;
+	}
+
+	public Robo_Player getLast_bot() {
+		return last_bot;
+	}
+
+	public void setLast_bot(Robo_Player last_bot) {
+		this.last_bot = last_bot;
+	}
+
+	public TimerEventManager getTimerManager() {
+		return timerManager;
+	}
+
+	public void setTimerManager(TimerEventManager timerManager) {
+		this.timerManager = timerManager;
+	}
+
+	public Timer getStepTimer() {
+		return stepTimer;
+	}
+
+	public void setStepTimer(Timer stepTimer) {
+		this.stepTimer = stepTimer;
+	}
+
+	public ControlsEventManager getControlPanelEventManager() {
+		return controlPanelEventManager;
+	}
+
+	public void setControlPanelEventManager(
+			ControlsEventManager controlPanelEventManager) {
+		this.controlPanelEventManager = controlPanelEventManager;
+	}
+
+	public boolean isWalking() {
+		return walking;
+	}
+
+	public void setWalking(boolean walking) {
+		this.walking = walking;
 	}
 }

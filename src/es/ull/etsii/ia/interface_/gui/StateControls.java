@@ -13,13 +13,6 @@ public class StateControls extends JPanel implements ActionListener {
 	private JButton[] buttons = { obstacle, initPoint,  goal};
 	private int selected = 0;
 
-	public int getSelected() {
-		return selected;
-	}
-
-	public void setSelected(int selected) {
-		this.selected = selected;
-	}
 
 	public StateControls(ActionListener listener) {
 		addListener(this);
@@ -49,5 +42,13 @@ public class StateControls extends JPanel implements ActionListener {
 			}
 		}
 
+	}
+	// ******************Getters & Setters********************
+	public int getSelected() {
+		return selected;
+	}
+	
+	public void setSelected(int selected) {
+		this.selected = selected;
 	}
 }

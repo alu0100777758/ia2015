@@ -32,6 +32,7 @@ public class DrawableCircle extends Circle implements Drawable {
 		else
 			g.drawOval(xRectangle, yRectangle, (int)getRadius()*2, (int)getRadius()*2);
 	}
+	// ******************Getters & Setters********************
 	public Point2D getPos() {
 		return getCenter();
 	}

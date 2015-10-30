@@ -119,6 +119,7 @@ public abstract class Actor implements Drawable, Positionable {
 		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 		return op.filter(image, null);
 	}
+	// ******************Getters & Setters********************
 	public int getFacing() {
 		return facing;
 	}

@@ -12,24 +12,6 @@ public class Point2D {
 		this.y = y;
 	}
 
-	public double x() {
-		return this.x;
-	}
-	public Point2D getRounded(){
-		return new Point2D(Math.round(x()), Math.round(y()));
-	}
-
-	public double y() {
-		return this.y;
-	}
-
-	public void setX(double val) {
-		this.x = val;
-	}
-
-	public void setY(double val) {
-		this.y = val;
-	}
 	
 	public String toString(){
 		return new String("(" + x() +","+y()+")"); 
@@ -56,5 +38,24 @@ public class Point2D {
 
 	public boolean equals(Point2D other) {
 		return (this.x() == other.x()) && (this.y() == other.y());
+	}
+	// ******************Getters & Setters********************
+	public double x() {
+		return this.x;
+	}
+	public Point2D getRounded(){
+		return new Point2D(Math.round(x()), Math.round(y()));
+	}
+	
+	public double y() {
+		return this.y;
+	}
+	
+	public void setX(double val) {
+		this.x = val;
+	}
+	
+	public void setY(double val) {
+		this.y = val;
 	}
 }

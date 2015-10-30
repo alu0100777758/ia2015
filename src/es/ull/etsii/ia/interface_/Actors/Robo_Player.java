@@ -168,6 +168,7 @@ public class Robo_Player extends Actor {
 		}
 		return false;
 	}
+	// ******************Getters & Setters********************
 	public ArrayList<Point2D> getPoints() {
 		return points;
 	}
