@@ -10,7 +10,6 @@ public class Ball extends Actor {
 		setSpritePath(SPRITE_PATH);
 		loadSprite();
 		setPos(pos);
-		System.out.println("haciendo bola");
 	}
 
 }

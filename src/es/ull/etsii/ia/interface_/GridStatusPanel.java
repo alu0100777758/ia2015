@@ -14,34 +14,34 @@ public class GridStatusPanel extends GridPanel {
 	boolean pathON = false;
 	public GridStatusPanel(){
 	}
-	void updatePath(){
-		path.clear();
-		path.setStart(new Point2D(gethPoints()/2,getvPoints()/2));
-	}
-	public void setvPoints(int vPoints) {
-		super.setvPoints(vPoints);
-		if(pathIsBroken()){
-			updatePath();
-		}
-	}
-	public void setStart(Point2D point){
-		path.setStart(point);
-	}
-	public void sethPoints(int hPoints) {
-		super.sethPoints(hPoints);
-		if(pathIsBroken()){
-			updatePath();
-		}
-	}
+//	void updatePath(){
+//		path.clear();
+//		path.setStart(new Point2D(gethPoints()/2,getvPoints()/2));
+//	}
+//	public void setvPoints(int vPoints) {
+//		super.setvPoints(vPoints);
+//		if(pathIsBroken()){
+//			updatePath();
+//		}
+//	}
+//	public void setStart(Point2D point){
+//		path.setStart(point);
+//	}
+//	public void sethPoints(int hPoints) {
+//		super.sethPoints(hPoints);
+//		if(pathIsBroken()){
+//			updatePath();
+//		}
+//	}
 	public boolean pathIsBroken(){
 		if(path == null)
 			return false;
 //		return (path.isAtBorder() || path.isOut());
 		return true;
 	}
-	public boolean atBorder(){
-		return path.isAtBorder();
-	}
+//	public boolean atBorder(){
+//		return path.isAtBorder();
+//	}
 	public void pathColor(Color color){
 		path.setColor(color);
 	}
@@ -49,7 +49,7 @@ public class GridStatusPanel extends GridPanel {
 		GridPanel grid = this;
 		path = new IA_State(grid);
 		pathON = true;
-		updatePath();
+//		updatePath();
 	}
 	public void paint(Graphics g){
 		super.paint(g);

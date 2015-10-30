@@ -30,7 +30,7 @@ public final class Control {
 	private static Control instance = null;
 	private int stepDelay = 1000;
 	public static final Point2D[] DIRECTION_POINTS = { WEST, EAST, NORTH, SOUTH };
-	private RandomPathWindow window = new RandomPathWindow();
+	private CellRoboCup window = new CellRoboCup();
 	private GridStatusPanel grid = new GridStatusPanel();
 	private GridControls gridControls = new GridControls();
 	private ControlsEventManager controlPanelEventManager;
@@ -142,11 +142,11 @@ public final class Control {
 	 *            inicial del camino en base a la posici�n del rat�n.
 	 */
 	public void clickedIn(Point2D point) {
-		grid.path.clear();
-		grid.path.setStart(grid.toSystem(point));
+//		grid.path.clear();
+//		grid.path.setStart(grid.toSystem(point));
 		grid.path.getActors().add(
 				new Robo_Player((short) 1, grid.toSystem(point), grid,
-						Actor.FACE_NORTH));
+						Actor.FACE_NORTH, grid.path));
 		grid.repaint();
 	}
 
@@ -157,16 +157,16 @@ public final class Control {
 	 */
 	public Point2D randomMove() {
 		Point2D randomPoint = DIRECTION_POINTS[rand.nextInt(4)];
-		if ((!gridControls.revisitCheck.isSelected())
-				&& grid.path.hasVisited(grid.path.getLast().add(randomPoint))) {
+//		if ((!gridControls.revisitCheck.isSelected())
+//				&& grid.path.hasVisited(grid.path.getLast().add(randomPoint))) {
 			try {
 				return randomMove();
 			} catch (StackOverflowError e) {
 				setWalking(false);
 				return new Point2D(0, 0);
 			}
-		}
-		return randomPoint;
+//		}
+//		return randomPoint;
 	}
 
 	/**
@@ -190,8 +190,8 @@ public final class Control {
 //		try {
 			grid.path.tick();
 			grid.repaint();
-			if (gridControls.borderCheck.isSelected() && grid.atBorder())
-				walking = false;
+//			if (gridControls.borderCheck.isSelected() && grid.atBorder())
+//				walking = false;
 //		} catch (OutOfSystemException e) {
 //			walking = false;
 //		}
@@ -220,6 +220,7 @@ public final class Control {
 				stepTimer.stop();
 				break walkingOngrid;
 			}
+			stepTimer.setDelay(gridControls.getDelay());
 			launchTick();
 		}
 	}
@@ -228,7 +229,7 @@ public final class Control {
 	 * m�todo que reinicia y limpia el camino mostrado por pantalla.
 	 */
 	public void reset() {
-		grid.updatePath();
+//		grid.updatePath();
 		grid.repaint();
 	}
 
@@ -272,8 +273,8 @@ public final class Control {
 	}
 
 	void setPathStart(int x, int y) {
-		grid.updatePath();
-		grid.setStart(new Point2D(x, y));
+//		grid.updatePath();
+//		grid.setStart(new Point2D(x, y));
 		grid.repaint();
 	}
 
@@ -297,8 +298,8 @@ public final class Control {
 			System.out.println("actor : " + gridControls.getActorType());
 			if(gridControls.getActorType() < 2){
 			setLast_bot(new Robo_Player((short) gridControls.getActorType(), grid.toSystem(point), grid,
-					Actor.FACE_NORTH));
-			grid.path.getActors().add(getLast_bot());
+					Actor.FACE_NORTH, grid.path));
+			grid.path.addActor(getLast_bot());
 			}
 			else{
 				if(getBall() == null){
@@ -319,7 +320,7 @@ public final class Control {
 		if (getLast_bot() != null) {
 			Point2D difference = grid.toSystem(point).substract(
 					getLast_bot().getPos());
-			System.out.println("difference : " + difference);
+//			System.out.println("difference : " + difference);
 			if (Math.abs(difference.x()) > Math.abs(difference.y())) {
 				if (difference.x() < 0)
 					getLast_bot().setFacing(Actor.FACE_WEST);
