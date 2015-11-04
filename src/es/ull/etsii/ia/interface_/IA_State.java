@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import javax.swing.text.AbstractDocument.BranchElement;
+
 import es.ull.etsii.ia.interface_.Actors.Actor;
 import es.ull.etsii.ia.interface_.Actors.SensitiveEnviroment;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
@@ -16,89 +18,43 @@ import es.ull.utils.Array2D;
  * 		   Clase encargada de almacenar y dibujar un estado en base a un objeto que presente la interfaz
  *         CoordinateSystem2D.
  */
-public class IA_State implements SensitiveEnviroment {
+public class IA_State extends GridPanel implements SensitiveEnviroment {
 	private Array2D<Actor> mapState; // Matriz donde se almacena la visión
 										// global del
 	// mapa.
-	private CoordinateSystem2D coordinates = null;
 	private Color color;
 	private Point2D workingSize;
 	private ArrayList<Actor> actors = new ArrayList<Actor>();
 	private int turnPointer = 0;
 
-	public IA_State(CoordinateSystem2D coordinates) {
-		this.coordinates = coordinates;
-		setWorkingSize(getCoordinates().getPointBounds());
+	public IA_State() {
+		setWorkingSize(getPointBounds());
 		setColor(Color.RED);
 		setMapState(new Array2D<Actor>((int) getWorkingSize().x(),
 				(int) getWorkingSize().y()));
 	}
 
-	public void setCoordinateSystem(CoordinateSystem2D coordinates) {
-		this.coordinates = coordinates;
-	}
-
-	// public void addPoint(Point2D point) throws OutOfSystemException {
-	// if (!coordinates.inSystem(point))
-	// throw new OutOfSystemException();
-	// points.add(point);
-	// }
-	//
-	// public Point2D getLast() {
-	// return points.get(points.size() - 1);
-	// }
-	//
-	// public void addRelative(Point2D point) throws OutOfSystemException {
-	// addPoint(points.get(points.size() - 1).add(point));
-	// }
-	//
-	// public void setStart(Point2D point) {
-	// if (points.size() < 1)
-	// points.add(point);
-	// else
-	// points.set(0, point);
-	// }
-	//
-	// public void clear() {
-	// points.clear();
-	// }
-	//
-	// public boolean isOut() {
-	// for (Point2D point : points) {
-	// if (!coordinates.inSystem(point))
-	// return false;
-	// }
-	// return true;
-	// }
-	//
-	// public boolean isAtBorder() {
-	// for (Point2D point : points) {
-	// if (coordinates.atBorder(point))
-	// return true;
-	// }
-	// return false;
-	// }
-	//
 	public void addActor(Actor actor){
 		getActors().add(actor);
 		getMapState().set((int)actor.getPos().x(),(int)actor.getPos().y(), actor);
 	}
-	public void drawState(Graphics originalG) {
-		Graphics2D g = (Graphics2D) originalG.create();
-		g.setColor(color);
-			drawLines(g);
-			drawGoals((Graphics2D)g.create());
+	public void paint(Graphics g) {
+		super.paint(g);
+		Graphics2D g2D = (Graphics2D) g.create();
+		g2D.setColor(color);
+			drawLines(g2D);
+			drawGoals((Graphics2D)g2D.create());
 		for (Actor act : getActors())
-			act.paint(g);
+			act.paint(g2D);
 	}
 
 	private void drawGoals(Graphics2D g) {
-		int size = getCoordinates().getVBounds()/3;
-		int ypos = getCoordinates().getVBounds()-size % 2 == 0 ? (getCoordinates().getVBounds()-size)/2 : (getCoordinates().getVBounds() - 1 - size )/2; 
-		Point2D topLeft = getCoordinates().getPointFor(0, ypos);
-		Point2D bottomLeft = new Point2D(getCoordinates().getCellCenter(new Point2D(1,0)).x(),getCoordinates().getPointFor(new Point2D(0,ypos+size)).y());
-		Point2D topRight = 	new Point2D(getCoordinates().getCellCenter(new Point2D(getCoordinates().getHBounds()-3,0)).x(),getCoordinates().getPointFor(new Point2D(0,ypos)).y());
-		Point2D bottomRight = getCoordinates().getPointFor(getCoordinates().getHBounds()-1, ypos + size);
+		int size = getVBounds()/3;
+		int ypos = getVBounds()-size % 2 == 0 ? (getVBounds()-size)/2 : (getVBounds() - 1 - size )/2; 
+		Point2D topLeft = getPointFor(0, ypos);
+		Point2D bottomLeft = new Point2D(getCellCenter(new Point2D(1,0)).x(),getPointFor(new Point2D(0,ypos+size)).y());
+		Point2D topRight = 	new Point2D(getCellCenter(new Point2D(getHBounds()-3,0)).x(),getPointFor(new Point2D(0,ypos)).y());
+		Point2D bottomRight = getPointFor(getHBounds()-1, ypos + size);
 		g.setColor(new Color(1, 1, 1, (float)0.7)); // TODO limpiar
 		g.fillRect((int)topLeft.x(), (int)topLeft.y(), (int)(bottomLeft.x()-topLeft.x()), (int)(bottomLeft.y() - topLeft.y()));
 		g.fillRect((int)topRight.x(), (int)topRight.y(), (int)(bottomRight.x()-topRight.x()), (int)(bottomRight.y() - topRight.y()));
@@ -109,8 +65,8 @@ public class IA_State implements SensitiveEnviroment {
 		Graphics2D g = (Graphics2D)gr.create();
 		g.setStroke(new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		g.setColor(Color.WHITE); 
-		Point2D topleft = coordinates.getCellCenter(new Point2D(1, 1));
-		Point2D bottonRight = coordinates.getCellCenter(new Point2D(getCoordinates().getHBounds()-3, getCoordinates().getVBounds()-3));
+		Point2D topleft = getCellCenter(new Point2D(1, 1));
+		Point2D bottonRight = getCellCenter(new Point2D(getHBounds()-3, getVBounds()-3));
 		g.drawRect((int)topleft.x(), (int)topleft.y(), (int)(bottonRight.x()-topleft.x()),(int)(bottonRight.y()-topleft.y()));
 	}
 
@@ -128,16 +84,101 @@ public class IA_State implements SensitiveEnviroment {
 		if (getTurnPointer() >= getActors().size())
 			setTurnPointer(0);
 	}
+	
+	@Override
+	public Array2D<Actor> getVision(Actor sensor) {
+		Array2D<Actor> vision;
+		switch (sensor.getFacing()) {
+		case Actor.FACE_NORTH:
+//			vision = getMapState().copy(0, 0, (int)sensor.getPos().x(), getMapState().getColumns()-1);
+			vision = getMapState().copy(0, 0,getMapState().getColumns()-1, (int)sensor.getPos().x());
+			break;
+		case Actor.FACE_SOUTH: 
+			vision = getMapState().copy( 0,(int)sensor.getPos().x(), getMapState().getRows()-1, getMapState().getColumns()-1);
+			break;
+		case Actor.FACE_EAST:
+			vision = getMapState().copy(0, 0, getMapState().getRows()-1, (int)sensor.getPos().x());
+			break;
+		case Actor.FACE_WEST:
+			vision = getMapState().copy( (int)sensor.getPos().y(),0, getMapState().getRows()-1, getMapState().getColumns()-1);
+		break;
+		default:
+			vision = null;
+			break;
+		}
+		return vision;
+	}
+
+	public void reset() {
+		setMapState(new Array2D<Actor>(getHBounds(), getVBounds()));
+		getActors().clear();
+		setTurnPointer(0);
+		repaint();
+	}
+	// fromgridstatus
+//	void updatePath(){
+//		path.clear();
+//		path.setStart(new Point2D(gethPoints()/2,getvPoints()/2));
+//	}
+//	public void setvPoints(int vPoints) {
+//		super.setvPoints(vPoints);
+//		if(pathIsBroken()){
+//			updatePath();
+//		}
+//	}
+//	public void setStart(Point2D point){
+//		path.setStart(point);
+//	}
+//	public void sethPoints(int hPoints) {
+//		super.sethPoints(hPoints);
+//		if(pathIsBroken()){
+//			updatePath();
+//		}
+//	}
+//	public boolean pathIsBroken(){
+//		if(state == null)
+//			return false;
+////		return (path.isAtBorder() || path.isOut());
+//		return true;
+//	}
+//	public boolean atBorder(){
+//		return path.isAtBorder();
+//	}
+//	public void pathColor(Color color){
+//		setColor(color);
+//	}
+//	public void turnOnPath(){
+////		GridPanel grid = this;
+////		state = new IA_State(grid);
+//		pathON = true;
+////		updatePath();
+//	}
+//	public void paint(Graphics g){
+//		super.paint(g);
+//		if(pathON)
+//			drawState(g);
+//	}
+//	public void paintComponent(Graphics g){
+//		super.paintComponent(g);
+//		g.setColor(Color.GREEN);
+//		if(pathON)
+//			path.drawPath(g);
+//	}
+	// ******************Getters & Setters********************
+//	public IA_State getState() {
+//		return state;
+//	}
+//	public void setState(IA_State state) {
+//		this.state = state;
+//	}
+//	public boolean isPathON() {
+//		return pathON;
+//	}
+//	public void setPathON(boolean pathON) {
+//		this.pathON = pathON;
+//	}
 	// ******************Getters & Setters********************
 
-	public CoordinateSystem2D getCoordinates() {
-		return coordinates;
-	}
-
-
-	public void setCoordinates(CoordinateSystem2D coordinates) {
-		this.coordinates = coordinates;
-	}
 
 	public void setColor(Color color) {
 		this.color = color;
@@ -178,18 +219,4 @@ public class IA_State implements SensitiveEnviroment {
 	public void setMapState(Array2D<Actor> mapState) {
 		this.mapState = mapState;
 	}
-
-	@Override
-	public Array2D<Actor> getVision(Actor sensor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void reset() {
-		setMapState(new Array2D<Actor>(getMapState().getRows(), getMapState().getColumns()));
-		getActors().clear();
-		setTurnPointer(0);
-	}
-	
-	
 }

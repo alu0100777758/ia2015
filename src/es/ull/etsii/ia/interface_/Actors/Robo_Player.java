@@ -67,6 +67,7 @@ public class Robo_Player extends Actor {
 
 	protected void evaluate() {
 		setView(getMap().getVision(this));
+		System.out.println(getView());
 		getEvaluatedPoints().clear();
 		Point2D pos = getCoordinates().getPointFor(getPos());
 		Point2D diff = diffPoint(pos);

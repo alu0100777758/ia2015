@@ -24,7 +24,7 @@ public final class Control {
 	private static Control instance = null;					//	Instancia Singleton.
 	private int stepDelay = GridControls.DEFAULT_FPS*1000;	//	Delay por defecto.
 	private CellRoboCup window = new CellRoboCup();			//	Ventana de la aplicacion.
-	private GridStatusPanel grid = new GridStatusPanel();	// 	Panel donde se dibuja la simulacion.
+	private IA_State grid = new IA_State();//= new GridStatusPanel();	// 	Panel donde se dibuja la simulacion.
 	private GridControls gridControls = new GridControls();	// 	Panel donde se dibujan los controles.
 	private ControlsEventManager controlPanelEventManager;	// 	Manejador de eventos de los controles.
 	private TimerEventManager timerManager;					//	Manejador de eventos del temporizador.
@@ -76,7 +76,7 @@ public final class Control {
 		buildInterface();
 		setEventManagers();
 		gridControls.setListener(getControlPanelEventManager());
-		grid.turnOnPath();
+//		grid.turnOnPath();
 		setStepTimer(new Timer(stepDelay, timerManager));
 		grid.addMouseListener(mouseControl);
 		grid.addMouseMotionListener(mouseControl);
@@ -101,7 +101,7 @@ public final class Control {
 	 */
 	public void launchTick() {
 //		try {
-			grid.state.tick();
+			grid.tick();
 			grid.repaint();
 //			if (gridControls.borderCheck.isSelected() && grid.atBorder())
 //				walking = false;
@@ -110,10 +110,10 @@ public final class Control {
 //		}
 	}
 
-	public void setPathColor(Color color) {
-		grid.pathColor(color);
-		grid.repaint();
-	}
+//	public void setPathColor(Color color) {
+//		grid.pathColor(color);
+//		grid.repaint();
+//	}
 
 	/**
 	 * @return Color m�todo que devuelve el color seleccionado por el usuario
@@ -144,7 +144,6 @@ public final class Control {
 	public void reset() {
 		setBall(null);
 		grid.reset();
-		grid.repaint();
 	}
 
 	/**
@@ -178,6 +177,7 @@ public final class Control {
 		} finally {
 			if (!parseError) {
 				setGridPointsDensity(x, y);
+				reset();
 			}
 		}
 	}
@@ -188,19 +188,19 @@ public final class Control {
 				Point2D inSystem = getGrid().toSystem(point);
 				Robo_Player robot;
 				try {
-					robot = (Robo_Player)getGrid().getState().getMapState().get((int)inSystem.x(), (int)inSystem.y());
+					robot = (Robo_Player)getGrid().getMapState().get((int)inSystem.x(), (int)inSystem.y());
 					robot.setTeam(gridControls.getActorType());
 				} catch (Exception e) {
-				robot = (Robo_Player)getGrid().getState().getMapState().get((int)inSystem.x(), (int)inSystem.y());
+				robot = (Robo_Player)getGrid().getMapState().get((int)inSystem.x(), (int)inSystem.y());
 			setLast_bot(new Robo_Player((short) gridControls.getActorType(), inSystem, getGrid(),
-					Actor.FACE_NORTH, getGrid().getState()));
-			getGrid().getState().addActor(getLast_bot());
+					Actor.FACE_NORTH, getGrid()));
+			getGrid().addActor(getLast_bot());
 				}
 			}
 			else{
 				if(getBall() == null){
 					setBall(new Ball(getGrid(),  getGrid().toSystem(point)));
-					getGrid().getState().getActors().add(getBall());
+					getGrid().getActors().add(getBall());
 				}
 			}
 				
@@ -284,11 +284,13 @@ public final class Control {
 		this.walking = walking;
 	}
 
-	public GridStatusPanel getGrid() {
+
+
+	public IA_State getGrid() {
 		return grid;
 	}
 
-	public void setGrid(GridStatusPanel grid) {
+	public void setGrid(IA_State grid) {
 		this.grid = grid;
 	}
 
