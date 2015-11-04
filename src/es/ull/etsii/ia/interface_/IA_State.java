@@ -23,20 +23,22 @@ public class IA_State extends GridPanel implements SensitiveEnviroment {
 										// global del
 	// mapa.
 	private Color color;
-	private Point2D workingSize;
+//	private Point2D workingSize;
 	private ArrayList<Actor> actors = new ArrayList<Actor>();
 	private int turnPointer = 0;
 
 	public IA_State() {
-		setWorkingSize(getPointBounds());
 		setColor(Color.RED);
-		setMapState(new Array2D<Actor>((int) getWorkingSize().x(),
-				(int) getWorkingSize().y()));
+		resetMap();
+	}
+
+	private void resetMap() {
+		setMapState(new Array2D<Actor>(getVBounds()-1, getHBounds()-1));
 	}
 
 	public void addActor(Actor actor){
 		getActors().add(actor);
-		getMapState().set((int)actor.getPos().x(),(int)actor.getPos().y(), actor);
+		getMapState().set((int)actor.getPos().y(),(int)actor.getPos().x(), actor);
 	}
 	public void paint(Graphics g) {
 		super.paint(g);
@@ -88,13 +90,15 @@ public class IA_State extends GridPanel implements SensitiveEnviroment {
 	@Override
 	public Array2D<Actor> getVision(Actor sensor) {
 		Array2D<Actor> vision;
+		System.out.println(getMapState());
 		switch (sensor.getFacing()) {
 		case Actor.FACE_NORTH:
-//			vision = getMapState().copy(0, 0, (int)sensor.getPos().x(), getMapState().getColumns()-1);
-			vision = getMapState().copy(0, 0,getMapState().getColumns()-1, (int)sensor.getPos().x());
+			System.out.println("north");
+			vision = getMapState().copy(0, 0,(int)sensor.getPos().y(), getMapState().getRows()-1);
 			break;
 		case Actor.FACE_SOUTH: 
-			vision = getMapState().copy( 0,(int)sensor.getPos().x(), getMapState().getRows()-1, getMapState().getColumns()-1);
+			System.out.println("south");
+			vision = getMapState().copy( (int)sensor.getPos().y(),0, getMapState().getRows()-1, getMapState().getColumns()-1);
 			break;
 		case Actor.FACE_EAST:
 			vision = getMapState().copy(0, 0, getMapState().getRows()-1, (int)sensor.getPos().x());
@@ -110,7 +114,7 @@ public class IA_State extends GridPanel implements SensitiveEnviroment {
 	}
 
 	public void reset() {
-		setMapState(new Array2D<Actor>(getHBounds(), getVBounds()));
+		resetMap();
 		getActors().clear();
 		setTurnPointer(0);
 		repaint();
@@ -192,13 +196,13 @@ public class IA_State extends GridPanel implements SensitiveEnviroment {
 		this.turnPointer = turnPointer;
 	}
 
-	public Point2D getWorkingSize() {
-		return workingSize;
-	}
-
-	public void setWorkingSize(Point2D workingSize) {
-		this.workingSize = workingSize;
-	}
+//	public Point2D getWorkingSize() {
+//		return workingSize;
+//	}
+//
+//	public void setWorkingSize(Point2D workingSize) {
+//		this.workingSize = workingSize;
+//	}
 
 	public ArrayList<Actor> getActors() {
 		return actors;

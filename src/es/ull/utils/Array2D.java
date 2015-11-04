@@ -11,8 +11,10 @@ public class Array2D<Type> {
 		setN(n);
 	}
 	private int getIndex(int row, int column) {
-		System.out.println();
-		return getColumns()-1 * row + column;
+//		System.out.println("Trow: " + getRows() + "   TCol:" + getColumns());
+		if(!(row < getRows() && column < getColumns()))
+				System.out.println("ERROR: row : "+ row + "    column: " +column);
+		return (getColumns() * row) + column;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -27,14 +29,14 @@ public class Array2D<Type> {
 	}
 
 	public Array2D<Type> copy(int row1, int column1, int row2, int column2) {
-		Array2D<Type> array = new Array2D<Type>(row2 - row1, column2 - column1);
+		Array2D<Type> array = new Array2D<Type>(row2 - (row1-1), column2 - (column1-1));
 		System.out.println("maxIndex: "+getIndex(array.getRows(), array.getColumns()));
 		System.out.println("arraylenght = " + array.array.length);
 		System.out.println("Copiando ("+row1+","+column1+") - ("+row2+","+column2+") a matriz("+array.getRows()+","+array.getColumns()+")" );
 		int row = 0;
 		int column = 0;
-		for (int i = row1; i < row2; i++) {
-			for (int j = column1; j < column2; j++) {
+		for (int i = row1; row < array.getRows(); i++) {
+			for (int j = column1; column < array.getColumns(); j++) {
 				array.set(row, column, get(i, j));
 				column++;
 //				System.out.println("peta en i = " +i +"\t j = "+j +"  con index= " + getIndex(row, column));
@@ -45,7 +47,7 @@ public class Array2D<Type> {
 		return array;
 	}
 	public String toString(){
-		String string = new String("check");
+		String string = new String();
 		for(int i= 0; i < getRows(); i++ ){
 			for(int j = 0; j < getColumns(); j++){
 				string += (" | " + get(i, j));

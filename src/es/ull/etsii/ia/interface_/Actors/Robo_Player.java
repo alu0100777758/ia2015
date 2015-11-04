@@ -133,9 +133,14 @@ public class Robo_Player extends Actor {
 
 	public void randomMove() {
 		int random = new Random().nextInt(4);
-		setPos(getPos().add(MOVEMENT[random]));
+		move(getPos().add(MOVEMENT[random]));
 		setFacing(FACE[random]);
 		addRelative(MOVEMENT[random]);
+	}
+
+	private void move(Point2D point2d) {
+		getView().switchElements((int)getPos().y(), (int)getPos().x(),(int) point2d.y(), (int)point2d.x());
+		setPos(point2d);
 	}
 
 	public void addPoint(Point2D point) {
@@ -185,6 +190,10 @@ public class Robo_Player extends Actor {
 				return true;
 		}
 		return false;
+	}
+	@Override
+	public String toString() {
+		return "R"+getPos();
 	}
 	// ******************Getters & Setters********************
 	public ArrayList<Point2D> getPoints() {
