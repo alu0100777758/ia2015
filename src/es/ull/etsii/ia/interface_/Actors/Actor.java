@@ -20,12 +20,12 @@ public abstract class Actor implements Drawable, Positionable {
 	public static final int FACE_EAST = 90;
 	public static final int FACE_WEST = -90;
 	public static final int FACE_SOUTH = 180;
-	public static final int FACE [] = { FACE_NORTH, FACE_EAST, FACE_WEST, FACE_SOUTH};
-	public static final Point2D MOVEMENT_SOUTH = new Point2D(0, 1);
 	public static final Point2D MOVEMENT_NORTH = new Point2D(0, -1);
 	public static final Point2D MOVEMENT_EAST = new Point2D(1, 0);
 	public static final Point2D MOVEMENT_WEST = new Point2D(-1, 0);
-	public static final Point2D MOVEMENT [] = {MOVEMENT_NORTH, MOVEMENT_EAST, MOVEMENT_WEST, MOVEMENT_SOUTH};
+	public static final Point2D MOVEMENT_SOUTH = new Point2D(0, 1);
+	public static final int [] FACE = { FACE_NORTH, FACE_EAST, FACE_WEST, FACE_SOUTH};
+	public static final Point2D [] MOVEMENT = {MOVEMENT_NORTH, MOVEMENT_EAST, MOVEMENT_WEST, MOVEMENT_SOUTH};
 	public static final int NORTH = 0;
 	public static final int EAST = 1;
 	public static final int WEST = 2;
@@ -82,9 +82,9 @@ public abstract class Actor implements Drawable, Positionable {
 	
 	@Override
 	public void setPos(Point2D newpos) {
-		this.position = newpos;
 		for(MovementListener listener : getMovListeners())
-			listener.updated();
+			listener.update(getPos(), newpos);
+		this.position = newpos;
 	}
 	public BufferedImage getSprite() {
 		return sprite;

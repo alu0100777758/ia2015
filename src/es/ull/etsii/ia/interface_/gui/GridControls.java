@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -27,11 +28,12 @@ public class GridControls extends JPanel {
 	public JButton setDimensions = new JButton(SET_DIMENSIONS_TEXT);
 	JTextArea vPathStart = new JTextArea(1, 5);
 	JTextArea hPathStart = new JTextArea(1, 5);
+//	public BinomicInput dimensions = new BinomicInput(OPTIONS_TITLE_1, COMPONENT_SEPARATOR_1);
 	public JButton setPathStart = new JButton(SET_DIMENSIONS_TEXT);
-	public JButton startPath = new JButton(START_TEXT);
-	public JButton selectColor = new JButton("Seleccionar"); // TODO incluir seleccion de agentes
-	public JButton reset = new JButton(RESET_TEXT);
-	public JSlider fps = new JSlider(1, 60, DEFAULT_FPS);
+	public  JButton startPath = new JButton(START_TEXT);
+	public  JButton step = new JButton("siguiente");
+	public  JButton reset = new JButton(RESET_TEXT);
+	public  JSlider fps = new JSlider(1, 60, DEFAULT_FPS);
 	JTextArea delayMillis = new JTextArea(1, 10);
 //	public JCheckBox borderCheck = new JCheckBox("Parada en borde");
 //	public JCheckBox revisitCheck = new JCheckBox("Revisita");
@@ -41,7 +43,7 @@ public class GridControls extends JPanel {
 //	public static final String OPTIONS_TITLE_2 = "Punto Inicial";
 //	public static final String COMPONENT_SEPARATOR_2 = ",";
 	public static final String BORDER_CHECK_TOOLTIP_TEXT = "<html>Si lo desmarca la simulaci�n podr� seguir avanzando aunque se llegue<br> a un borde, no obstante  se detendr� si intenta salirse del per�metro</html>";
-	
+	public  final JComponent [] initializingList = {fps,startPath, step, reset};
 	private StateControls stateInput;
 	public StateControls getStateInput() {
 		return stateInput;
@@ -54,7 +56,7 @@ public class GridControls extends JPanel {
 	public GridControls() {
 		super.setMaximumSize(new Dimension(25, getMaximumSize().height));
 		GridLayout layout = new GridLayout(11, 1);
-		layout.setVgap(10);
+		layout.setVgap(15);
 		setLayout(layout);
 		JPanel dimensions = new JPanel();
 		add(new JLabel(OPTIONS_TITLE_1));
@@ -64,15 +66,14 @@ public class GridControls extends JPanel {
 		dimensions.setMaximumSize(getMinimumSize());
 		add(dimensions);
 		add(setDimensions);
-		dimensions
-				.setMaximumSize(new Dimension(Integer.MAX_VALUE, TEXT_HEIGHT));
-		dimensions = new JPanel();
+		dimensions.setMaximumSize(new Dimension(Integer.MAX_VALUE, TEXT_HEIGHT));
+//		dimensions = new JPanel();
 //		add(new JLabel(OPTIONS_TITLE_2));
 //		dimensions.add(vPathStart);
 //		dimensions.add(new JLabel(COMPONENT_SEPARATOR_2));
 //		dimensions.add(hPathStart);
-		dimensions.setMaximumSize(getMinimumSize());
-		add(dimensions);
+//		dimensions.setMaximumSize(getMinimumSize());
+//		add(dimensions);
 //		add(setPathStart);
 //		add(delayMillis);
 		fps.setMajorTickSpacing(10);
@@ -84,6 +85,7 @@ public class GridControls extends JPanel {
 //		add(borderCheck);
 //		add(revisitCheck);
 		add(startPath);
+		add(step);
 		add(reset);
 //		add(selectColor);
 		setStateInput(new StateControls(listener));
@@ -99,9 +101,8 @@ public class GridControls extends JPanel {
 		setDimensions.addActionListener(listener);
 		setPathStart.addActionListener(listener);
 		startPath.addActionListener(listener);
-
-		selectColor.addActionListener(listener);
 		reset.addActionListener(listener);
+		step.addActionListener(listener);
 	}
 
 	public void setListener(ActionListener listener) {

@@ -59,10 +59,9 @@ public class ControlsEventManager implements ActionListener {
 				}
 				setStart(!isStart());
 			} 
-//			else if (pulsedButton.equals(gridControls.selectColor)) {
-//				Control.getInstance().setPathColor(
-//						Control.getInstance().getColorFromDialog());
-//			} 
+			else if (pulsedButton.equals(gridControls.step)) {
+				Control.getInstance().step();
+			} 
 			else if (pulsedButton.equals(gridControls.reset)) {
 				System.out.println("reset");
 				Control.getInstance().reset();

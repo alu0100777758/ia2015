@@ -64,7 +64,6 @@ public class Robo_Player extends Actor {
 		mode = !mode;
 		return mode;
 	}
-
 	protected void evaluate() {
 		setView(getMap().getVision(this));
 		System.out.println(getView());
@@ -139,7 +138,7 @@ public class Robo_Player extends Actor {
 	}
 
 	private void move(Point2D point2d) {
-		getView().switchElements((int)getPos().y(), (int)getPos().x(),(int) point2d.y(), (int)point2d.x());
+//		getView().switchElements((int)getPos().y(), (int)getPos().x(),(int) point2d.y(), (int)point2d.x());
 		setPos(point2d);
 	}
 

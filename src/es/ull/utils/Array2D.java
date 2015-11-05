@@ -1,6 +1,9 @@
 package es.ull.utils;
 
-public class Array2D<Type> {
+import java.util.Iterator;
+import java.util.function.UnaryOperator;
+
+public class Array2D<Type> implements Iterable<Type> {
 	private Object array[];
 	private int rows;
 	private int columns;
@@ -10,10 +13,12 @@ public class Array2D<Type> {
 		setM(m);
 		setN(n);
 	}
+
 	private int getIndex(int row, int column) {
-//		System.out.println("Trow: " + getRows() + "   TCol:" + getColumns());
-		if(!(row < getRows() && column < getColumns()))
-				System.out.println("ERROR: row : "+ row + "    column: " +column);
+		// System.out.println("Trow: " + getRows() + "   TCol:" + getColumns());
+		if (!(row < getRows() && column < getColumns()))
+			System.out.println("ERROR: row : " + row + "    column: " + column);
+//		System.out.println("index: " + ((getColumns() * row) + column) );
 		return (getColumns() * row) + column;
 	}
 
@@ -24,59 +29,49 @@ public class Array2D<Type> {
 	}
 
 	public void set(int row, int column, Type value) {
-//		getArray()[getIndex(row, column)] = value;
+		 //getArray()[getIndex(row, column)] = value;
 		set(value, row, column);
 	}
 
 	public Array2D<Type> copy(int row1, int column1, int row2, int column2) {
-		Array2D<Type> array = new Array2D<Type>(row2 - (row1-1), column2 - (column1-1));
-		System.out.println("maxIndex: "+getIndex(array.getRows(), array.getColumns()));
-		System.out.println("arraylenght = " + array.array.length);
-		System.out.println("Copiando ("+row1+","+column1+") - ("+row2+","+column2+") a matriz("+array.getRows()+","+array.getColumns()+")" );
-		int row = 0;
-		int column = 0;
-		for (int i = row1; row < array.getRows(); i++) {
-			for (int j = column1; column < array.getColumns(); j++) {
-				array.set(row, column, get(i, j));
-				column++;
-//				System.out.println("peta en i = " +i +"\t j = "+j +"  con index= " + getIndex(row, column));
+		Array2D<Type> array = new Array2D<Type>(row2 - (row1 - 1), column2
+				- (column1 - 1));
+//		System.out.println("maxIndex: "
+//				+ getIndex(array.getRows(), array.getColumns()));
+//		System.out.println("arraylenght = " + array.array.length);
+//		System.out.println("Copiando (" + row1 + "," + column1 + ") - (" + row2
+//				+ "," + column2 + ") a matriz(" + array.getRows() + ","
+//				+ array.getColumns() + ")");
+		for (int i = 0; i < array.getRows(); i++) {
+			for (int j = 0; j < array.getColumns(); j++) {
+				array.set(i, j, get(row1+i, column1+j));
+//				System.out.println("accediendo a : ("+i+','+j+')' );
 			}
-			row++;
 		}
-		// array.insertSubarray(0, 0, this); //TODO
 		return array;
 	}
-	public String toString(){
+
+	public String toString() {
 		String string = new String();
-		for(int i= 0; i < getRows(); i++ ){
-			for(int j = 0; j < getColumns(); j++){
+		for (int i = 0; i < getRows(); i++) {
+			for (int j = 0; j < getColumns(); j++) {
 				string += (" | " + get(i, j));
 			}
 			string += "\n";
 		}
 		return string;
 	}
-	// public void insertSubarray(int rowInit, int columnInit, Array2D<Type>
-	// submatrix){
-	// int rowEnd = submatrix.getRows() < getRows() ? submatrix.getRows() :
-	// getRows();
-	// int columnEnd = submatrix.getColumns() < getColumns() ?
-	// submatrix.getColumns() : getColumns();
-	//
-	// for(int i = rowInit; i < rowEnd; i++){
-	// for(int j = columnEnd; j<columnEnd;j++){
-	// set(i, j, submatrix.get(i, j));
-	// }
-	// }
-	// }
-	public void switchElements(int x1, int y1, int x2, int y2){
+
+	public void switchElements(int x1, int y1, int x2, int y2) {
 		Object dummy = get(x1, y1);
 		set(x1, y1, get(x2, y2));
 		set(dummy, x2, y2);
 	}
+
 	private void set(Object value, int row, int column) {
 		getArray()[getIndex(row, column)] = value;
 	}
+
 	protected Object[] getArray() {
 		return array;
 	}
@@ -99,6 +94,33 @@ public class Array2D<Type> {
 
 	protected void setN(int n) {
 		this.columns = n;
+	}
+	
+//	@SuppressWarnings("unchecked")
+//	public void foreach(TernaryOperator<Type> lambda){
+//		for(Type element : (Type[])getArray()){
+//			lambda.apply(element);
+//		}
+//	}
+	private class Array2DIterator<Typein> implements Iterator<Typein> {
+		int index = 0;
+
+		@Override
+		public boolean hasNext() {
+			return index < getArray().length;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Typein next() {
+			index++;
+			return (Typein)getArray()[index-1];
+		}
+	}
+
+	@Override
+	public Iterator<Type> iterator() {
+		return new Array2DIterator<Type>();
 	}
 
 }

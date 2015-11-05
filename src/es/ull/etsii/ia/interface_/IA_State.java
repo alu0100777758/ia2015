@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.text.AbstractDocument.BranchElement;
 
 import es.ull.etsii.ia.interface_.Actors.Actor;
+import es.ull.etsii.ia.interface_.Actors.MovementListener;
 import es.ull.etsii.ia.interface_.Actors.SensitiveEnviroment;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 import es.ull.utils.Array2D;
@@ -18,7 +19,7 @@ import es.ull.utils.Array2D;
  * 		   Clase encargada de almacenar y dibujar un estado en base a un objeto que presente la interfaz
  *         CoordinateSystem2D.
  */
-public class IA_State extends GridPanel implements SensitiveEnviroment {
+public class IA_State extends GridPanel implements SensitiveEnviroment, MovementListener {
 	private Array2D<Actor> mapState; // Matriz donde se almacena la visión
 										// global del
 	// mapa.
@@ -38,6 +39,7 @@ public class IA_State extends GridPanel implements SensitiveEnviroment {
 
 	public void addActor(Actor actor){
 		getActors().add(actor);
+		actor.addMovListener(this);
 		getMapState().set((int)actor.getPos().y(),(int)actor.getPos().x(), actor);
 	}
 	public void paint(Graphics g) {
@@ -94,17 +96,19 @@ public class IA_State extends GridPanel implements SensitiveEnviroment {
 		switch (sensor.getFacing()) {
 		case Actor.FACE_NORTH:
 			System.out.println("north");
-			vision = getMapState().copy(0, 0,(int)sensor.getPos().y(), getMapState().getRows()-1);
+			vision = getMapState().copy(0, 0,(int)sensor.getPos().y(), getMapState().getColumns()-1);
 			break;
 		case Actor.FACE_SOUTH: 
 			System.out.println("south");
 			vision = getMapState().copy( (int)sensor.getPos().y(),0, getMapState().getRows()-1, getMapState().getColumns()-1);
 			break;
 		case Actor.FACE_EAST:
-			vision = getMapState().copy(0, 0, getMapState().getRows()-1, (int)sensor.getPos().x());
+			System.out.println("East");
+			vision = getMapState().copy(0, (int)sensor.getPos().x(), getMapState().getRows()-1,getMapState().getColumns()-1);
 			break;
 		case Actor.FACE_WEST:
-			vision = getMapState().copy( (int)sensor.getPos().y(),0, getMapState().getRows()-1, getMapState().getColumns()-1);
+			System.out.println("West");
+			vision = getMapState().copy( 0,0, getMapState().getRows()-1,(int)sensor.getPos().x() );
 		break;
 		default:
 			vision = null;
@@ -222,5 +226,11 @@ public class IA_State extends GridPanel implements SensitiveEnviroment {
 
 	public void setMapState(Array2D<Actor> mapState) {
 		this.mapState = mapState;
+	}
+
+	@Override
+	public void update(Point2D oldPos, Point2D newPos) {
+		System.out.println("switching from " + oldPos +" to "+ newPos);
+		getMapState().switchElements((int)oldPos.y(), (int)oldPos.x(), (int)newPos.y(), (int)newPos.x());
 	}
 }

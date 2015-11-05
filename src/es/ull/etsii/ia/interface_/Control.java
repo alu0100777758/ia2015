@@ -309,5 +309,9 @@ public final class Control {
 	public void setWindow(CellRoboCup window) {
 		this.window = window;
 	}
+
+	public void step() {
+		launchTick();
+	}
 	
 }
