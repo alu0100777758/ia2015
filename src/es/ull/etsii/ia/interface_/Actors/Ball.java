@@ -11,5 +11,9 @@ public class Ball extends Actor {
 		loadSprite();
 		setPos(pos);
 	}
+	@Override
+	public String toString() {
+		return "B";
+	}
 
 }

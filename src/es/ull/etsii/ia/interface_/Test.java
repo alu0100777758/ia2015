@@ -17,4 +17,5 @@ public class Test {
 		Array2D<Integer> arry2 = arry.copy(1, 2, arry.getRows()-1, arry.getColumns()-1);
 		System.out.println("Arry2 \n "+arry2);
 	}
+	
 }

@@ -16,9 +16,11 @@ public class Array2D<Type> implements Iterable<Type> {
 
 	private int getIndex(int row, int column) {
 		// System.out.println("Trow: " + getRows() + "   TCol:" + getColumns());
-		if (!(row < getRows() && column < getColumns()))
+		if (!(row <= getRows() && column <= getColumns())) {
 			System.out.println("ERROR: row : " + row + "    column: " + column);
-//		System.out.println("index: " + ((getColumns() * row) + column) );
+			// System.out.println("index: " + ((getColumns() * row) + column) );
+			return -1;
+		}
 		return (getColumns() * row) + column;
 	}
 
@@ -29,23 +31,24 @@ public class Array2D<Type> implements Iterable<Type> {
 	}
 
 	public void set(int row, int column, Type value) {
-		 //getArray()[getIndex(row, column)] = value;
+		// getArray()[getIndex(row, column)] = value;
 		set(value, row, column);
 	}
 
 	public Array2D<Type> copy(int row1, int column1, int row2, int column2) {
 		Array2D<Type> array = new Array2D<Type>(row2 - (row1 - 1), column2
 				- (column1 - 1));
-//		System.out.println("maxIndex: "
-//				+ getIndex(array.getRows(), array.getColumns()));
-//		System.out.println("arraylenght = " + array.array.length);
-//		System.out.println("Copiando (" + row1 + "," + column1 + ") - (" + row2
-//				+ "," + column2 + ") a matriz(" + array.getRows() + ","
-//				+ array.getColumns() + ")");
+		// System.out.println("maxIndex: "
+		// + getIndex(array.getRows(), array.getColumns()));
+		// System.out.println("arraylenght = " + array.array.length);
+		// System.out.println("Copiando (" + row1 + "," + column1 + ") - (" +
+		// row2
+		// + "," + column2 + ") a matriz(" + array.getRows() + ","
+		// + array.getColumns() + ")");
 		for (int i = 0; i < array.getRows(); i++) {
 			for (int j = 0; j < array.getColumns(); j++) {
-				array.set(i, j, get(row1+i, column1+j));
-//				System.out.println("accediendo a : ("+i+','+j+')' );
+				array.set(i, j, get(row1 + i, column1 + j));
+				// System.out.println("accediendo a : ("+i+','+j+')' );
 			}
 		}
 		return array;
@@ -95,13 +98,13 @@ public class Array2D<Type> implements Iterable<Type> {
 	protected void setN(int n) {
 		this.columns = n;
 	}
-	
-//	@SuppressWarnings("unchecked")
-//	public void foreach(TernaryOperator<Type> lambda){
-//		for(Type element : (Type[])getArray()){
-//			lambda.apply(element);
-//		}
-//	}
+
+	// @SuppressWarnings("unchecked")
+	// public void foreach(TernaryOperator<Type> lambda){
+	// for(Type element : (Type[])getArray()){
+	// lambda.apply(element);
+	// }
+	// }
 	private class Array2DIterator<Typein> implements Iterator<Typein> {
 		int index = 0;
 
@@ -114,7 +117,7 @@ public class Array2D<Type> implements Iterable<Type> {
 		@Override
 		public Typein next() {
 			index++;
-			return (Typein)getArray()[index-1];
+			return (Typein) getArray()[index - 1];
 		}
 	}
 

@@ -33,10 +33,11 @@ public final class Control {
 	private MouseControl mouseControl = new MouseControl();	//	Manejador de eventos del raton.
 	private Robo_Player last_bot;							// 	Robo player en proceso de orientacion. 
 	private Ball ball;										// 	Unica pelota de la simulacion.
-	
-	
+	private HiveMemory [] teamsMemory = new HiveMemory[2];
 
 	private Control() {
+		getTeamsMemory()[0] = new HiveMemory();
+		getTeamsMemory()[1] = new HiveMemory();
 	}
 
 	/**
@@ -193,14 +194,14 @@ public final class Control {
 				} catch (Exception e) {
 				robot = (Robo_Player)getGrid().getMapState().get((int)inSystem.x(), (int)inSystem.y());
 			setLast_bot(new Robo_Player((short) gridControls.getActorType(), inSystem, getGrid(),
-					Actor.FACE_NORTH, getGrid()));
+					Actor.FACE_NORTH, getGrid(), getTeamsMemory()[gridControls.getActorType()]));
 			getGrid().addActor(getLast_bot());
 				}
 			}
 			else{
 				if(getBall() == null){
 					setBall(new Ball(getGrid(),  getGrid().toSystem(point)));
-					getGrid().getActors().add(getBall());
+					getGrid().addActor(getBall());
 				}
 			}
 				
@@ -313,5 +314,14 @@ public final class Control {
 	public void step() {
 		launchTick();
 	}
+
+	public HiveMemory[] getTeamsMemory() {
+		return teamsMemory;
+	}
+
+	public void setTeamsMemory(HiveMemory[] teamsMemory) {
+		this.teamsMemory = teamsMemory;
+	}
+	
 	
 }

@@ -27,7 +27,6 @@ public class IA_State extends GridPanel implements SensitiveEnviroment, Movement
 //	private Point2D workingSize;
 	private ArrayList<Actor> actors = new ArrayList<Actor>();
 	private int turnPointer = 0;
-
 	public IA_State() {
 		setColor(Color.RED);
 		resetMap();
