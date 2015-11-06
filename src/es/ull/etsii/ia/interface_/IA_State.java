@@ -11,6 +11,7 @@ import javax.swing.text.AbstractDocument.BranchElement;
 import es.ull.etsii.ia.interface_.Actors.Actor;
 import es.ull.etsii.ia.interface_.Actors.MovementListener;
 import es.ull.etsii.ia.interface_.Actors.SensitiveEnviroment;
+import es.ull.etsii.ia.interface_.Actors.Vision2D;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 import es.ull.utils.Array2D;
 
@@ -89,25 +90,25 @@ public class IA_State extends GridPanel implements SensitiveEnviroment, Movement
 	}
 	
 	@Override
-	public Array2D<Actor> getVision(Actor sensor) {
-		Array2D<Actor> vision;
+	public Vision2D getVision(Actor sensor) {
+		Vision2D vision;
 		System.out.println(getMapState());
 		switch (sensor.getFacing()) {
 		case Actor.FACE_NORTH:
 			System.out.println("north");
-			vision = getMapState().copy(0, 0,(int)sensor.getPos().y(), getMapState().getColumns()-1);
+			vision = new Vision2D(getMapState().copy(0, 0,(int)sensor.getPos().y(), getMapState().getColumns()-1), sensor.getPos());
 			break;
 		case Actor.FACE_SOUTH: 
 			System.out.println("south");
-			vision = getMapState().copy( (int)sensor.getPos().y(),0, getMapState().getRows()-1, getMapState().getColumns()-1);
+			vision = new Vision2D(getMapState().copy( (int)sensor.getPos().y(),0, getMapState().getRows()-1, getMapState().getColumns()-1), new Point2D(sensor.getPos().x(), 0));
 			break;
 		case Actor.FACE_EAST:
 			System.out.println("East");
-			vision = getMapState().copy(0, (int)sensor.getPos().x(), getMapState().getRows()-1,getMapState().getColumns()-1);
+			vision = new Vision2D(getMapState().copy(0, (int)sensor.getPos().x(), getMapState().getRows()-1,getMapState().getColumns()-1), new Point2D(0, sensor.getPos().y()));
 			break;
 		case Actor.FACE_WEST:
 			System.out.println("West");
-			vision = getMapState().copy( 0,0, getMapState().getRows()-1,(int)sensor.getPos().x() );
+			vision = new Vision2D(getMapState().copy( 0,0, getMapState().getRows()-1,(int)sensor.getPos().x() ), sensor.getPos());
 		break;
 		default:
 			vision = null;
@@ -122,68 +123,6 @@ public class IA_State extends GridPanel implements SensitiveEnviroment, Movement
 		setTurnPointer(0);
 		repaint();
 	}
-	// fromgridstatus
-//	void updatePath(){
-//		path.clear();
-//		path.setStart(new Point2D(gethPoints()/2,getvPoints()/2));
-//	}
-//	public void setvPoints(int vPoints) {
-//		super.setvPoints(vPoints);
-//		if(pathIsBroken()){
-//			updatePath();
-//		}
-//	}
-//	public void setStart(Point2D point){
-//		path.setStart(point);
-//	}
-//	public void sethPoints(int hPoints) {
-//		super.sethPoints(hPoints);
-//		if(pathIsBroken()){
-//			updatePath();
-//		}
-//	}
-//	public boolean pathIsBroken(){
-//		if(state == null)
-//			return false;
-////		return (path.isAtBorder() || path.isOut());
-//		return true;
-//	}
-//	public boolean atBorder(){
-//		return path.isAtBorder();
-//	}
-//	public void pathColor(Color color){
-//		setColor(color);
-//	}
-//	public void turnOnPath(){
-////		GridPanel grid = this;
-////		state = new IA_State(grid);
-//		pathON = true;
-////		updatePath();
-//	}
-//	public void paint(Graphics g){
-//		super.paint(g);
-//		if(pathON)
-//			drawState(g);
-//	}
-//	public void paintComponent(Graphics g){
-//		super.paintComponent(g);
-//		g.setColor(Color.GREEN);
-//		if(pathON)
-//			path.drawPath(g);
-//	}
-	// ******************Getters & Setters********************
-//	public IA_State getState() {
-//		return state;
-//	}
-//	public void setState(IA_State state) {
-//		this.state = state;
-//	}
-//	public boolean isPathON() {
-//		return pathON;
-//	}
-//	public void setPathON(boolean pathON) {
-//		this.pathON = pathON;
-//	}
 	// ******************Getters & Setters********************
 
 
@@ -198,14 +137,6 @@ public class IA_State extends GridPanel implements SensitiveEnviroment, Movement
 	public void setTurnPointer(int turnPointer) {
 		this.turnPointer = turnPointer;
 	}
-
-//	public Point2D getWorkingSize() {
-//		return workingSize;
-//	}
-//
-//	public void setWorkingSize(Point2D workingSize) {
-//		this.workingSize = workingSize;
-//	}
 
 	public ArrayList<Actor> getActors() {
 		return actors;

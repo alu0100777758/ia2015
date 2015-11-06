@@ -11,5 +11,5 @@ public interface SensitiveEnviroment {
 	 * @param sensor el sensor que solicita los datos
 	 * @return Array con el mapa de la vision del sensor
 	 */
-	Array2D<Actor> getVision(Actor sensor);
+	Vision2D getVision(Actor sensor);
 }

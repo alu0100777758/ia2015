@@ -13,10 +13,15 @@ public class Array2D<Type> implements Iterable<Type> {
 		setM(m);
 		setN(n);
 	}
+	public Array2D(Array2D<Type> array){
+		setArray(array.getArray());
+		setM(array.getRows());
+		setN(array.getColumns());
+	}
 
 	private int getIndex(int row, int column) {
-		// System.out.println("Trow: " + getRows() + "   TCol:" + getColumns());
-		if (!(row <= getRows() && column <= getColumns())) {
+//		 System.out.println("Trow: " + getRows() + "   TCol:" + getColumns());
+		if ((row > getRows()) || (column > getColumns())) {
 			System.out.println("ERROR: row : " + row + "    column: " + column);
 			// System.out.println("index: " + ((getColumns() * row) + column) );
 			return -1;

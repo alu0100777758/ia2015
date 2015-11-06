@@ -4,6 +4,7 @@ import es.ull.etsii.ia.interface_.CoordinateSystem2D;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 
 public class Ball extends Actor {
+	private int speed = 0;
 	public static final String SPRITE_PATH = "img/ball.png";
 	public Ball(CoordinateSystem2D coordinates, Point2D pos) {
 		super(coordinates, NORTH);

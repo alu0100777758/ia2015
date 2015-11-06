@@ -10,7 +10,9 @@ import java.util.Random;
 
 import es.ull.etsii.ia.interface_.CoordinateSystem2D;
 import es.ull.etsii.ia.interface_.HiveMemory;
+import es.ull.etsii.ia.interface_.geometry.Circle;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
+import es.ull.etsii.ia.interface_.geometry.drawable.Drawable;
 import es.ull.etsii.ia.interface_.geometry.drawable.DrawableCircle;
 import es.ull.etsii.ia.interface_.geometry.drawable.DrawableRectangle;
 import es.ull.utils.Array2D;
@@ -22,14 +24,15 @@ public class Robo_Player extends Actor {
 	public static final String T2 = "img/playerT2.png"; // Path de la segunda
 														// equipacion
 	private ArrayList<Point2D> points = new ArrayList<Point2D>();
-	private ArrayList<DrawableRectangle> evaluated = new ArrayList<DrawableRectangle>();
+	private ArrayList<Drawable> evaluated = new ArrayList<Drawable>();
 	private boolean evaluation = false;
 	private boolean mode = true;
 	private SensitiveEnviroment map;
-	private Array2D<Actor> view;
+	private Vision2D view;
 	private int team = 0;
 	private HiveMemory memory;
 	private int nextStep = -1;
+//	private Point2D invisionPos;
 
 	public boolean isEvaluation() {
 		return evaluation;
@@ -39,11 +42,11 @@ public class Robo_Player extends Actor {
 		this.evaluation = evaluation;
 	}
 
-	public ArrayList<DrawableRectangle> getEvaluatedPoints() {
+	public ArrayList<Drawable> getEvaluatedPoints() {
 		return evaluated;
 	}
 
-	public void setEvaluatedPoints(ArrayList<DrawableRectangle> evaluatedPoints) {
+	public void setEvaluatedPoints(ArrayList<Drawable> evaluatedPoints) {
 		this.evaluated = evaluatedPoints;
 	}
 
@@ -157,27 +160,46 @@ public class Robo_Player extends Actor {
 		return value;
 	}
 
-	private void turnFriend(Robo_Player ally, Ball ball) {
+	private void turnFriend(Robo_Player ally, Ball ball){
+		boolean turned = false;
 		switch (ally.getFacing()) {
 		case Actor.FACE_NORTH:
-			if(ball.getPos().y() > ally.getPos().y())
+			if(!turned && ball.getPos().y() > ally.getPos().y()){
 				ally.setFacing(Actor.FACE_SOUTH);
+			addTurned(ally);
+			turned = true;
+			System.out.println(" y gira al sur");
+			}
 			break;
 		case Actor.FACE_EAST:
-			if(ball.getPos().x() < ally.getPos().x())
+			if(!turned && ball.getPos().x() < ally.getPos().x()){
 				ally.setFacing(Actor.FACE_WEST);
+			addTurned(ally);
+			turned = true;
+			System.out.println(" y gira al oeste");
+			}
 			break;
 		case Actor.FACE_WEST:
-			if(ball.getPos().x() > ally.getPos().x())
+			if(!turned && ball.getPos().x() > ally.getPos().x()){
 				ally.setFacing(Actor.FACE_EAST);
+			addTurned(ally);
+			turned = true;
+			System.out.println(" y gira al este");
+			}
 			break;
 		case Actor.FACE_SOUTH:
-			if(ball.getPos().y() < ally.getPos().y())
+			if(!turned && ball.getPos().y() < ally.getPos().y()){
 				ally.setFacing(Actor.FACE_NORTH);
-			break;
-		default:
+			addTurned(ally);
+			turned = true;
+			System.out.println(" y gira al nortes");
+			}
 			break;
 		}
+	}
+
+	private void addTurned(Robo_Player ally) {
+		getEvaluatedPoints().add(new DrawableCircle(getCoordinates().getHsize(),getCoordinates().getCellCenter(ally.getPos()), false));
 	}
 
 	private int evaluateAtt(ViewElements elements, Point2D pos) {
@@ -224,7 +246,7 @@ public class Robo_Player extends Actor {
 		drawPath(g);
 		super.paint(g);
 		if (!mode) {
-			for (DrawableRectangle rect : getEvaluatedPoints())
+			for (Drawable rect : getEvaluatedPoints())
 				rect.paint(g);
 		}
 	}
@@ -257,13 +279,14 @@ public class Robo_Player extends Actor {
 
 	public void move(int movement) {
 		if (movement >= 0) {
-			Point2D dest = getPos().add(Actor.MOVEMENT[movement]);
+			Point2D dest = getView().getRelativePos().add(MOVEMENT[movement]);
+			System.out.println("dest: "+dest);
 			Actor destEl = getView().get((int) dest.y(), (int) dest.x());
 			if (destEl != null && destEl.getClass() == Ball.class) {
 				System.out.println("movingBall");
-				destEl.setPos(destEl.getPos().add(Actor.MOVEMENT[nextStep]));
+				destEl.setPos(destEl.getPos().add(MOVEMENT[nextStep]));
 			}
-			setPos(dest);
+			setPos(getPos().add(MOVEMENT[movement]));
 			setFacing(FACE[movement]);
 			addRelative(MOVEMENT[movement]);
 		}
@@ -340,11 +363,11 @@ public class Robo_Player extends Actor {
 		this.map = map;
 	}
 
-	public Array2D<Actor> getView() {
+	public Vision2D getView() {
 		return view;
 	}
 
-	public void setView(Array2D<Actor> view) {
+	public void setView(Vision2D view) {
 		this.view = view;
 	}
 
@@ -376,4 +399,12 @@ public class Robo_Player extends Actor {
 		this.nextStep = nextStep;
 	}
 
+//	public Point2D getInvisionPos() {
+//		return invisionPos;
+//	}
+//
+//	public void setInvisionPos(Point2D invisionPos) {
+//		this.invisionPos = invisionPos;
+//	}
+	
 }
