@@ -19,6 +19,7 @@ import es.ull.utils.Array2D;
 import es.ull.utils.Distance;
 
 public class Robo_Player extends Actor {
+	private static final int COLOR_MAX = 16777215;
 	public static final String T1 = "img/playerT1.png"; // Path de la primera
 														// equipacion
 	public static final String T2 = "img/playerT2.png"; // Path de la segunda
@@ -32,7 +33,8 @@ public class Robo_Player extends Actor {
 	private int team = 0;
 	private HiveMemory memory;
 	private int nextStep = -1;
-//	private Point2D invisionPos;
+
+	// private Point2D invisionPos;
 
 	public boolean isEvaluation() {
 		return evaluation;
@@ -86,7 +88,7 @@ public class Robo_Player extends Actor {
 				Math.max(east, Math.max(west, south)));
 		int min = Math.min(Math.min(center, north),
 				Math.min(east, Math.min(west, south)));
-		if (min == center)
+		if (min == center)	// menos es mejor
 			nextStep = -1;
 		else if (min == north)
 			nextStep = Actor.NORTH;
@@ -99,7 +101,6 @@ public class Robo_Player extends Actor {
 		System.out.println("next step = " + nextStep);
 		Point2D pos = getCoordinates().getPointFor(getPos());
 		Point2D diff = diffPoint(pos);
-		for (int i = 0; i < 3; i++) {
 			getEvaluatedPoints().add(
 					new DrawableRectangle(colorFromNum(center, max), pos.x(),
 							pos.y(), diff.x(), diff.y()));
@@ -123,8 +124,6 @@ public class Robo_Player extends Actor {
 			getEvaluatedPoints().add(
 					new DrawableRectangle(colorFromNum(west, max), pos4.x(),
 							pos4.y(), diff.x(), diff.y()));
-
-		}
 	}
 
 	private int evaluatePoint(ViewElements elements, Point2D pos) {
@@ -160,56 +159,99 @@ public class Robo_Player extends Actor {
 		return value;
 	}
 
-	private void turnFriend(Robo_Player ally, Ball ball){
+	private int evaluateAtt(ViewElements elements, Point2D pos) {
+		int value = 1;
+		// System.out.println("allies  " + elements.getAlly());
+		// System.out.println("enemys  " + elements.getFoe());
+		// System.out.println("valueAfterball  " + value);
+		for (Robo_Player enemy : elements.getFoe()) {
+			value += Distance.manhattan((int) enemy.getPos().x(), (int) enemy
+					.getPos().y(), (int) pos.x(), (int) pos.y());
+		}
+		// System.out.println("valueAfterEnemy  " + value);
+		for (Robo_Player ally : elements.getAlly()) {
+			if (ally != this) {
+				value -= Distance.manhattan((int) ally.getPos().x(), (int) ally
+						.getPos().y(), (int) pos.x(), (int) pos.y());
+				if (elements.getBall() != null) {
+					turnFriend(ally, elements.getBall());
+				}
+			}
+		}
+		if (elements.getBall() != null)
+			if (pos.equals(elements.getBall().getPos()) && Distance.manhattan((int) elements.getBall().getPos().x(),
+					(int) elements.getBall().getPos().y(), (int) pos.x(),
+					(int) pos.y()) < 3) {
+					if (getTeam() == 0) {
+						if(Distance.manhattan(elements.getBall().getPos(), new Point2D(getView().getRows() ,elements.getBall().getPos().y()) ) <= Distance.manhattan(getView().getRelativePos(), new Point2D(getView().getRows(),getView().getRelativePos().y())))// TODO buscar porteria en el scan
+								{
+//							if (pos.equals(getPos().add(MOVEMENT[EAST]))
+//								}
+//								&& pos.add(MOVEMENT[EAST]) == null) {
+//							value -= 3;
+							value += Distance.manhattan(getView().getRelativePos(), new Point2D(getView().getRows(),getView().getRelativePos().y()));
+							System.out.println("perfect to the right");
+						}else {
+							value += 3;
+						}
+					} else if (pos.equals(getPos().add(MOVEMENT[WEST]))
+							&& pos.add(MOVEMENT[WEST]) == null) {
+						System.out.println("perfect to the left");
+						value -= 3;
+					}else {
+						value += 3;
+					}
+				}else {
+					value += 4;
+				}
+				
+		 System.out.println("valueAfterAlly  " + value);
+		return value;
+	}
+	private void turnFriend(Robo_Player ally, Ball ball) {
 		boolean turned = false;
 		switch (ally.getFacing()) {
 		case Actor.FACE_NORTH:
-			if(!turned && ball.getPos().y() > ally.getPos().y()){
+			if (!turned && ball.getPos().y() > ally.getPos().y()) {
 				ally.setFacing(Actor.FACE_SOUTH);
-			addTurned(ally);
-			turned = true;
-			System.out.println(" y gira al sur");
+				addTurned(ally);
+				turned = true;
 			}
 			break;
 		case Actor.FACE_EAST:
-			if(!turned && ball.getPos().x() < ally.getPos().x()){
+			if (!turned && ball.getPos().x() < ally.getPos().x()) {
 				ally.setFacing(Actor.FACE_WEST);
-			addTurned(ally);
-			turned = true;
-			System.out.println(" y gira al oeste");
+				addTurned(ally);
+				turned = true;
 			}
 			break;
 		case Actor.FACE_WEST:
-			if(!turned && ball.getPos().x() > ally.getPos().x()){
+			if (!turned && ball.getPos().x() > ally.getPos().x()) {
 				ally.setFacing(Actor.FACE_EAST);
-			addTurned(ally);
-			turned = true;
-			System.out.println(" y gira al este");
+				addTurned(ally);
+				turned = true;
 			}
 			break;
 		case Actor.FACE_SOUTH:
-			if(!turned && ball.getPos().y() < ally.getPos().y()){
+			if (!turned && ball.getPos().y() < ally.getPos().y()) {
 				ally.setFacing(Actor.FACE_NORTH);
-			addTurned(ally);
-			turned = true;
-			System.out.println(" y gira al nortes");
+				addTurned(ally);
+				turned = true;
 			}
 			break;
 		}
 	}
 
 	private void addTurned(Robo_Player ally) {
-		getEvaluatedPoints().add(new DrawableCircle(getCoordinates().getHsize(),getCoordinates().getCellCenter(ally.getPos()), false));
+		getEvaluatedPoints().add(
+				new DrawableCircle(getCoordinates().getHsize(),
+						getCoordinates().getCellCenter(ally.getPos()), false));
 	}
 
-	private int evaluateAtt(ViewElements elements, Point2D pos) {
-		int value = 0;
-		return value;
-	}
 
 	private ViewElements scanView() {
 		setView(getMap().getVision(this));
-		System.out.println(getView());
+//		System.out.println(getView());
 		ViewElements elements = new ViewElements();
 		for (Actor element : getView()) {
 			if ((element != null)) {
@@ -224,6 +266,12 @@ public class Robo_Player extends Actor {
 				}
 			}
 		}
+		if(elements.getBall() == null){
+			getMemory().setBallSeen(getMemory().getBallSeen()+1);
+			if(getMemory().getBallSeen()>= getMemory().getHiveSize())
+				setFacing(FACE[new Random().nextInt(4)]);
+		}else
+			getMemory().setBallSeen(0);
 		return elements;
 	}
 
@@ -234,7 +282,7 @@ public class Robo_Player extends Actor {
 	public Color colorFromNum(int num, int maxrange) {
 		if (maxrange < 1)
 			maxrange = 1;
-		int val = (16777215 * num) / maxrange;
+		int val = (((COLOR_MAX * num) / maxrange));
 		// System.out.println("Colorvalue:" + val);
 		return new Color(val);
 	}
@@ -274,22 +322,29 @@ public class Robo_Player extends Actor {
 	}
 
 	public void step() {
-		move(nextStep);
+		if (nextStep >= 0) {
+			Point2D dest = getView().getRelativePos().add(MOVEMENT[nextStep]);
+//			System.out.println("dest: " + dest);
+			try {
+				Actor destEl = getView().get((int) dest.y(), (int) dest.x());
+				if (destEl != null && destEl.getClass() == Ball.class) {
+					System.out.println("movingBall");
+					destEl.setPos(destEl.getPos().add(MOVEMENT[nextStep]));
+					getMemory().setAttackState(true);
+				} else{
+					getMemory().setAttackState(false);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			move(nextStep);
+		}
 	}
 
 	public void move(int movement) {
-		if (movement >= 0) {
-			Point2D dest = getView().getRelativePos().add(MOVEMENT[movement]);
-			System.out.println("dest: "+dest);
-			Actor destEl = getView().get((int) dest.y(), (int) dest.x());
-			if (destEl != null && destEl.getClass() == Ball.class) {
-				System.out.println("movingBall");
-				destEl.setPos(destEl.getPos().add(MOVEMENT[nextStep]));
-			}
-			setPos(getPos().add(MOVEMENT[movement]));
-			setFacing(FACE[movement]);
-			addRelative(MOVEMENT[movement]);
-		}
+		setPos(getPos().add(MOVEMENT[movement]));
+		setFacing(FACE[movement]);
+		addRelative(MOVEMENT[movement]);
 	}
 
 	public void addPoint(Point2D point) {
@@ -399,12 +454,12 @@ public class Robo_Player extends Actor {
 		this.nextStep = nextStep;
 	}
 
-//	public Point2D getInvisionPos() {
-//		return invisionPos;
-//	}
-//
-//	public void setInvisionPos(Point2D invisionPos) {
-//		this.invisionPos = invisionPos;
-//	}
-	
+	// public Point2D getInvisionPos() {
+	// return invisionPos;
+	// }
+	//
+	// public void setInvisionPos(Point2D invisionPos) {
+	// this.invisionPos = invisionPos;
+	// }
+
 }

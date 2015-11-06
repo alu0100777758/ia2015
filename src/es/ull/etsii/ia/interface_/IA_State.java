@@ -92,7 +92,7 @@ public class IA_State extends GridPanel implements SensitiveEnviroment, Movement
 	@Override
 	public Vision2D getVision(Actor sensor) {
 		Vision2D vision;
-		System.out.println(getMapState());
+//		System.out.println(getMapState());
 		switch (sensor.getFacing()) {
 		case Actor.FACE_NORTH:
 			System.out.println("north");

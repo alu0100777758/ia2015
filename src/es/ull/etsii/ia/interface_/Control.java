@@ -196,6 +196,7 @@ public final class Control {
 			setLast_bot(new Robo_Player((short) gridControls.getActorType(), inSystem, getGrid(),
 					Actor.FACE_NORTH, getGrid(), getTeamsMemory()[gridControls.getActorType()]));
 			getGrid().addActor(getLast_bot());
+			getTeamsMemory()[gridControls.getActorType()].setHiveSize(getTeamsMemory()[gridControls.getActorType()].getHiveSize()+1);
 				}
 			}
 			else{
