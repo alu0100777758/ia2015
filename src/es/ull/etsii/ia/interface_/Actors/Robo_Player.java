@@ -28,12 +28,21 @@ public class Robo_Player extends Actor {
 	private ArrayList<Drawable> evaluated = new ArrayList<Drawable>();
 	private boolean evaluation = false;
 	private boolean mode = true;
-	private SensitiveEnviroment map;
 	private Vision2D view;
 	private int team = 0;
 	private HiveMemory memory;
 	private int nextStep = -1;
-
+	private ViewElements lastScanned;
+	private Decision<Actor> moveD = (actor) -> {move(nextStep);};
+	private Decision<Actor> pushMove = (actor) -> {
+		Ball ball = (Ball)actor;
+		ball.push(this);
+		moveD.decide(actor);
+	};
+	private Decision<Actor> decision = moveD;
+	public void pushBall(Ball ball){
+		ball.push(this);
+	}
 	// private Point2D invisionPos;
 
 	public boolean isEvaluation() {
@@ -77,18 +86,18 @@ public class Robo_Player extends Actor {
 	}
 
 	protected void evaluate() {
-		ViewElements elements = scanView();
+		setLastScanned(scanView());
 		getEvaluatedPoints().clear();
-		int center = evaluatePoint(elements, getPos());
-		int north = evaluatePoint(elements, getPos().add(Actor.MOVEMENT_NORTH));
-		int east = evaluatePoint(elements, getPos().add(Actor.MOVEMENT_EAST));
-		int west = evaluatePoint(elements, getPos().add(Actor.MOVEMENT_WEST));
-		int south = evaluatePoint(elements, getPos().add(MOVEMENT_SOUTH));
+		int center = evaluatePoint(getLastScanned(), getPos());
+		int north = evaluatePoint(getLastScanned(), getPos().add(Actor.MOVEMENT_NORTH));
+		int east = evaluatePoint(getLastScanned(), getPos().add(Actor.MOVEMENT_EAST));
+		int west = evaluatePoint(getLastScanned(), getPos().add(Actor.MOVEMENT_WEST));
+		int south = evaluatePoint(getLastScanned(), getPos().add(MOVEMENT_SOUTH));
 		int max = Math.max(Math.max(center, north),
 				Math.max(east, Math.max(west, south)));
 		int min = Math.min(Math.min(center, north),
 				Math.min(east, Math.min(west, south)));
-		if (min == center)	// menos es mejor
+		if (min == center) // menos es mejor
 			nextStep = -1;
 		else if (min == north)
 			nextStep = Actor.NORTH;
@@ -101,29 +110,33 @@ public class Robo_Player extends Actor {
 		System.out.println("next step = " + nextStep);
 		Point2D pos = getCoordinates().getPointFor(getPos());
 		Point2D diff = diffPoint(pos);
-			getEvaluatedPoints().add(
-					new DrawableRectangle(colorFromNum(center, max), pos.x(),
-							pos.y(), diff.x(), diff.y()));
-			Point2D pos1 = getCoordinates().getPointFor(
-					getPos().add(MOVEMENT_NORTH));
-			getEvaluatedPoints().add(
-					new DrawableRectangle(colorFromNum(north, max), pos1.x(),
-							pos1.y(), diff.x(), diff.y()));
-			Point2D pos2 = getCoordinates().getPointFor(
-					getPos().add(MOVEMENT_SOUTH));
-			getEvaluatedPoints().add(
-					new DrawableRectangle(colorFromNum(south, max), pos2.x(),
-							pos2.y(), diff.x(), diff.y()));
-			Point2D pos3 = getCoordinates().getPointFor(
-					getPos().add(MOVEMENT_EAST));
-			getEvaluatedPoints().add(
-					new DrawableRectangle(colorFromNum(east, max), pos3.x(),
-							pos3.y(), diff.x(), diff.y()));
-			Point2D pos4 = getCoordinates().getPointFor(
-					getPos().add(MOVEMENT_WEST));
-			getEvaluatedPoints().add(
-					new DrawableRectangle(colorFromNum(west, max), pos4.x(),
-							pos4.y(), diff.x(), diff.y()));
+		getEvaluatedPoints().add(
+				new DrawableRectangle(colorFromNum(center, max), pos.x(), pos
+						.y(), diff.x(), diff.y()));
+		Point2D pos1 = getCoordinates().getPointFor(
+				getPos().add(MOVEMENT_NORTH));
+		getEvaluatedPoints().add(
+				new DrawableRectangle(colorFromNum(north, max), pos1.x(), pos1
+						.y(), diff.x(), diff.y()));
+		Point2D pos2 = getCoordinates().getPointFor(
+				getPos().add(MOVEMENT_SOUTH));
+		getEvaluatedPoints().add(
+				new DrawableRectangle(colorFromNum(south, max), pos2.x(), pos2
+						.y(), diff.x(), diff.y()));
+		Point2D pos3 = getCoordinates()
+				.getPointFor(getPos().add(MOVEMENT_EAST));
+		getEvaluatedPoints().add(
+				new DrawableRectangle(colorFromNum(east, max), pos3.x(), pos3
+						.y(), diff.x(), diff.y()));
+		Point2D pos4 = getCoordinates()
+				.getPointFor(getPos().add(MOVEMENT_WEST));
+		getEvaluatedPoints().add(
+				new DrawableRectangle(colorFromNum(west, max), pos4.x(), pos4
+						.y(), diff.x(), diff.y()));
+		if(getPos().add(MOVEMENT[nextStep]).equals(getLastScanned().getBall().getPos())){
+			setDecision(pushMove);
+		}else
+			setDecision(moveD);
 	}
 
 	private int evaluatePoint(ViewElements elements, Point2D pos) {
@@ -179,35 +192,49 @@ public class Robo_Player extends Actor {
 			}
 		}
 		if (elements.getBall() != null)
-			if (pos.equals(elements.getBall().getPos()) && Distance.manhattan((int) elements.getBall().getPos().x(),
-					(int) elements.getBall().getPos().y(), (int) pos.x(),
-					(int) pos.y()) < 3) {
-					if (getTeam() == 0) {
-						if(Distance.manhattan(elements.getBall().getPos(), new Point2D(getView().getRows() ,elements.getBall().getPos().y()) ) <= Distance.manhattan(getView().getRelativePos(), new Point2D(getView().getRows(),getView().getRelativePos().y())))// TODO buscar porteria en el scan
-								{
-//							if (pos.equals(getPos().add(MOVEMENT[EAST]))
-//								}
-//								&& pos.add(MOVEMENT[EAST]) == null) {
-//							value -= 3;
-							value += Distance.manhattan(getView().getRelativePos(), new Point2D(getView().getRows(),getView().getRelativePos().y()));
-							System.out.println("perfect to the right");
-						}else {
-							value += 3;
-						}
-					} else if (pos.equals(getPos().add(MOVEMENT[WEST]))
-							&& pos.add(MOVEMENT[WEST]) == null) {
-						System.out.println("perfect to the left");
-						value -= 3;
-					}else {
+			if (pos.equals(elements.getBall().getPos())
+					&& Distance.manhattan(
+							(int) elements.getBall().getPos().x(),
+							(int) elements.getBall().getPos().y(),
+							(int) pos.x(), (int) pos.y()) < 3) {
+				if (getTeam() == 0) {
+					if (Distance.manhattan(elements.getBall().getPos(),
+							new Point2D(getView().getRows(), elements.getBall()
+									.getPos().y())) <= Distance
+							.manhattan(getView().getRelativePos(), new Point2D(
+									getView().getRows(), getView()
+											.getRelativePos().y())))// TODO
+																	// buscar
+																	// porteria
+																	// en el
+																	// scan
+					{
+						// if (pos.equals(getPos().add(MOVEMENT[EAST]))
+						// }
+						// && pos.add(MOVEMENT[EAST]) == null) {
+						// value -= 3;
+						value += Distance.manhattan(getView().getRelativePos(),
+								new Point2D(getView().getRows(), getView()
+										.getRelativePos().y()));
+						System.out.println("perfect to the right");
+					} else {
 						value += 3;
 					}
-				}else {
-					value += 4;
+				} else if (pos.equals(getPos().add(MOVEMENT[WEST]))
+						&& pos.add(MOVEMENT[WEST]) == null) {
+					System.out.println("perfect to the left");
+					value -= 3;
+				} else {
+					value += 3;
 				}
-				
-		 System.out.println("valueAfterAlly  " + value);
+			} else {
+				value += 4;
+			}
+
+		System.out.println("valueAfterAlly  " + value);
 		return value;
 	}
+
 	private void turnFriend(Robo_Player ally, Ball ball) {
 		boolean turned = false;
 		switch (ally.getFacing()) {
@@ -248,10 +275,9 @@ public class Robo_Player extends Actor {
 						getCoordinates().getCellCenter(ally.getPos()), false));
 	}
 
-
 	private ViewElements scanView() {
 		setView(getMap().getVision(this));
-//		System.out.println(getView());
+		// System.out.println(getView());
 		ViewElements elements = new ViewElements();
 		for (Actor element : getView()) {
 			if ((element != null)) {
@@ -266,11 +292,11 @@ public class Robo_Player extends Actor {
 				}
 			}
 		}
-		if(elements.getBall() == null){
-			getMemory().setBallSeen(getMemory().getBallSeen()+1);
-			if(getMemory().getBallSeen()>= getMemory().getHiveSize())
+		if (elements.getBall() == null) {
+			getMemory().setBallSeen(getMemory().getBallSeen() + 1);
+			if (getMemory().getBallSeen() >= getMemory().getHiveSize())
 				setFacing(FACE[new Random().nextInt(4)]);
-		}else
+		} else
 			getMemory().setBallSeen(0);
 		return elements;
 	}
@@ -280,11 +306,18 @@ public class Robo_Player extends Actor {
 	}
 
 	public Color colorFromNum(int num, int maxrange) {
-		if (maxrange < 1)
-			maxrange = 1;
-		int val = (((COLOR_MAX * num) / maxrange));
-		// System.out.println("Colorvalue:" + val);
-		return new Color(val);
+
+		double H = num / maxrange; // Hue (note 0.4 = Green, see huge
+											// chart below)
+		double S = 0.9; // Saturation
+		double B = 0.9; // Brightness
+
+		return Color.getHSBColor((float) H, (float) S, (float) B);
+		// if (maxrange < 1)
+		// maxrange = 1;
+		// int val = (((COLOR_MAX * num) / maxrange));
+		// // System.out.println("Colorvalue:" + val);
+		// return new Color(val);
 	}
 
 	@Override
@@ -323,21 +356,27 @@ public class Robo_Player extends Actor {
 
 	public void step() {
 		if (nextStep >= 0) {
-			Point2D dest = getView().getRelativePos().add(MOVEMENT[nextStep]);
-//			System.out.println("dest: " + dest);
-			try {
-				Actor destEl = getView().get((int) dest.y(), (int) dest.x());
-				if (destEl != null && destEl.getClass() == Ball.class) {
-					System.out.println("movingBall");
-					destEl.setPos(destEl.getPos().add(MOVEMENT[nextStep]));
-					getMemory().setAttackState(true);
-				} else{
-					getMemory().setAttackState(false);
-				}
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
-			move(nextStep);
+//			Point2D dest = getView().getRelativePos().add(MOVEMENT[nextStep]);
+//			// System.out.println("dest: " + dest);
+//			// try {
+//
+//			if (getView().get((int) dest.y(), (int) dest.x()) != null
+//					&& getView().get((int) dest.y(), (int) dest.x()).getClass() == Ball.class) {
+//				Actor destEl = getView().get((int) dest.y(), (int) dest.x());
+//				Ball ball = (Ball) destEl;
+//				System.out.println("movingBall : " + ball);
+//				// destEl.setPos(destEl.getPos().add(MOVEMENT[nextStep]));
+//				ball.push(this);// POR QUE NO FUNCIONA???
+//				System.out.println("pushed");
+//				getMemory().setAttackState(true);
+//			} else {
+//				getMemory().setAttackState(false);
+//			}
+//			// } catch (Exception e) {
+//			// // TODO: handle exception
+//			// }
+//			move(nextStep);
+			getDecision().decide(getLastScanned().getBall());
 		}
 	}
 
@@ -410,14 +449,6 @@ public class Robo_Player extends Actor {
 		this.points = points;
 	}
 
-	public SensitiveEnviroment getMap() {
-		return map;
-	}
-
-	public void setMap(SensitiveEnviroment map) {
-		this.map = map;
-	}
-
 	public Vision2D getView() {
 		return view;
 	}
@@ -452,6 +483,22 @@ public class Robo_Player extends Actor {
 
 	public void setNextStep(int nextStep) {
 		this.nextStep = nextStep;
+	}
+
+	public ViewElements getLastScanned() {
+		return lastScanned;
+	}
+
+	public void setLastScanned(ViewElements lastScanned) {
+		this.lastScanned = lastScanned;
+	}
+
+	public Decision<Actor> getDecision() {
+		return decision;
+	}
+
+	public void setDecision(Decision<Actor> decision) {
+		this.decision = decision;
 	}
 
 	// public Point2D getInvisionPos() {

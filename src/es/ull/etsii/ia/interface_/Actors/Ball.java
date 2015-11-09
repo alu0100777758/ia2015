@@ -12,9 +12,25 @@ public class Ball extends Actor {
 		loadSprite();
 		setPos(pos);
 	}
+	public void push(Actor actor){
+		Point2D pushVect = getPos().substract(actor.getPos());
+		Point2D dest = actor.getPos().add(pushVect);
+		Vision2D vision = getMap().getVision(this);
+		System.out.println("entra al push");
+		if(vision.get((int)dest.y(), (int)dest.x()) == null){
+			setPos(dest);
+			System.out.println( " DEST = " + dest);
+		}
+	}
 	@Override
 	public String toString() {
 		return "B";
 	}
+	@Override
+	public boolean tick() {
+		// TODO Auto-generated method stub
+		return super.tick();
+	}
+	
 
 }

@@ -34,8 +34,9 @@ public abstract class Actor implements Drawable, Positionable {
 	private Point2D position;
 	private BufferedImage sprite;//<----
 	private String spritePath;//<----
-	private static int hcellSize;
-	private static int vcellSize;
+//	private static int hcellSize;
+//	private static int vcellSize;
+	private SensitiveEnviroment map;
 	private CoordinateSystem2D coordinates;
 	private ArrayList<MovementListener> movListeners = new ArrayList<>();
 	
@@ -120,21 +121,28 @@ public abstract class Actor implements Drawable, Positionable {
 	public void setCoordinates(CoordinateSystem2D coordinates) {
 		this.coordinates = coordinates;
 	}
-	
-	public static int getHcellSize() {
-		return hcellSize;
+	public SensitiveEnviroment getMap() {
+		return map;
 	}
-	
-	public static void setHcellSize(int hcellSize) {
-		Actor.hcellSize = hcellSize;
+
+	public void setMap(SensitiveEnviroment map) {
+		this.map = map;
 	}
-	
-	public static int getVcellSize() {
-		return vcellSize;
-	}
-	
-	public static void setVcellSize(int vcellSize) {
-		Actor.vcellSize = vcellSize;
-	}
+
+//	public static int getHcellSize() {
+//		return hcellSize;
+//	}
+//	
+//	public static void setHcellSize(int hcellSize) {
+//		Actor.hcellSize = hcellSize;
+//	}
+//	
+//	public static int getVcellSize() {
+//		return vcellSize;
+//	}
+//	
+//	public static void setVcellSize(int vcellSize) {
+//		Actor.vcellSize = vcellSize;
+//	}
 	
 }

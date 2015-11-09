@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.text.AbstractDocument.BranchElement;
 
 import es.ull.etsii.ia.interface_.Actors.Actor;
+import es.ull.etsii.ia.interface_.Actors.Ball;
 import es.ull.etsii.ia.interface_.Actors.MovementListener;
 import es.ull.etsii.ia.interface_.Actors.SensitiveEnviroment;
 import es.ull.etsii.ia.interface_.Actors.Vision2D;
@@ -20,7 +21,7 @@ import es.ull.utils.Array2D;
  * 		   Clase encargada de almacenar y dibujar un estado en base a un objeto que presente la interfaz
  *         CoordinateSystem2D.
  */
-public class IA_State extends GridPanel implements SensitiveEnviroment, MovementListener {
+public class FootballField extends GridPanel implements SensitiveEnviroment, MovementListener {
 	private Array2D<Actor> mapState; // Matriz donde se almacena la visión
 										// global del
 	// mapa.
@@ -28,7 +29,8 @@ public class IA_State extends GridPanel implements SensitiveEnviroment, Movement
 //	private Point2D workingSize;
 	private ArrayList<Actor> actors = new ArrayList<Actor>();
 	private int turnPointer = 0;
-	public IA_State() {
+	private Ball ball ;
+	public FootballField() {
 		setColor(Color.RED);
 		resetMap();
 	}
@@ -50,6 +52,8 @@ public class IA_State extends GridPanel implements SensitiveEnviroment, Movement
 			drawGoals((Graphics2D)g2D.create());
 		for (Actor act : getActors())
 			act.paint(g2D);
+		if(getBall() != null)
+			getBall().paint(g);
 	}
 
 	private void drawGoals(Graphics2D g) {
@@ -78,6 +82,8 @@ public class IA_State extends GridPanel implements SensitiveEnviroment, Movement
 	 * Metodo encargado de distribuir el tiempo de ejecución a cada agente.
 	 */
 	public void tick() {
+		if(getBall() != null)
+			getBall().tick();
 		if (!getActors().isEmpty() && getActors().get(getTurnPointer()).tick())
 			incrementTurn();
 
@@ -93,6 +99,9 @@ public class IA_State extends GridPanel implements SensitiveEnviroment, Movement
 	public Vision2D getVision(Actor sensor) {
 		Vision2D vision;
 //		System.out.println(getMapState());
+		if(sensor.getClass() == Ball.class){
+			return new Vision2D(getMapState(), sensor.getPos());
+		}
 		switch (sensor.getFacing()) {
 		case Actor.FACE_NORTH:
 			System.out.println("north");
@@ -121,7 +130,15 @@ public class IA_State extends GridPanel implements SensitiveEnviroment, Movement
 		resetMap();
 		getActors().clear();
 		setTurnPointer(0);
+		setBall(null);
 		repaint();
+	}
+	public void moveBall(Point2D newpos){
+		if(getBall() != null){
+			getMapState().switchElements((int)getBall().getPos().y(), (int)getBall().getPos().x(), (int)newpos.y(), (int)newpos.x());
+			getBall().setPos(newpos);
+		}
+		
 	}
 	// ******************Getters & Setters********************
 
@@ -163,4 +180,17 @@ public class IA_State extends GridPanel implements SensitiveEnviroment, Movement
 		System.out.println("switching from " + oldPos +" to "+ newPos);
 		getMapState().switchElements((int)oldPos.y(), (int)oldPos.x(), (int)newPos.y(), (int)newPos.x());
 	}
+
+	public Ball getBall() {
+		return ball;
+	}
+
+	public void setBall(Ball ball) {
+		this.ball = ball;
+		if(ball != null){
+			ball.addMovListener(this);
+			getMapState().set((int)ball.getPos().y(), (int)ball.getPos().x(), ball);
+		}
+	}
+	
 }

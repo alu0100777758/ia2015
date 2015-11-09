@@ -57,8 +57,8 @@ public class GridPanel extends JPanel implements CoordinateSystem2D {
 		for(int i = 0 ; i < hPoints; i++){
 			g.drawLine((int)(i*hSize+x),y, (int)(i*hSize+x),(int)h);
 		}
-		Actor.setHcellSize((int)hSize);
-		Actor.setVcellSize((int)vSize);
+//		Actor.setHcellSize((int)hSize);
+//		Actor.setVcellSize((int)vSize);
 	}
 	/**
 	 * m�todo encargado de actualizar el tama�o �til de la rejilla.

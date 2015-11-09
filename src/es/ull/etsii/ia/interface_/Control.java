@@ -24,7 +24,7 @@ public final class Control {
 	private static Control instance = null;					//	Instancia Singleton.
 	private int stepDelay = GridControls.DEFAULT_FPS*1000;	//	Delay por defecto.
 	private CellRoboCup window = new CellRoboCup();			//	Ventana de la aplicacion.
-	private IA_State grid = new IA_State();//= new GridStatusPanel();	// 	Panel donde se dibuja la simulacion.
+	private FootballField grid = new FootballField();//= new GridStatusPanel();	// 	Panel donde se dibuja la simulacion.
 	private GridControls gridControls = new GridControls();	// 	Panel donde se dibujan los controles.
 	private ControlsEventManager controlPanelEventManager;	// 	Manejador de eventos de los controles.
 	private TimerEventManager timerManager;					//	Manejador de eventos del temporizador.
@@ -200,9 +200,10 @@ public final class Control {
 				}
 			}
 			else{
-				if(getBall() == null){
-					setBall(new Ball(getGrid(),  getGrid().toSystem(point)));
-					getGrid().addActor(getBall());
+				if(getGrid().getBall() == null){
+//					setBall(new Ball(getGrid(),  getGrid().toSystem(point)));
+					getGrid().setBall(new Ball(getGrid(),  getGrid().toSystem(point)));
+					getGrid().getBall().setMap(getGrid());
 				}
 			}
 				
@@ -232,8 +233,9 @@ public final class Control {
 					getLast_bot().setFacing(Actor.FACE_SOUTH);
 			}
 		}
-		else if(getBall() != null)
-			getBall().setPos(grid.toSystem(point));
+		else if(getGrid().getBall() != null)
+			getGrid().moveBall(grid.toSystem(point));
+//			getBall().setPos(grid.toSystem(point));
 		window.repaint();
 	}
 	// ******************Getters & Setters********************
@@ -288,11 +290,11 @@ public final class Control {
 
 
 
-	public IA_State getGrid() {
+	public FootballField getGrid() {
 		return grid;
 	}
 
-	public void setGrid(IA_State grid) {
+	public void setGrid(FootballField grid) {
 		this.grid = grid;
 	}
 

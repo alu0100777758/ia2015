@@ -70,10 +70,10 @@ public class Array2D<Type> implements Iterable<Type> {
 		return string;
 	}
 
-	public void switchElements(int x1, int y1, int x2, int y2) {
-		Object dummy = get(x1, y1);
-		set(x1, y1, get(x2, y2));
-		set(dummy, x2, y2);
+	public void switchElements(int row1, int col1, int row2, int col2) {
+		Object dummy = get(row1, col1);
+		set(row1, col1, get(row2, col2));
+		set(dummy, row2, col2);
 	}
 
 	private void set(Object value, int row, int column) {
