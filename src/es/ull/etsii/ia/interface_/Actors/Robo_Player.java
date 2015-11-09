@@ -88,6 +88,7 @@ public class Robo_Player extends Actor {
 	protected void evaluate() {
 		setLastScanned(scanView());
 		getEvaluatedPoints().clear();
+		// hacer lista de visitables , en caso de que no se pueda visitar eliminar de la lista, finalmente escanear solamente los visitablessss
 		int center = evaluatePoint(getLastScanned(), getPos());
 		int north = evaluatePoint(getLastScanned(), getPos().add(Actor.MOVEMENT_NORTH));
 		int east = evaluatePoint(getLastScanned(), getPos().add(Actor.MOVEMENT_EAST));
@@ -133,7 +134,7 @@ public class Robo_Player extends Actor {
 		getEvaluatedPoints().add(
 				new DrawableRectangle(colorFromNum(west, max), pos4.x(), pos4
 						.y(), diff.x(), diff.y()));
-		if(getPos().add(MOVEMENT[nextStep]).equals(getLastScanned().getBall().getPos())){
+		if(getLastScanned().getBall()!= null && nextStep >= 0 && getPos().add(MOVEMENT[nextStep]).equals(getLastScanned().getBall().getPos())){
 			setDecision(pushMove);
 		}else
 			setDecision(moveD);
@@ -306,11 +307,13 @@ public class Robo_Player extends Actor {
 	}
 
 	public Color colorFromNum(int num, int maxrange) {
-
-		double H = num / maxrange; // Hue (note 0.4 = Green, see huge
+		if(maxrange == 0){
+			maxrange =1;
+		}
+		double H = num / maxrange *10; // Hue (note 0.4 = Green, see huge
 											// chart below)
 		double S = 0.9; // Saturation
-		double B = 0.9; // Brightness
+		double B = 0.9; // Brightnessr
 
 		return Color.getHSBColor((float) H, (float) S, (float) B);
 		// if (maxrange < 1)

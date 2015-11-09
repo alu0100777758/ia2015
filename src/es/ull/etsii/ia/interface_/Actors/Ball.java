@@ -14,7 +14,8 @@ public class Ball extends Actor {
 	}
 	public void push(Actor actor){
 		Point2D pushVect = getPos().substract(actor.getPos());
-		Point2D dest = actor.getPos().add(pushVect);
+		System.out.println("pushvect = " + pushVect);
+		Point2D dest = getPos().add(pushVect);
 		Vision2D vision = getMap().getVision(this);
 		System.out.println("entra al push");
 		if(vision.get((int)dest.y(), (int)dest.x()) == null){
