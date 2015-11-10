@@ -6,6 +6,7 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -24,18 +25,18 @@ public abstract class Actor implements Drawable, Positionable {
 	public static final Point2D MOVEMENT_EAST = new Point2D(1, 0);
 	public static final Point2D MOVEMENT_WEST = new Point2D(-1, 0);
 	public static final Point2D MOVEMENT_SOUTH = new Point2D(0, 1);
+	public static final Point2D MOVEMENT_CENTER = new Point2D(0, 0);
 	public static final int [] FACE = { FACE_NORTH, FACE_EAST, FACE_WEST, FACE_SOUTH};
-	public static final Point2D [] MOVEMENT = {MOVEMENT_NORTH, MOVEMENT_EAST, MOVEMENT_WEST, MOVEMENT_SOUTH};
+	public static final Point2D [] MOVEMENT = {MOVEMENT_NORTH, MOVEMENT_EAST, MOVEMENT_WEST, MOVEMENT_SOUTH, MOVEMENT_CENTER};
 	public static final int NORTH = 0;
 	public static final int EAST = 1;
 	public static final int WEST = 2;
 	public static final int SOUTH = 3;
+	public static final int CENTER = 4;
 	private int facing = FACE_SOUTH;
 	private Point2D position;
 	private BufferedImage sprite;//<----
 	private String spritePath;//<----
-//	private static int hcellSize;
-//	private static int vcellSize;
 	private SensitiveEnviroment map;
 	private CoordinateSystem2D coordinates;
 	private ArrayList<MovementListener> movListeners = new ArrayList<>();
@@ -53,8 +54,8 @@ public abstract class Actor implements Drawable, Positionable {
 		g.drawImage(rotate(getSprite(),facing),(int)point.x(),(int)point.y(),(int)sizeMarker.x(),(int)sizeMarker.y(),null);
 	}
 	public Point2D diffPoint(Point2D pos){
-		Point2D destPoint = coordinates.getPointFor(getPos().add(Point2D.UNIT));
-		return destPoint.substract(pos).getRounded();
+		Point2D destPoint = coordinates.getPointFor(pos.add(Point2D.UNIT));
+		return destPoint.substract(coordinates.getPointFor(pos)).getRounded();
 	}
 	public void addMovListener( MovementListener listener){
 		getMovListeners().add(listener);
@@ -103,6 +104,7 @@ public abstract class Actor implements Drawable, Positionable {
 		return facing;
 	}
 	public void setFacing(int facing) {
+		System.out.println("girando facing" + facing);
 		this.facing = facing;
 	}
 	public boolean tick(){

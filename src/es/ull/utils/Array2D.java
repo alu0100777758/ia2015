@@ -3,6 +3,8 @@ package es.ull.utils;
 import java.util.Iterator;
 import java.util.function.UnaryOperator;
 
+import es.ull.etsii.ia.interface_.geometry.Point2D;
+
 public class Array2D<Type> implements Iterable<Type> {
 	private Object array[];
 	private int rows;
@@ -20,10 +22,8 @@ public class Array2D<Type> implements Iterable<Type> {
 	}
 
 	private int getIndex(int row, int column) {
-//		 System.out.println("Trow: " + getRows() + "   TCol:" + getColumns());
 		if ((row > getRows()) || (column > getColumns())) {
 			System.out.println("ERROR: row : " + row + "    column: " + column);
-			// System.out.println("index: " + ((getColumns() * row) + column) );
 			return -1;
 		}
 		return (getColumns() * row) + column;
@@ -34,26 +34,20 @@ public class Array2D<Type> implements Iterable<Type> {
 	public Type get(int row, int column) {
 		return (Type) getArray()[getIndex(row, column)];
 	}
+	public Type get(Point2D pos){
+		return get((int)pos.y(),(int)pos.x());
+	}
 
 	public void set(int row, int column, Type value) {
-		// getArray()[getIndex(row, column)] = value;
 		set(value, row, column);
 	}
 
 	public Array2D<Type> copy(int row1, int column1, int row2, int column2) {
 		Array2D<Type> array = new Array2D<Type>(row2 - (row1 - 1), column2
 				- (column1 - 1));
-		// System.out.println("maxIndex: "
-		// + getIndex(array.getRows(), array.getColumns()));
-		// System.out.println("arraylenght = " + array.array.length);
-		// System.out.println("Copiando (" + row1 + "," + column1 + ") - (" +
-		// row2
-		// + "," + column2 + ") a matriz(" + array.getRows() + ","
-		// + array.getColumns() + ")");
 		for (int i = 0; i < array.getRows(); i++) {
 			for (int j = 0; j < array.getColumns(); j++) {
 				array.set(i, j, get(row1 + i, column1 + j));
-				// System.out.println("accediendo a : ("+i+','+j+')' );
 			}
 		}
 		return array;
@@ -104,12 +98,6 @@ public class Array2D<Type> implements Iterable<Type> {
 		this.columns = n;
 	}
 
-	// @SuppressWarnings("unchecked")
-	// public void foreach(TernaryOperator<Type> lambda){
-	// for(Type element : (Type[])getArray()){
-	// lambda.apply(element);
-	// }
-	// }
 	private class Array2DIterator<Typein> implements Iterator<Typein> {
 		int index = 0;
 
