@@ -104,7 +104,6 @@ public abstract class Actor implements Drawable, Positionable {
 		return facing;
 	}
 	public void setFacing(int facing) {
-		System.out.println("girando facing" + facing);
 		this.facing = facing;
 	}
 	public boolean tick(){

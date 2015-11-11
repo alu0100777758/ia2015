@@ -204,6 +204,7 @@ public final class Control {
 //					setBall(new Ball(getGrid(),  getGrid().toSystem(point)));
 					getGrid().setBall(new Ball(getGrid(),  getGrid().toSystem(point)));
 					getGrid().getBall().setMap(getGrid());
+					getGrid().getBall().addMovListener(getGrid());
 				}
 			}
 				
@@ -233,9 +234,10 @@ public final class Control {
 					getLast_bot().setFacing(Actor.FACE_SOUTH);
 			}
 		}
-		else if(getGrid().getBall() != null)
-			getGrid().moveBall(grid.toSystem(point));
-//			getBall().setPos(grid.toSystem(point));
+		else if(getGrid().getBall() != null){
+//			getGrid().moveBall(grid.toSystem(point));
+			getGrid().getBall().setPos(grid.toSystem(point)); // TODO la bola no se situa correctamente en la grid
+		}
 		window.repaint();
 	}
 	// ******************Getters & Setters********************

@@ -32,9 +32,12 @@ public class Array2D<Type> implements Iterable<Type> {
 	@SuppressWarnings("unchecked")
 	// la funcion "set" asegura el tipo.
 	public Type get(int row, int column) {
-		return (Type) getArray()[getIndex(row, column)];
+		int index = getIndex(row, column);
+		return index < getRows()*getColumns()? (Type)getArray()[getIndex(row, column)] : null;
 	}
 	public Type get(Point2D pos){
+		System.out.println("pointToGotcha: " + pos);
+		System.out.println("rows: " + getRows() + " columns: "+ getColumns() + " index: "+ getIndex((int)pos.y(),(int)pos.x()));
 		return get((int)pos.y(),(int)pos.x());
 	}
 

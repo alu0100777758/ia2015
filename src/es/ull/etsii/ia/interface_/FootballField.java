@@ -82,6 +82,7 @@ public class FootballField extends GridPanel implements SensitiveEnviroment, Mov
 	 * Metodo encargado de distribuir el tiempo de ejecución a cada agente.
 	 */
 	public void tick() {
+		System.out.println(getMapState());
 		if(getBall() != null)
 			getBall().tick();
 		if (!getActors().isEmpty() && getActors().get(getTurnPointer()).tick())
@@ -177,7 +178,6 @@ public class FootballField extends GridPanel implements SensitiveEnviroment, Mov
 
 	@Override
 	public void update(Point2D oldPos, Point2D newPos) {
-		System.out.println("switching from " + oldPos +" to "+ newPos);
 		getMapState().switchElements((int)oldPos.y(), (int)oldPos.x(), (int)newPos.y(), (int)newPos.x());
 	}
 

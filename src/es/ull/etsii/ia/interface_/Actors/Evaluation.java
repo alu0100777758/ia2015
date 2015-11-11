@@ -33,5 +33,8 @@ public class Evaluation<Type> {
 	public void setValue(int value) {
 		this.value = value;
 	}
-	
+	@Override
+	public String toString() {
+		return "" + getPos() +" val: " + getValue();
+	}
 }
