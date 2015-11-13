@@ -8,8 +8,8 @@ import es.ull.etsii.ia.interface_.geometry.drawable.DrawableCircle;
 import es.ull.etsii.ia.interface_.simulation.CoordinateSystem2D;
 
 /**
- * @author 
  *	Clase encargada de representar las celda de la porteria.
+ * @author Javier Martin Hernandez y Tomas Rodriguez 
  */
 public class Goal extends Actor {
 	int team; 			//	equipo al que pertenece la porteria.

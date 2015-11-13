@@ -6,8 +6,8 @@ import es.ull.etsii.ia.interface_.geometry.Point2D;
 import es.ull.utils.Distance;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez.
  * clase encargada de representar el resultado del scaneo de una percepcion.
+ * @author Javier Martin Hernandez y Tomas Rodriguez.
  *
  */
 public class PerceptionScan {

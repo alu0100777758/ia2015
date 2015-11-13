@@ -3,8 +3,8 @@ package es.ull.utils;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 
 /**
- * @author Javier Matin Hernandez
  * Clase encargada de facilitar el calculo de diferentes distancias.
+ * @author Javier Matin Hernandez
  */
 public class Distance {
 	/**

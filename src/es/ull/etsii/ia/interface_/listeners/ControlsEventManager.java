@@ -9,8 +9,8 @@ import es.ull.etsii.ia.interface_.Control;
 import es.ull.etsii.ia.interface_.gui.GridControls;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez 
  * 		   Clase encargada de procesar los eventos del panel de control.
+ * @author Javier Martin Hernandez y Tomas Rodriguez 
  */
 public class ControlsEventManager implements ActionListener {
 	GridControls gridControls;			//	Atributo que almacena el panel de control al que "escuchar"

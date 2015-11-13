@@ -5,10 +5,10 @@ import java.util.Iterator;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 
 /**
+ * clase encargada de representar un array bidimensional.
  * @author Javier Martin hernandez
  *
- * @param <Type> tipo de datos que contendrá el array.
- * clase encargada de representar un array bidimensional.
+ * @param <Type> tipo de datos que contiene el array.
  */
 public class Array2D<Type> implements Iterable<Type> {
 	private Object array[];

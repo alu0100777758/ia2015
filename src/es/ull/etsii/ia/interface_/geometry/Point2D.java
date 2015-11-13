@@ -1,7 +1,7 @@
 package es.ull.etsii.ia.interface_.geometry;
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez
  *	Clase que representacion un punto en el plano con precision doble.
+ * @author Javier Martin Hernandez y Tomas Rodriguez
  */
 public class Point2D {
 	public static final Point2D UNIT= new Point2D(1,1);
@@ -45,7 +45,7 @@ public class Point2D {
 	}
 
 	/**
-	 * @param scalar por el que se multiplicará el punto.
+	 * @param scalar por el que se multiplica el punto.
 	 * @return el punto tras aplicarle el producto escalar.
 	 */
 	public Point2D scalarProduct(double scalar) {

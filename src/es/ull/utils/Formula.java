@@ -1,8 +1,8 @@
 package es.ull.utils;
 
 /**
- * @author Javier Martin Hernandez
  * Clase encargada de facilitar diversas formulas comunes.
+ * @author Javier Martin Hernandez
  */
 public class Formula {
 	/**

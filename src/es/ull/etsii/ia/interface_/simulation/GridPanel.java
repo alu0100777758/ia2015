@@ -12,13 +12,13 @@ import javax.swing.JPanel;
 
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez
  *	Clase encargada de representar una rejilla de densidad definida capaz de actuar como sistema de coordenadas.
+ * @author Javier Martin Hernandez y Tomas Rodriguez
  */
 public class GridPanel extends JPanel implements CoordinateSystem2D {
 	private static final long serialVersionUID = -8427977059756274679L;
 	private static final String DEFAULT_BACKGROUND = "img/lawn.png";		//	ruta de la imagen por defecto para el fondo.
-	private static int DEFAULT_SIZE = 50;									//	tamaño por defecto de la rejilla.
+	private static int DEFAULT_SIZE = 50;									//	tamaï¿½o por defecto de la rejilla.
 	private static int PADDING = 5;											//	margen entre ventana y rejilla.
 	private BufferedImage backgroundImage;									//	imagen  del fondo.
 	private int vPoints;													//	lineas verticales de la rejilla.
@@ -57,7 +57,7 @@ public class GridPanel extends JPanel implements CoordinateSystem2D {
 		}
 	}
 	/**
-	 * metodo encargado de actualizar el tamaño util de la rejilla.
+	 * metodo encargado de actualizar la dimension util de la rejilla.
 	 */
 	public void updateSizes(){
 		vSize = (double)(getHeight()-(getInsets().top + getInsets().bottom))/(vPoints - 1);

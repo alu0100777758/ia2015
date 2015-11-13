@@ -1,5 +1,5 @@
 /**
- * Proporciona las clases que se usarán en la interfaz grafica de usuario para recibir la configuracion del usuario.
+ * Proporciona las clases que se usan en la interfaz grafica de usuario para recibir la configuracion del usuario.
  * <p>
  * @since 1.0
  */

@@ -16,9 +16,8 @@ import es.ull.etsii.ia.interface_.geometry.Point2D;
 import es.ull.utils.Array2D;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez Clase encargada de
- *         almacenar y dibujar un estado en base a un objeto que presente la
- *         interfaz CoordinateSystem2D.
+ *  Clase encargada de almacenar y dibujar un estado en base a un objeto que presente la interfaz CoordinateSystem2D.
+ *  @author Javier Martin Hernandez y Tomas Rodriguez 
  */
 public class FootballField extends GridPanel implements SensitiveEnviroment,
 		MovementListener {
@@ -35,7 +34,7 @@ public class FootballField extends GridPanel implements SensitiveEnviroment,
 	}
 
 	/**
-	 * reinicia el mapa creando uno del mismo tamaño que el presente.
+	 * reinicia el mapa creando uno de la misma dimension que el presente.
 	 */
 	private void resetMap() {
 		setMapState(new Array2D<Actor>(getVBounds() - 1, getHBounds() - 1));
@@ -49,8 +48,8 @@ public class FootballField extends GridPanel implements SensitiveEnviroment,
 	}
 
 	/**
-	 * @param actor
-	 *            a añadir. incluye el nuevo actor en el campo.
+	 * @param actor actor a incluir. 
+	 *            incluye el nuevo actor en el campo.
 	 */
 	public void addActor(Actor actor) {
 		getActors().add(actor);

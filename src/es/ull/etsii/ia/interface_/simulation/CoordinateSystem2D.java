@@ -3,8 +3,8 @@ package es.ull.etsii.ia.interface_.simulation;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez Martin
  *	Interfaz que define la comunicacion con un sistema de coordenadas bidimensional.
+ * @author Javier Martin Hernandez y Tomas Rodriguez Martin
  */
 public interface CoordinateSystem2D {
 	/**

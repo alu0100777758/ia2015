@@ -12,8 +12,8 @@ import javax.swing.JSlider;
 import javax.swing.JTextArea;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez 
  * 		   Clase encargada de dibujar y configurar el panel de controles.
+ * @author Javier Martin Hernandez y Tomas Rodriguez 
  */
 public class GridControls extends JPanel {
 	private static final long serialVersionUID = -7807762227293272654L;
@@ -21,9 +21,9 @@ public class GridControls extends JPanel {
 	private static final String FPS_TEXT = "     Frames por segundo";				//	texto sobre el slider de fps.
 	private static final int TEXT_HEIGHT = 25;										//	altura de los cuadros de texto.
 	public static final int DEFAULT_FPS = 1;										//	fps por defecto.
-	public static final String OPTIONS_TITLE_1 = "Densidad";						//	texto sobre la seleccion de tamaño.
-	public static final String COMPONENT_SEPARATOR_1 = "x";							//	separador entre los cuadros de texto de la seleccion de tamaño.
-	public static final String SET_DIMENSIONS_TEXT = "Establecer";					//	texto en el boton usado para confirmar el tamaño.
+	public static final String OPTIONS_TITLE_1 = "Densidad";						//	texto sobre la seleccion de dimension.
+	public static final String COMPONENT_SEPARATOR_1 = "x";							//	separador entre los cuadros de texto de la seleccion de dimension.
+	public static final String SET_DIMENSIONS_TEXT = "Establecer";					//	texto en el boton usado para confirmar la dimension.
 	public static final String RESET_TEXT = "reset";								//	texto en el boton usado para reiniciar la simulacion.
 	public static final String START_TEXT = "Empezar";								//	texto sobre el boton usado para comenzar/retomar la simulacion.
 	public static final String STOP_TEXT = "Pausar";								//	texto sobre el boton usado para pausar la simulacion

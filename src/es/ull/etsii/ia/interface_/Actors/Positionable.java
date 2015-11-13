@@ -3,8 +3,8 @@ package es.ull.etsii.ia.interface_.Actors;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez
  *	Interfaz que define la comunicacion con objetos que se puedan posicionar respecto a un punto.
+ * @author Javier Martin Hernandez y Tomas Rodriguez
  */
 public interface Positionable {
 	/**

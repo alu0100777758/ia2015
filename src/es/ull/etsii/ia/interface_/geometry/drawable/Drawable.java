@@ -4,8 +4,8 @@ import java.awt.Graphics;
 
 import es.ull.etsii.ia.interface_.Actors.Positionable;
 /**
- * @author Javier Martin Hernandez
  *	interfaz que define la comunicacion con cualquier objeto dibujable en pantalla.
+ * @author Javier Martin Hernandez
  */
 
 public interface Drawable extends Positionable {

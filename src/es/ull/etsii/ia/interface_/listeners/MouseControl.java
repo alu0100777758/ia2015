@@ -9,8 +9,8 @@ import es.ull.etsii.ia.interface_.Control;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez
  *	Clase encargada de procesar los eventos del  raton.
+ * @author Javier Martin Hernandez y Tomas Rodriguez
  */
 public class MouseControl implements MouseListener, MouseMotionListener {
 

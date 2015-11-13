@@ -7,8 +7,8 @@ import javax.swing.Timer;
 
 import es.ull.etsii.ia.interface_.Control;
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez Martin
  *	Clase encargada de procesar los eventos de timpo temporizador.
+ * @author Javier Martin Hernandez y Tomas Rodriguez Martin
  */
 public class TimerEventManager implements ActionListener {
 
