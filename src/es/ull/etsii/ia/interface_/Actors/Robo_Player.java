@@ -17,48 +17,41 @@ import es.ull.etsii.ia.interface_.simulation.CoordinateSystem2D;
 import es.ull.etsii.ia.interface_.simulation.HiveMemory;
 import es.ull.utils.Distance;
 
+/**
+ * @author Javier Martin Hernandez y Tomas Rodriguez 
+ * clase encargada de representar a un agente de la colmena.
+ */
 public class Robo_Player extends Actor {
-	public static final String T1 = "img/playerT1.png"; // Path de la primera
-														// equipacion.
-	public static final String T2 = "img/playerT2.png"; // Path de la segunda
-														// equipacion.
-	private ArrayList<Point2D> points = new ArrayList<Point2D>();
-	private ArrayList<Drawable> evaluated = new ArrayList<Drawable>();
-	private boolean evaluation = false;
-	private boolean mode = true;
-	private Vision2D view;
-	private int team = 0;
-	private HiveMemory memory;
-	private int nextStep = -1;
-	private Perception lastScanned;
-	private Decision<Actor> moveD = (actor) -> {
-		move(getEv().getPos());
+	private static final int SHOT_SPEED = 2;							//	Velocidad aplicada al disparo.
+	public static final String T1 = "img/playerT1.png"; 				//	Path de la primera equipacion.
+	public static final String T2 = "img/playerT2.png"; 				//	Path de la segunda equipacion.
+	private int team = 0;												//	codigo de equipo al que pertenece.
+	private ArrayList<Point2D> points = new ArrayList<Point2D>();		//	Lista de puntos visitados durante la simulacion.
+	private ArrayList<Drawable> evaluated = new ArrayList<Drawable>();	//	Lista de representacion de elementos evaluados 
+	private boolean evaluationMode = true;								//	true si se encuentra en modo evaluacion.
+	private Vision2D view;												//	ultima percepcion obtenida.
+	private HiveMemory memory;											//	Memoria en comun con todo su equipo
+	private PerceptionScan lastScanned;									//	escaneo de la ultima percepcion.
+	private Evaluation<Actor> bestEvaluation;							//	mejor evaluacion del ultimo proceso de evaluacion.
+	private Action<Actor> moveD = (actor) -> {							//	accion de movimiento.
+		move(getBestEvaluation().getPos());
 		if (getMemory().getBallOwner() == this) {
 			getMemory().setBallOwner(null);
 			getMemory().setAttackState(false);
 		}
 	};
-	private Decision<Actor> pushMove = (actor) -> {
+	private Action<Actor> pushMove = (actor) -> {						//	accion de avanzar con el balon.
 		Ball ball = (Ball) actor;
 		pushBall(ball);
 		moveD.decide(actor);
 		getMemory().setAttackState(true);
 		getMemory().setBallOwner(this);
 	};
-	private Decision<Actor> shoot = (actor) -> {
+	private Action<Actor> shoot = (actor) -> {							//	accion de disparar.
 		Ball ball = (Ball) actor;
-		shootBall(ball, getNextStep());
+		shootBall(ball, getBestEvaluation().getPos());
 	};
-	private Decision<Actor> decision;
-	private Evaluation<Actor> bestEvaluation;
 
-	public void pushBall(Ball ball) {
-		ball.push(this);
-	}
-
-	private void shootBall(Ball ball, int direction) {
-		ball.shot(2, direction);
-	}
 
 	public Robo_Player(short team, Point2D point,
 			CoordinateSystem2D coordinates, int face, SensitiveEnviroment map,
@@ -73,16 +66,20 @@ public class Robo_Player extends Actor {
 
 	/**
 	 * @return boolean true si ha terminado de efectuar todas sus acciones.
+	 * realiza las acciones necesarias en este turno.
 	 */
 	public boolean tick() {
-		if (mode) {
+		if (evaluationMode) {
 			evaluate();
 		} else
 			step();
-		mode = !mode;
-		return mode;
+		evaluationMode = !evaluationMode;
+		return evaluationMode;
 	}
 
+	/**
+	 * realiza la evaluacion de los estados visitables.(profundidad 1)
+	 */
 	protected void evaluate() {
 		setLastScanned(scanView());
 		getEvaluatedPoints().clear();
@@ -114,11 +111,13 @@ public class Robo_Player extends Actor {
 							evPoints.get(evPoints.size() - 1).getValue()), pos
 							.x(), pos.y(), diff.x(), diff.y()));
 		}
-		setEv(minev);
-		setNextStep(minev.getPos());
-
+		setBestEvaluation(minev);
 	}
 
+	/**
+	 * @param i direccion en la que se va a mover.
+	 * @return	true si no hay nada que impida el desplazamiento en esa direccion.
+	 */
 	boolean canBeEvaluated(int i) {
 		return (!isOutOfBounds(i) && (getView().get(
 				getView().getRelativePos().add(MOVEMENT[i])) == null
@@ -127,6 +126,10 @@ public class Robo_Player extends Actor {
 				getView().getRelativePos().add(MOVEMENT[i])) == this));
 	}
 
+	/**
+	 * @param i direccion en la que se va a mover.
+	 * @return true si la direccion se encuentra fuera del sistema de coordenadas.
+	 */
 	private boolean isOutOfBounds(int i) {
 		Point2D pos = getPos().add(MOVEMENT[i]);
 		return (pos.x() < 0 || pos.y() < 0
@@ -134,6 +137,9 @@ public class Robo_Player extends Actor {
 				.getVBounds() - 3);
 	}
 
+	/**
+	 * @return direccion en la que el agente no percibe informacion (y por lo tanto no puede moverse a ella)
+	 */
 	private int getHiddenSide() {
 		switch (getFacing()) {
 		case Actor.FACE_NORTH:
@@ -148,13 +154,23 @@ public class Robo_Player extends Actor {
 		return -1;
 	}
 
-	private Evaluation<Actor> evaluatePoint(Perception elements, int pos) {
+	/**
+	 * @param elements
+	 * @param pos
+	 * @return evaluacion del estado representado por la direccion pos.
+	 */
+	private Evaluation<Actor> evaluatePoint(PerceptionScan elements, int pos) {
 		if (getMemory().isAttackState())
 			return evaluateAtt(elements, pos);
 		return evaluateDef(elements, pos);
 	}
 
-	private Evaluation<Actor> evaluateDef(Perception elements, int pos) {
+	/**
+	 * @param elements
+	 * @param pos
+	 * @return la evaluacion de un estado de defensa.
+	 */
+	private Evaluation<Actor> evaluateDef(PerceptionScan elements, int pos) {
 		Evaluation<Actor> ev = new Evaluation<Actor>();
 		ev.setPos(pos);
 		ev.setDecision(moveD);
@@ -181,7 +197,12 @@ public class Robo_Player extends Actor {
 		return ev;
 	}
 
-	private Evaluation<Actor> evaluateAtt(Perception elements, int pos) {
+	/**
+	 * @param elements
+	 * @param pos
+	 * @return la evaluacion de un estado de ataque
+	 */
+	private Evaluation<Actor> evaluateAtt(PerceptionScan elements, int pos) {
 		Evaluation<Actor> ev = new Evaluation<Actor>();
 		ev.setPos(pos);
 		ev.setDecision(moveD);
@@ -193,8 +214,6 @@ public class Robo_Player extends Actor {
 			int ballGoal = elements.distanceToEnemyGoal(elements.getBall()
 					.getPos(), getTeam());
 			int posGoal = elements.distanceToEnemyGoal(getPos(), getTeam());
-			System.out.println("ballgoal= " + ballGoal + "   pos goal: "
-					+ posGoal);
 			if (ballGoal < posGoal) {
 				if (manlength == 0) {
 					ev.setDecision(shoot);
@@ -225,6 +244,10 @@ public class Robo_Player extends Actor {
 		return ev;
 	}
 
+	/**
+	 * @param ally aliado con rotacion ineficiente.
+	 * @param actor	hacia el que debe girarse el aliado.
+	 */
 	private void turnFriend(Robo_Player ally, Actor actor) {
 		boolean turned = false;
 		switch (ally.getFacing()) {
@@ -259,15 +282,22 @@ public class Robo_Player extends Actor {
 		}
 	}
 
+	/**
+	 * @param ally
+	 * incluye en la lista de representacion de evaluaciones un circulo sobre el aliado rotado.
+	 */
 	private void addTurned(Robo_Player ally) {
 		getEvaluatedPoints().add(
 				new DrawableCircle(getCoordinates().getHsize(),
 						getCoordinates().getCellCenter(ally.getPos()), false));
 	}
 
-	private Perception scanView() {
+	/**
+	 * @return el resultado de escanear la percepcion actual.
+	 */
+	private PerceptionScan scanView() {
 		setView(getMap().perceive(this));
-		Perception elements = new Perception();
+		PerceptionScan elements = new PerceptionScan();
 		for (Actor element : getView()) {
 			if ((element != null)) {
 				if ((element.getClass() == Robo_Player.class)) {
@@ -293,6 +323,11 @@ public class Robo_Player extends Actor {
 		return elements;
 	}
 
+	/**
+	 * @param num
+	 * @param maxrange
+	 * @return un color en base a num respecto maxRange.
+	 */
 	public Color colorFromNum(double num, double maxrange) {
 		if (maxrange == 0) {
 			maxrange = 1;
@@ -303,19 +338,89 @@ public class Robo_Player extends Actor {
 		return Color.getHSBColor((float) h, (float) s, (float) b);
 	}
 
+
+	/**
+	 * avanza a otro estado.
+	 */
+	public void step() {
+		// System.out.println(getView());
+		// System.out.println("ev: " + getEv());
+		// System.out.println("ev.decision: " + getEv().getDecision());
+		// System.out.println("lastscaned: " + getLastScanned());
+		// System.out.println("lastscanned.ball" + getLastScanned().getBall());
+
+		getBestEvaluation().getDecision().decide(getLastScanned().getBall());
+	}
+
+	/**
+	 * @param movement direccion en la que se movera el agente.
+	 */
+	public void move(int movement) {
+		setPos(getPos().add(MOVEMENT[movement]));
+		if (movement < FACE.length)
+			setFacing(FACE[movement]);
+		addRelative(MOVEMENT[movement]);
+	}
+
+
+	/**
+	 * @param point incluye el siguiente punto visitado
+	 */
+	public void addRelative(Point2D point) {
+		addPoint(points.get(points.size() - 1).add(point));
+	}
+
+	/**
+	 * @param point situa el inicio de la ruta.
+	 */
+	public void setStart(Point2D point) {
+		if (points.size() < 1)
+			points.add(point);
+		else
+			points.set(0, point);
+	}
+
+	/**
+	 * borra la ruta.
+	 */
+	public void clear() {
+		points.clear();
+	}
+
+
+	/**
+	 * @param ball
+	 * empuja el balon/
+	 */
+	public void pushBall(Ball ball) {
+		ball.push(this);
+	}
+	
+	/**
+	 * @param ball
+	 * @param direction
+	 * dispara el balon.
+	 */
+	private void shootBall(Ball ball, int direction) {
+		ball.shot(SHOT_SPEED, direction);
+	}
 	@Override
 	public void paint(Graphics goriginal) {
 		loadSprite();
 		Graphics2D g = (Graphics2D) goriginal.create();
 		drawPath(g);
 		super.paint(g);
-		if (!mode) {
+		if (!evaluationMode) {
 			for (Drawable rect : getEvaluatedPoints()) {
 				rect.paint(g);
 			}
 		}
 	}
-
+	
+	/**
+	 * @param g
+	 * dibuja la ruta que ha seguido el agente durante la simulacion.
+	 */
 	private void drawPath(Graphics2D g) {
 		g.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND,
 				BasicStroke.JOIN_ROUND));
@@ -329,61 +434,19 @@ public class Robo_Player extends Actor {
 		}
 		g.drawPolyline(polygon.xpoints, polygon.ypoints, points.size());
 	}
-
-	public void step() {
-		// System.out.println(getView());
-		// System.out.println("ev: " + getEv());
-		// System.out.println("ev.decision: " + getEv().getDecision());
-		// System.out.println("lastscaned: " + getLastScanned());
-		// System.out.println("lastscanned.ball" + getLastScanned().getBall());
-
-		getEv().getDecision().decide(getLastScanned().getBall());
-	}
-
-	public void move(int movement) {
-		setPos(getPos().add(MOVEMENT[movement]));
-		if (movement < FACE.length)
-			setFacing(FACE[movement]);
-		addRelative(MOVEMENT[movement]);
-	}
-
-	public void addPoint(Point2D point) {
-		points.add(point);
-	}
-
-	public Point2D getLast() {
-		return points.get(points.size() - 1);
-	}
-
-	public void addRelative(Point2D point) {
-		addPoint(points.get(points.size() - 1).add(point));
-	}
-
-	public void setStart(Point2D point) {
-		if (points.size() < 1)
-			points.add(point);
-		else
-			points.set(0, point);
-	}
-
-	public void clear() {
-		points.clear();
-	}
-
 	@Override
 	public String toString() {
 		return "R" + getPos();
 	}
-
 	// ******************Getters & Setters********************
-	public boolean isEvaluation() {
-		return evaluation;
-	}
 
-	public void setEvaluation(boolean evaluation) {
-		this.evaluation = evaluation;
+	public void addPoint(Point2D point) {
+		points.add(point);
 	}
-
+	
+	public Point2D getLast() {
+		return points.get(points.size() - 1);
+	}
 	public ArrayList<Drawable> getEvaluatedPoints() {
 		return evaluated;
 	}
@@ -428,35 +491,29 @@ public class Robo_Player extends Actor {
 		this.memory = memory;
 	}
 
-	public int getNextStep() {
-		return nextStep;
-	}
 
-	public void setNextStep(int nextStep) {
-		this.nextStep = nextStep;
-	}
-
-	public Perception getLastScanned() {
+	public PerceptionScan getLastScanned() {
 		return lastScanned;
 	}
 
-	public void setLastScanned(Perception lastScanned) {
+	public void setLastScanned(PerceptionScan lastScanned) {
 		this.lastScanned = lastScanned;
 	}
 
-	public Decision<Actor> getDecision() {
-		return decision;
-	}
-
-	public void setDecision(Decision<Actor> decision) {
-		this.decision = decision;
-	}
-
-	public Evaluation<Actor> getEv() {
+	public Evaluation<Actor> getBestEvaluation() {
 		return bestEvaluation;
 	}
 
-	public void setEv(Evaluation<Actor> ev) {
+	public void setBestEvaluation(Evaluation<Actor> ev) {
 		this.bestEvaluation = ev;
 	}
+
+	public boolean isEvaluationMode() {
+		return evaluationMode;
+	}
+
+	public void setEvaluationMode(boolean evaluationMode) {
+		this.evaluationMode = evaluationMode;
+	}
+	
 }

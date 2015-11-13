@@ -146,7 +146,7 @@ public final class Control {
 	 */
 	public void reset() {
 		setWalking(false);
-		getGridControls().startPath.setText(GridControls.START_TEXT);
+		getGridControls().getStartStop().setText(GridControls.START_TEXT);
 		getControlPanelEventManager().setStart(false);
 		grid.reset();
 	}

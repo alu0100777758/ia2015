@@ -1,12 +1,16 @@
 package es.ull.etsii.ia.interface_.Actors;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 import es.ull.utils.Distance;
 
-public class Perception {
+/**
+ * @author Javier Martin Hernandez y Tomas Rodriguez.
+ * clase encargada de representar el resultado del scaneo de una percepcion.
+ *
+ */
+public class PerceptionScan {
 	private ArrayList<Robo_Player> ally = new ArrayList<>();
 	private ArrayList<Robo_Player> foe = new ArrayList<>();
 	private Ball ball;

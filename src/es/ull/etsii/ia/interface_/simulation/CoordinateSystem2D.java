@@ -10,58 +10,58 @@ public interface CoordinateSystem2D {
 	/**
 	 * @param x
 	 * @param y
-	 * @return
+	 * @return punto en la unidad del sistema externo (por ejemplo pixeles) mas cercano al punto (x,y)
 	 */
 	public Point2D getPointFor(int x, int y);
 	/**
 	 * @param point
-	 * @return
+	 * @return punto en la unidad del sistema externo (por ejemplo pixeles) mas cercano al punto proporcionado.
 	 */
 	public Point2D getPointFor(Point2D point);
 	/**
 	 * @param x
 	 * @param y
-	 * @return
+	 * @return celda con el centro mas proximo a las coordenadas dadas.
 	 */
 	public Point2D getCellFor(int x , int y );
 	/**
-	 * @param point
-	 * @return
+	 * @param point que representa la coordenada de una celda.
+	 * @return el punto en la unidad del sistema externo (por ejemplo pixeles) hasta el centro de la celda.
 	 */
 	public Point2D getCellCenter(Point2D point);
 	/**
 	 * @param point
-	 * @return
+	 * @return true si el punto se encuentra dentro del sistema.
 	 */
 	public boolean inSystem(Point2D point);
 	/**
-	 * @param point
-	 * @return
+	 * @param point 
+	 * @return true si el punto se encuentra sobre los limites del sistema.
 	 */
 	public boolean atBorder(Point2D point);
 	/**
-	 * @param point
-	 * @return
+	 * @param point punto en pixeles.
+	 * @return	el punto del sistema mas cercano.
 	 */
 	public Point2D toSystem(Point2D point);
 	/**
-	 * @return
+	 * @return cantidad de puntos en el eje x que posee el sistema.
 	 */
 	public int getHBounds();
 	/**
-	 * @return
+	 * @return cantidad de puntos en el eje y que posee el sistema.
 	 */
 	public int getVBounds();
 	/**
-	 * @return
+	 * @return distancia en el eje x entre los puntos.
 	 */
 	public double getHsize();
 	/**
-	 * @return
+	 * @return distancia en el eje y entre los puntos.
 	 */
 	public double getVsize();
 	/**
-	 * @return
+	 * @return Point2D formado por(getHBounds(), getVBounds())
 	 */
 	public Point2D getPointBounds();
 }

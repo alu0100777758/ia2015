@@ -2,23 +2,23 @@ package es.ull.etsii.ia.interface_.Actors;
 
 
 public class Evaluation<Type> implements Comparable<Evaluation<Type>> {
-	private Decision<Type> decision;
+	private Action<Type> decision;
 	private int pos;
 	private double value;
 	public Evaluation(){
 		
 	}
-	public Evaluation(Decision<Type> decision, int pos, int val) {
+	public Evaluation(Action<Type> decision, int pos, int val) {
 		setDecision(decision);
 		setPos(pos);
 		setValue(val);
 	}
 	
 	// ******************Getters & Setters********************
-	public Decision<Type> getDecision() {
+	public Action<Type> getDecision() {
 		return decision;
 	}
-	public void setDecision(Decision<Type> decision) {
+	public void setDecision(Action<Type> decision) {
 		this.decision = decision;
 	}
 

@@ -5,8 +5,8 @@ package es.ull.etsii.ia.interface_.geometry;
  * 		   Clase que representa un circulo.
  */
 public class Circle extends Geometry {
-	private Point2D center;
-	private double radius;
+	private Point2D center;				// centro del circulo.
+	private double radius;				// radio del circulo.
 
 
 	public Circle(double radius, Point2D center) {

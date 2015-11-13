@@ -7,21 +7,21 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
- * @author alu4550
- * Define la clase encargada de representar la interfaz de usuario referente al estado actual de la simulacion.
+ * @author Javier Martin Hernandez y Tomas Rodriguez 
+ * 		   Define la clase encargada de representar la interfaz de usuario 
+ * 		   referente al estado actual de la simulacion.
  *
  */
 public class StateControls extends JPanel implements ActionListener {
-	public static final String TEAM2_TEXT = "Azules";
 	public static final long serialVersionUID = 1L;
-	public static final String BALL_TEXT = "Balón";
-	public static final String TEAM1_TEXT = "Rojos";
-	private JButton team1 = new JButton(TEAM1_TEXT);
-	private JButton ball = new JButton(BALL_TEXT);
-	private JButton team2 = new JButton(TEAM2_TEXT);
-	private JButton[] buttons = { team1, team2,  ball};
-	private int selected = 0;
-
+	public static final String TEAM1_TEXT = "Rojos";				// nombre del primer equipo.
+	public static final String TEAM2_TEXT = "Azules";				// nombre del segundo equipo.
+	public static final String BALL_TEXT = "Balon";					// nombre del balon.
+	private JButton team1 = new JButton(TEAM1_TEXT);				// boton para seleccionar el primer equipo.
+	private JButton team2 = new JButton(TEAM2_TEXT);				// boton para seleccionar el segundo equipo
+	private JButton ball = new JButton(BALL_TEXT);					// boton para seleccionar el balon.
+	private JButton[] buttons = { team1, team2, ball };				// array con todos los botones.
+	private int selected = 0;										// indice del boton seleccionado actualmente.
 
 	public StateControls(ActionListener listener) {
 		addListener(this);
@@ -29,16 +29,22 @@ public class StateControls extends JPanel implements ActionListener {
 		buttons[0].setEnabled(false);
 	}
 
+	/**
+	 *  incluye todos los botones en el panel.
+	 */
 	protected void addButtons() {
-		for(JButton button : buttons){
+		for (JButton button : buttons) {
 			add(button);
 		}
 	}
 
+	/**
+	 * @param listener setea correctamente el listener de cada boton.
+	 */
 	protected void addListener(ActionListener listener) {
-		team1.addActionListener(listener);
-		ball.addActionListener(listener);
-		team2.addActionListener(listener);
+		for (JButton button : buttons) {
+			button.addActionListener(listener);
+		}
 	}
 
 	@Override
@@ -46,17 +52,18 @@ public class StateControls extends JPanel implements ActionListener {
 		if (e.getSource().getClass() == JButton.class) {
 			for (int index = 0; index < buttons.length; index++) {
 				buttons[index].setEnabled(buttons[index] != e.getSource());
-				if(!buttons[index].isEnabled())
+				if (!buttons[index].isEnabled())
 					setSelected(index);
 			}
 		}
 
 	}
+
 	// ******************Getters & Setters********************
 	public int getSelected() {
 		return selected;
 	}
-	
+
 	public void setSelected(int selected) {
 		this.selected = selected;
 	}
