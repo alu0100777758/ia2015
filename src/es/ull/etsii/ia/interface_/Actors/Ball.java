@@ -60,7 +60,6 @@ public class Ball extends Actor {
 		while (vision.get((int) dest.y(), (int) dest.x()) != null) {
 			dest = new Point2D(rand.nextInt(vision.getColumns() -2 )+1, rand.nextInt(vision.getRows() -2 )+1);
 		}
-		System.out.println(dest);
 		return dest;
 	}
 
