@@ -1,5 +1,5 @@
 /**
- * Proporciona las clases encargadas de implementar los diferentes listeners de la simulación.
+ * Proporciona las clases encargadas de implementar los diferentes listeners de la simulacion.
  * <p>
  * @since 1.0
  */

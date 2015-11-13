@@ -16,9 +16,8 @@ import es.ull.etsii.ia.interface_.geometry.Point2D;
 import es.ull.utils.Array2D;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez Clase encargada de
- *         almacenar y dibujar un estado en base a un objeto que presente la
- *         interfaz CoordinateSystem2D.
+ *  Clase encargada de almacenar y dibujar un estado en base a un objeto que presente la interfaz CoordinateSystem2D.
+ *  @author Javier Martin Hernandez y Tomas Rodriguez 
  */
 public class FootballField extends GridPanel implements SensitiveEnviroment,
 		MovementListener {
@@ -35,7 +34,7 @@ public class FootballField extends GridPanel implements SensitiveEnviroment,
 	}
 
 	/**
-	 * reinicia el mapa creando uno del mismo tamaño que el presente.
+	 * reinicia el mapa creando uno de la misma dimension que el presente.
 	 */
 	private void resetMap() {
 		setMapState(new Array2D<Actor>(getVBounds() - 1, getHBounds() - 1));
@@ -49,8 +48,8 @@ public class FootballField extends GridPanel implements SensitiveEnviroment,
 	}
 
 	/**
+	 * incluye el nuevo actor en el campo.
 	 * @param actor
-	 *            a añadir. incluye el nuevo actor en el campo.
 	 */
 	public void addActor(Actor actor) {
 		getActors().add(actor);
@@ -60,8 +59,8 @@ public class FootballField extends GridPanel implements SensitiveEnviroment,
 	}
 
 	/**
-	 * @param metodo
-	 *            encargado de dibujar las porterias
+	 *            metodo encargado de dibujar las porterias
+	 * @param g
 	 */
 	private void drawGoals(Graphics2D g) {
 		int size = getVBounds() / 3;
@@ -85,8 +84,8 @@ public class FootballField extends GridPanel implements SensitiveEnviroment,
 	}
 
 	/**
-	 * @param gr
 	 *            metodo encargado de dibujar las lineas del campo.
+	 * @param gr
 	 */
 	private void drawLines(Graphics2D gr) {
 		Graphics2D g = (Graphics2D) gr.create();

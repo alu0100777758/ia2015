@@ -3,12 +3,12 @@ package es.ull.etsii.ia.interface_.simulation;
 import es.ull.etsii.ia.interface_.Actors.Robo_Player;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez
  * Clase que representa la memoria colectiva del sistema colmena.
+ * @author Javier Martin Hernandez y Tomas Rodriguez
  */
 public class HiveMemory {
 	private boolean attackState = false;	// denota si es verdad que el equipo se encuentra en un estado de ataque.
-	private int hiveSize = 0;				// denota el tamaño actual de la colmena.
+	private int hiveSize = 0;				// denota la dimension actual de la colmena.
 	private int ballSeen = 0;				// denota la cantidad de turnos desde la ultima vez que se percibio el balon.
 	private Robo_Player ballOwner;			// denota el actor del equipo en posesion del balon.
 	

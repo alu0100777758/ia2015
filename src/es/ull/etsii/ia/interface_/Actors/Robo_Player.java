@@ -18,8 +18,8 @@ import es.ull.etsii.ia.interface_.simulation.HiveMemory;
 import es.ull.utils.Distance;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez 
  * clase encargada de representar a un agente de la colmena.
+ * @author Javier Martin Hernandez y Tomas Rodriguez 
  */
 public class Robo_Player extends Actor {
 	private static final int SHOT_SPEED = 2;							//	Velocidad aplicada al disparo.
@@ -65,8 +65,8 @@ public class Robo_Player extends Actor {
 	}
 
 	/**
-	 * @return boolean true si ha terminado de efectuar todas sus acciones.
-	 * realiza las acciones necesarias en este turno.
+	 * devuelve true si ha terminado de efectuar todas sus acciones realiza las acciones necesarias en este turno.
+	 * @return boolean 
 	 */
 	public boolean tick() {
 		if (evaluationMode) {
@@ -115,30 +115,32 @@ public class Robo_Player extends Actor {
 	}
 
 	/**
-	 * @param i direccion en la que se va a mover.
-	 * @return	true si no hay nada que impida el desplazamiento en esa direccion.
+	 * devuelve true si no hay nada que impida el desplazamiento en esa direccion.
+	 * @param direction 
+	 * @return	boolean
 	 */
-	boolean canBeEvaluated(int i) {
-		return (!isOutOfBounds(i) && (getView().get(
-				getView().getRelativePos().add(MOVEMENT[i])) == null
-				|| getView().get(getView().getRelativePos().add(MOVEMENT[i]))
+	boolean canBeEvaluated(int direction) {
+		return (!isOutOfBounds(direction) && ((getView().get(
+				getView().getRelativePos().add(MOVEMENT[direction])) == null
+				|| getView().get(getView().getRelativePos().add(MOVEMENT[direction]))
 						.getClass() == Ball.class || getView().get(
-				getView().getRelativePos().add(MOVEMENT[i])) == this));
+				getView().getRelativePos().add(MOVEMENT[direction])) == this)));
 	}
 
 	/**
-	 * @param i direccion en la que se va a mover.
-	 * @return true si la direccion se encuentra fuera del sistema de coordenadas.
+	 * devuelve true si la direccion se encuentra fuera del sistema de coordenadas.
+	 * @param direction 
+	 * @return boolean
 	 */
-	private boolean isOutOfBounds(int i) {
-		Point2D pos = getPos().add(MOVEMENT[i]);
+	private boolean isOutOfBounds(int direction) {
+		Point2D pos = getView().getRelativePos().add(MOVEMENT[direction]);
 		return (pos.x() < 0 || pos.y() < 0
-				|| pos.x() > getCoordinates().getHBounds() - 3 || pos.y() > getCoordinates()
-				.getVBounds() - 3);
+				|| pos.x() >= (getView().getColumns()) || pos.y() >= (getView().getRows()));
 	}
 
 	/**
-	 * @return direccion en la que el agente no percibe informacion (y por lo tanto no puede moverse a ella)
+	 * devuelve direccion en la que el agente no percibe informacion (y por lo tanto no puede moverse a ella)
+	 * @return int 
 	 */
 	private int getHiddenSide() {
 		switch (getFacing()) {
@@ -155,9 +157,10 @@ public class Robo_Player extends Actor {
 	}
 
 	/**
+	 * devuelve la evaluacion del estado representado por la direccion pos.
 	 * @param elements
 	 * @param pos
-	 * @return evaluacion del estado representado por la direccion pos.
+	 * @return Evaluation.
 	 */
 	private Evaluation<Actor> evaluatePoint(PerceptionScan elements, int pos) {
 		if (getMemory().isAttackState())
@@ -166,9 +169,10 @@ public class Robo_Player extends Actor {
 	}
 
 	/**
+	 * devuelve la evaluacion de un estado de defensa.
 	 * @param elements
 	 * @param pos
-	 * @return la evaluacion de un estado de defensa.
+	 * @return Evaluation.
 	 */
 	private Evaluation<Actor> evaluateDef(PerceptionScan elements, int pos) {
 		Evaluation<Actor> ev = new Evaluation<Actor>();
@@ -178,16 +182,16 @@ public class Robo_Player extends Actor {
 		int value = 1;
 		if (elements.getBall() != null) {
 			double manlength = elements.distanceToBall(position);
-			value += manlength * getMemory().getHiveSize();
+			value += manlength * getMemory().getHiveSize();			// mas cerca de la pelota es mejor
 			if (manlength == 0) {
 				ev.setDecision(pushMove);
 			} 
 		} else
-		value += elements.distanceToFoes(position);
+		value += elements.distanceToFoes(position);					//	mas cerca de los enemigos es mejor ( entorpecer su ataque / defensa)
 		for (Robo_Player ally : elements.getAlly()) {
 			if (ally != this) {
 				value -= Distance.manhattan((int) ally.getPos().x(), (int) ally
-						.getPos().y(), (int) position.x(), (int) position.y());
+						.getPos().y(), (int) position.x(), (int) position.y());		//	alejarse de los aliados es mejor (cubrir mas campo)
 				if (elements.getBall() != null) {
 					turnFriend(ally, elements.getBall());
 				}
@@ -198,9 +202,10 @@ public class Robo_Player extends Actor {
 	}
 
 	/**
+	 * devuelve la evaluacion de un estado de ataque.
 	 * @param elements
 	 * @param pos
-	 * @return la evaluacion de un estado de ataque
+	 * @return evaluation.
 	 */
 	private Evaluation<Actor> evaluateAtt(PerceptionScan elements, int pos) {
 		Evaluation<Actor> ev = new Evaluation<Actor>();
@@ -245,8 +250,9 @@ public class Robo_Player extends Actor {
 	}
 
 	/**
-	 * @param ally aliado con rotacion ineficiente.
-	 * @param actor	hacia el que debe girarse el aliado.
+	 * Rota el aliado "ally" para que mire hacia el actor "actor"
+	 * @param ally
+	 * @param actor
 	 */
 	private void turnFriend(Robo_Player ally, Actor actor) {
 		boolean turned = false;
@@ -283,8 +289,8 @@ public class Robo_Player extends Actor {
 	}
 
 	/**
-	 * @param ally
 	 * incluye en la lista de representacion de evaluaciones un circulo sobre el aliado rotado.
+	 * @param ally
 	 */
 	private void addTurned(Robo_Player ally) {
 		getEvaluatedPoints().add(
@@ -293,7 +299,8 @@ public class Robo_Player extends Actor {
 	}
 
 	/**
-	 * @return el resultado de escanear la percepcion actual.
+	 * devuelve el resultado de escanear la percepcion actual.
+	 * @return PerceptionScan
 	 */
 	private PerceptionScan scanView() {
 		setView(getMap().perceive(this));
@@ -324,17 +331,18 @@ public class Robo_Player extends Actor {
 	}
 
 	/**
+	 * devuelve un color en base a num respecto maxRange.
 	 * @param num
 	 * @param maxrange
-	 * @return un color en base a num respecto maxRange.
+	 * @return Color
 	 */
 	public Color colorFromNum(double num, double maxrange) {
 		if (maxrange == 0) {
 			maxrange = 1;
 		}
-		double h = 1 - (num / maxrange * 0.7); // Hue
-		double s = 1; // Saturation
-		double b = 1; // Brightness
+		double h = 1 - (num / maxrange * 0.7); // codigo hue
+		double s = 1; // saturacion
+		double b = 1; // brillo
 		return Color.getHSBColor((float) h, (float) s, (float) b);
 	}
 
@@ -343,17 +351,12 @@ public class Robo_Player extends Actor {
 	 * avanza a otro estado.
 	 */
 	public void step() {
-		// System.out.println(getView());
-		// System.out.println("ev: " + getEv());
-		// System.out.println("ev.decision: " + getEv().getDecision());
-		// System.out.println("lastscaned: " + getLastScanned());
-		// System.out.println("lastscanned.ball" + getLastScanned().getBall());
-
 		getBestEvaluation().getDecision().decide(getLastScanned().getBall());
 	}
 
 	/**
-	 * @param movement direccion en la que se movera el agente.
+	 * devuelve direccion en la que se movera el agente.
+	 * @param movement 
 	 */
 	public void move(int movement) {
 		setPos(getPos().add(MOVEMENT[movement]));
@@ -364,14 +367,16 @@ public class Robo_Player extends Actor {
 
 
 	/**
-	 * @param point incluye el siguiente punto visitado
+	 * incluye el siguiente punto visitado
+	 * @param point 
 	 */
 	public void addRelative(Point2D point) {
 		addPoint(points.get(points.size() - 1).add(point));
 	}
 
 	/**
-	 * @param point situa el inicio de la ruta.
+	 * situa el inicio de la ruta.
+	 * @param point 
 	 */
 	public void setStart(Point2D point) {
 		if (points.size() < 1)
@@ -389,17 +394,17 @@ public class Robo_Player extends Actor {
 
 
 	/**
+	 * empuja el balon
 	 * @param ball
-	 * empuja el balon/
 	 */
 	public void pushBall(Ball ball) {
 		ball.push(this);
 	}
 	
 	/**
+	 * dispara el balon.
 	 * @param ball
 	 * @param direction
-	 * dispara el balon.
 	 */
 	private void shootBall(Ball ball, int direction) {
 		ball.shot(SHOT_SPEED, direction);
@@ -418,8 +423,8 @@ public class Robo_Player extends Actor {
 	}
 	
 	/**
-	 * @param g
 	 * dibuja la ruta que ha seguido el agente durante la simulacion.
+	 * @param g
 	 */
 	private void drawPath(Graphics2D g) {
 		g.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND,

@@ -4,14 +4,14 @@ import es.ull.etsii.ia.interface_.geometry.Point2D;
 import es.ull.utils.Array2D;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez
  * Clase que representa la posicion y percepcion relativas del actor en el mapa.
+ * @author Javier Martin Hernandez y Tomas Rodriguez
  */
 public class Vision2D extends Array2D<Actor>{
 	private Point2D relativePos;	//	Posicion del actor respecto a su percepcion.
 	/**
-	 * @param array mapa con los objetivos observables.
-	 * @param relativePos posicion relativa del actor.
+	 * @param array 
+	 * @param relativePos.
 	 */
 	public Vision2D(Array2D<Actor> array, Point2D relativePos) {
 		super(array);

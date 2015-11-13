@@ -4,13 +4,16 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 /**
- * @author Javier Martin Hernandez y Tomas  Rodriguez Martin
  *	Clase que representa la ventana de la aplicacion.
+ * @author Javier Martin Hernandez y Tomas  Rodriguez Martin
  */
 
 public class CellRoboCup extends JFrame {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * crea la ventana de la aplicacion.
+	 */
 	CellRoboCup(){
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		setTitle("CellRoboCup");

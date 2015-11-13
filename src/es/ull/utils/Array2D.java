@@ -5,10 +5,10 @@ import java.util.Iterator;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 
 /**
+ * clase encargada de representar un array bidimensional.
  * @author Javier Martin hernandez
  *
- * @param <Type> tipo de datos que contendrá el array.
- * clase encargada de representar un array bidimensional.
+ * @param <Type> tipo de datos que contiene el array.
  */
 public class Array2D<Type> implements Iterable<Type> {
 	private Object array[];
@@ -25,7 +25,8 @@ public class Array2D<Type> implements Iterable<Type> {
 		setN(n);
 	}
 	/**
-	 * @param array constructor de copia.
+	 * constructor de copia.
+	 * @param array 
 	 */
 	public Array2D(Array2D<Type> array){
 		setArray(array.getArray());
@@ -34,9 +35,10 @@ public class Array2D<Type> implements Iterable<Type> {
 	}
 
 	/**
-	 * @param row fila.
-	 * @param column columna.
-	 * @return indice en el array unidimensional.
+	 * devuelve el indice en el array unidimensional.
+	 * @param row
+	 * @param column.
+	 * @return int
 	 */
 	private int getIndex(int row, int column) {
 		if ((row > getRows()) || (column > getColumns())) {
@@ -47,9 +49,10 @@ public class Array2D<Type> implements Iterable<Type> {
 	}
 
 	/**
+	 * devuelve el elemento en la fila "row" y columna "column".
 	 * @param row
 	 * @param column
-	 * @return el elemento en la fila "row" y columna "column".
+	 * @return Type
 	 */
 	@SuppressWarnings("unchecked")
 	// la funcion "set" asegura el tipo.
@@ -59,11 +62,12 @@ public class Array2D<Type> implements Iterable<Type> {
 	}
 
 	/**
-	 * @param row1 fila inicial.
-	 * @param column1 columna inicial.
-	 * @param row2 fila final.
-	 * @param column2 columna final.
-	 * @return Array2D<Type> con los datos ubicados desde row1,column1 hasta row2,column2.
+	 * devuelve un array con los datos ubicados desde row1,column1 hasta row2,column2.
+	 * @param row1
+	 * @param column1
+	 * @param row2
+	 * @param column2 
+	 * @return Array2D<Type>
 	 */
 	public Array2D<Type> copy(int row1, int column1, int row2, int column2) {
 		Array2D<Type> array = new Array2D<Type>(row2 - (row1 - 1), column2
@@ -77,11 +81,11 @@ public class Array2D<Type> implements Iterable<Type> {
 	}
 
 	/**
+	 * intercambia el objeto en la  fila "row1" columna "col1" por el de la fila "row2" columna "col2".
 	 * @param row1
 	 * @param col1
 	 * @param row2
 	 * @param col2
-	 * intercambia el objeto en la  fila "row1" columna "col1" por el de la fila "row2" columna "col2".
 	 */
 	public void switchElements(int row1, int col1, int row2, int col2) {
 		Object dummy = get(row1, col1);

@@ -1,9 +1,6 @@
 package es.ull.etsii.ia.interface_;
 
-import java.awt.Color;
-
 import javax.swing.BoxLayout;
-import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -19,8 +16,8 @@ import es.ull.etsii.ia.interface_.simulation.FootballField;
 import es.ull.etsii.ia.interface_.simulation.HiveMemory;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez Martin 
  * Clase encargada de gestionar la logica del programa.
+ * @author Javier Martin Hernandez y Tomas Rodriguez Martin 
  */
 public final class Control {
 	private static Control instance = null;					//	Instancia Singleton.
@@ -35,15 +32,14 @@ public final class Control {
 	private MouseControl mouseControl = new MouseControl();	//	Manejador de eventos del raton.
 	private Robo_Player last_bot;							// 	Robo player en proceso de orientacion. 
 	private Ball ball;										// 	Unica pelota de la simulacion.
-	private HiveMemory [] teamsMemory = new HiveMemory[2];
+	private HiveMemory [] teamsMemory = new HiveMemory[2];	//	memorias Colmena en uso.
 
 	private Control() {
-		getTeamsMemory()[0] = new HiveMemory();
-		getTeamsMemory()[1] = new HiveMemory();
+		resetTeamMemory();
 	}
-
 	/**
-	 * @return Instancia singleton de la clase
+	 * devuelve la instancia singleton de la clase
+	 * @return Control
 	 */
 	public static Control getInstance() {
 		if (instance == null) {
@@ -53,7 +49,16 @@ public final class Control {
 	}
 
 	/**
-	 * m�todo que construye la interfaz.
+	 * reinicia las memorias colmena.
+	 */
+	private void resetTeamMemory() {
+		getTeamsMemory()[0] = new HiveMemory();
+		getTeamsMemory()[1] = new HiveMemory();
+	}
+
+
+	/**
+	 * metodo que construye la interfaz.
 	 */
 	public void buildInterface() {
 		JPanel mainPanel = new JPanel();
@@ -64,7 +69,7 @@ public final class Control {
 	}
 
 	/**
-	 * m�todo encargado de inicializar los diferentes gestores de eventos.
+	 * metodo encargado de inicializar los diferentes gestores de eventos.
 	 */
 	public void setEventManagers() {
 		setControlPanelEventManager(new ControlsEventManager(gridControls));
@@ -72,14 +77,13 @@ public final class Control {
 	}
 
 	/**
-	 * M�todo que desarrolla todos los pasos necesarios para lanzar la
-	 * aplicaci�n tal como se define.
+	 * Metodo que desarrolla todos los pasos necesarios para lanzar la
+	 * aplicacion tal como se define.
 	 */
 	public void play() {
 		buildInterface();
 		setEventManagers();
 		gridControls.setListener(getControlPanelEventManager());
-//		grid.turnOnPath();
 		setStepTimer(new Timer(stepDelay, timerManager));
 		grid.addMouseListener(mouseControl);
 		grid.addMouseMotionListener(mouseControl);
@@ -87,11 +91,9 @@ public final class Control {
 	}
 
 	/**
+	 * metodo encargado de actualizar la densidad de la rejilla. setea el numero de columnas a "x" y el de filas a "y"
 	 * @param x
-	 *            n�mero de filas.
 	 * @param y
-	 *            n�mero de columnas. m�todo encargado de actualizar la
-	 *            densidad de la rejilla.
 	 */
 	public void setGridPointsDensity(int x, int y) {
 		getGrid().sethPoints(x);
@@ -103,32 +105,12 @@ public final class Control {
 	 * metodo encargado de marcar el inicio de turno de la simulacion.
 	 */
 	public void launchTick() {
-//		try {
-			grid.tick();
-			grid.repaint();
-//			if (gridControls.borderCheck.isSelected() && grid.atBorder())
-//				walking = false;
-//		} catch (OutOfSystemException e) {
-//			walking = false;
-//		}
-	}
-
-//	public void setPathColor(Color color) {
-//		grid.pathColor(color);
-//		grid.repaint();
-//	}
-
-	/**
-	 * @return Color m�todo que devuelve el color seleccionado por el usuario
-	 *         desde un dialogo de selecci�n de color.
-	 */
-	public Color getColorFromDialog() {
-		return JColorChooser.showDialog(window, "Choose Background Color",
-				gridControls.getBackground());
+			getGrid().tick();
+			getGrid().repaint();
 	}
 
 	/**
-	 * m�todo encargado de avanzar en la simulaci�n.
+	 * metodo encargado de avanzar en la simulacion.
 	 */
 	public void stepForward() {
 		walkingOngrid: {
@@ -142,17 +124,18 @@ public final class Control {
 	}
 
 	/**
-	 * m�todo que reinicia y limpia el estado mostrado por pantalla.
+	 * metodo que reinicia y limpia el estado mostrado por pantalla.
 	 */
 	public void reset() {
 		setWalking(false);
+		resetTeamMemory();
 		getGridControls().getStartStop().setText(GridControls.START_TEXT);
 		getControlPanelEventManager().setStart(false);
 		grid.reset();
 	}
 
 	/**
-	 * m�todo encargado de comenzar la simulaci�n.
+	 * metodo encargado de comenzar la simulacion.
 	 */
 	public void tryToRunWithDelay() {
 		int stepsDelay = 0;
@@ -171,6 +154,9 @@ public final class Control {
 		walking = true;
 	}
 
+	/**
+	 * actualiza el tamaño de la rejilla.
+	 */
 	public void updateDimension() {
 		int x = 0, y = 0;
 		boolean parseError = false;
@@ -187,6 +173,10 @@ public final class Control {
 		}
 	}
 
+	/**
+	 * inicia la operacion de insercion de un nuevo actor.
+	 * @param point 
+	 */
 	public void clickPressed(Point2D point) {
 		if (getLast_bot() == null) {
 			if(gridControls.getActorType() < 2){
@@ -212,25 +202,36 @@ public final class Control {
 		}
 	}
 
+	/**
+	 * confirma la posicion de los actores en edicion.
+	 * @param point2d
+	 */
 	public void clickReleased(Point2D point2d) {
 		if(getLast_bot() == null){
-			getGrid().getBall().setPos(getGrid().toSystem(point2d)); // TODO la bola no se situa correctamente en la grid
+			getGrid().getBall().setPos(getGrid().toSystem(point2d));
 
 		}else
 		setLast_bot(null);
 	}
 
+	/**
+	 * efectua las operaciones de actualizacion necesarias cuando esta en modo edicion de balon y se arrastra el raton.
+	 * @param point
+	 */
 	public void dragged(Point2D point) {
 		if (getLast_bot() != null) {
 			setRobotRotation(point);
 		}
 		else if(getGrid().getBall() != null){
-//			getGrid().moveBall(grid.toSystem(point));
-			getGrid().getBall().setPos(grid.toSystem(point)); // TODO la bola no se situa correctamente en la grid
+			getGrid().getBall().setPos(grid.toSystem(point)); 
 		}
 		window.repaint();
 	}
 
+	/**
+	 * rota el actor en edicion hacia la direccion basica mas cercana a la representada mediante point
+	 * @param point 
+	 */
 	private void setRobotRotation(Point2D point) {
 		Point2D difference = grid.toSystem(point).substract(
 				getLast_bot().getPos());
@@ -324,7 +325,16 @@ public final class Control {
 	}
 
 	public void step() {
+		try{
 		launchTick();
+		}catch(ArrayIndexOutOfBoundsException e){
+			try {
+				Thread.sleep(100);
+				launchTick();
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 	public HiveMemory[] getTeamsMemory() {

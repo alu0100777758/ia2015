@@ -8,8 +8,8 @@ import java.awt.Rectangle;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez clase encargada de
- *         representar un rectangulo dibujable.
+ * clase encargada de representar un rectangulo dibujable.
+ * @author Javier Martin Hernandez y Tomas Rodriguez 
  *
  */
 public class DrawableRectangle extends Rectangle implements Drawable {

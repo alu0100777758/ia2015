@@ -6,8 +6,8 @@ import es.ull.etsii.ia.interface_.geometry.Circle;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 
 /**
- * @author Javier Martin Hernandez y Tomas Rodriguez
  *	Clase encargada de representar un circulo con la capacidad de dibujarse en pantalla.
+ * @author Javier Martin Hernandez y Tomas Rodriguez
  */
 public class DrawableCircle extends Circle implements Drawable {
 	private boolean filled = false;						// true si se rellena el circulo.		
@@ -15,9 +15,10 @@ public class DrawableCircle extends Circle implements Drawable {
 		super(radius, center);
 	}
 	/**
+	 * filled false si se desea una circunferencia.
 	 * @param radius
 	 * @param center
-	 * @param filled false si se desea una circunferencia.
+	 * @param filled 
 	 */
 	public DrawableCircle(double radius, Point2D center, boolean filled) {
 		this(radius, center);
