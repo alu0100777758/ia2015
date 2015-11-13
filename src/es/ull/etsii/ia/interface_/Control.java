@@ -105,8 +105,8 @@ public final class Control {
 	 * metodo encargado de marcar el inicio de turno de la simulacion.
 	 */
 	public void launchTick() {
-			grid.tick();
-			grid.repaint();
+			getGrid().tick();
+			getGrid().repaint();
 	}
 
 	/**
@@ -325,7 +325,16 @@ public final class Control {
 	}
 
 	public void step() {
+		try{
 		launchTick();
+		}catch(ArrayIndexOutOfBoundsException e){
+			try {
+				Thread.sleep(100);
+				launchTick();
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 	public HiveMemory[] getTeamsMemory() {

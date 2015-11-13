@@ -15,9 +15,10 @@ public class DrawableCircle extends Circle implements Drawable {
 		super(radius, center);
 	}
 	/**
+	 * filled false si se desea una circunferencia.
 	 * @param radius
 	 * @param center
-	 * @param filled false si se desea una circunferencia.
+	 * @param filled 
 	 */
 	public DrawableCircle(double radius, Point2D center, boolean filled) {
 		this(radius, center);

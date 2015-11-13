@@ -8,11 +8,13 @@ import es.ull.etsii.ia.interface_.geometry.Point2D;
  */
 public interface Positionable {
 	/**
-	 * @return la posicion actual
+	 * devuelve la posicion actual.
+	 * @return Point2D
 	 */
 	public Point2D getPos();
 	/**
-	 * @param newpos la posicion objetivo
+	 * setea la posicion actual a "newpos".
+	 * @param newpos 
 	 */
 	public void setPos(Point2D newpos);
 }

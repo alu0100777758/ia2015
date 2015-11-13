@@ -56,8 +56,9 @@ public abstract class Actor implements Drawable, Positionable {
 
 
 	/**
+	 * devuelve el punto con las dimensiones de la celda en el punto pos.
 	 * @param pos
-	 * @return punto con las dimensiones de la celda en el punto pos
+	 * @return punto 
 	 */
 	public Point2D diffPoint(Point2D pos) {
 		Point2D destPoint = coordinates.getPointFor(pos.add(Point2D.UNIT));
@@ -78,9 +79,10 @@ public abstract class Actor implements Drawable, Positionable {
 	}
 
 	/**
-	 * @param image imagen fuente
-	 * @param grades grados a rotar
-	 * @return	la imagen "image" rotada "grades grados
+	 * devuelve la la imagen "image" rotada "grades grados.
+	 * @param image
+	 * @param grades
+	 * @return	BufferedImage
 	 */
 	public BufferedImage rotate(BufferedImage image, int grades) {
 		double rotationRequired = Math.toRadians(grades);
@@ -93,8 +95,9 @@ public abstract class Actor implements Drawable, Positionable {
 		return op.filter(image, null);
 	}
 	/**
-	 * @param listener
 	 *  añade un nuevo MovementListener.
+	 * @param listener
+	 * 
 	 */
 	public void addMovListener(MovementListener listener) {
 		getMovListeners().add(listener);

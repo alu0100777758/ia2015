@@ -19,42 +19,47 @@ public class Point2D {
 
 
 	/**
+	 * devuelve la suma del punto actual con el (x,y).
 	 * @param x
 	 * @param y
-	 * @return suma del punto actual con el (x,y).
+	 * @return Point2D
 	 */
 	public Point2D add(double x, double y) {
 		return this.add(new Point2D(x, y));
 	}
 	
 	/**
+	 * devuelve la diferencia del punto actual con other.
 	 * @param other
-	 * @return la diferencia del punto actual con other.
+	 * @return Point2D
 	 */
 	public Point2D substract(Point2D other) {
 		return new Point2D(this.x() - other.x(), this.y() - other.y());
 	}
 	
 	/**
+	 * devuelve la diferencia del punto actual con el (x,y)
 	 * @param x
 	 * @param y
-	 * @return la diferencia del punto actual con el (x,y)
+	 * @return Point2D
 	 */
 	public Point2D substract(double x, double y) {
 		return this.substract(new Point2D(x, y));
 	}
 
 	/**
-	 * @param scalar por el que se multiplica el punto.
-	 * @return el punto tras aplicarle el producto escalar.
+	 * devuelve el punto tras aplicarle el producto escalar con "scalar".
+	 * @param scalar
+	 * @return Point2D
 	 */
 	public Point2D scalarProduct(double scalar) {
 		return new Point2D(this.x() * scalar, this.y() * scalar);
 	}
 
 	/**
-	 * @param other punto con el que se va a comparar.
-	 * @return true si ambos puntos son iguales.
+	 * devuelve true si ambos puntos son iguales.
+	 * @param other 
+	 * @return true 
 	 */
 	public boolean equals(Point2D other) {
 		return (this.x() == other.x()) && (this.y() == other.y());

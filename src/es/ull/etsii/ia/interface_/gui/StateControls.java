@@ -39,7 +39,8 @@ public class StateControls extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * @param listener setea correctamente el listener de cada boton.
+	 * setea correctamente el listener de cada boton.
+	 * @param listener 
 	 */
 	protected void addListener(ActionListener listener) {
 		for (JButton button : buttons) {

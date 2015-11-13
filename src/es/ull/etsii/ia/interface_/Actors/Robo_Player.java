@@ -120,11 +120,11 @@ public class Robo_Player extends Actor {
 	 * @return	boolean
 	 */
 	boolean canBeEvaluated(int direction) {
-		return (!isOutOfBounds(direction) && (getView().get(
+		return (!isOutOfBounds(direction) && ((getView().get(
 				getView().getRelativePos().add(MOVEMENT[direction])) == null
 				|| getView().get(getView().getRelativePos().add(MOVEMENT[direction]))
 						.getClass() == Ball.class || getView().get(
-				getView().getRelativePos().add(MOVEMENT[direction])) == this));
+				getView().getRelativePos().add(MOVEMENT[direction])) == this)));
 	}
 
 	/**
@@ -133,10 +133,10 @@ public class Robo_Player extends Actor {
 	 * @return boolean
 	 */
 	private boolean isOutOfBounds(int direction) {
-		Point2D pos = getPos().add(MOVEMENT[direction]);
+		Point2D pos = getView().getRelativePos().add(MOVEMENT[direction]);
 		return (pos.x() < 0 || pos.y() < 0
-				|| pos.x() > getCoordinates().getHBounds() - 3 || pos.y() > getCoordinates()
-				.getVBounds() - 3);
+				|| pos.x() >= (getCoordinates().getHBounds() - 2) || pos.y() >= (getCoordinates()
+				.getVBounds() - 3));
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class Robo_Player extends Actor {
 	}
 
 	/**
-	 * devuelve la evaluacion de un estado de defens
+	 * devuelve la evaluacion de un estado de defensa.
 	 * @param elements
 	 * @param pos
 	 * @return Evaluation.
@@ -183,16 +183,16 @@ public class Robo_Player extends Actor {
 		int value = 1;
 		if (elements.getBall() != null) {
 			double manlength = elements.distanceToBall(position);
-			value += manlength * getMemory().getHiveSize();
+			value += manlength * getMemory().getHiveSize();			// mas cerca de la pelota es mejor
 			if (manlength == 0) {
 				ev.setDecision(pushMove);
 			} 
 		} else
-		value += elements.distanceToFoes(position);
+		value += elements.distanceToFoes(position);					//	mas cerca de los enemigos es mejor ( entorpecer su ataque / defensa)
 		for (Robo_Player ally : elements.getAlly()) {
 			if (ally != this) {
 				value -= Distance.manhattan((int) ally.getPos().x(), (int) ally
-						.getPos().y(), (int) position.x(), (int) position.y());
+						.getPos().y(), (int) position.x(), (int) position.y());		//	alejarse de los aliados es mejor (cubrir mas campo)
 				if (elements.getBall() != null) {
 					turnFriend(ally, elements.getBall());
 				}

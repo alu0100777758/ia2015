@@ -14,7 +14,7 @@ public class Evaluation<Type> implements Comparable<Evaluation<Type>> {
 	public Evaluation(){
 	}
 	/**
-	 * @param decision lambda que almacena la accion elegida.
+	 * @param decision
 	 * @param pos
 	 * @param val
 	 */

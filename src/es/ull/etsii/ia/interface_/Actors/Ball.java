@@ -15,8 +15,8 @@ public class Ball extends Actor {
 	public static final String SPRITE_PATH = "img/ball.png";	//	path del sprite.
 
 	/**
-	 * @param coordinates sistema de coordenadas utilizado
-	 * @param pos posicion en la que se ubicara el balon.
+	 * @param coordinates 
+	 * @param pos
 	 */
 	public Ball(CoordinateSystem2D coordinates, Point2D pos) {
 		super(coordinates, NORTH);
@@ -26,8 +26,9 @@ public class Ball extends Actor {
 	}
 
 	/**
-	 * @param actor que realiza la accion
 	 *  empuja el balon en la direccion opuesta al actor.
+	 * @param actor
+	 * 
 	 */
 	public void push(Actor actor) {
 		Point2D pushVect = getPos().substract(actor.getPos());
@@ -48,8 +49,9 @@ public class Ball extends Actor {
 	}
 
 	/**
-	 * @param vision percepcion del campo.
-	 * @return	punto aleatorio en el que se puede reubicar el balon.
+	 * devuelve un punto aleatorio en el que se puede reubicar el balon.
+	 * @param vision 
+	 * @return	Point2D
 	 */
 	private Point2D randomPosition(Vision2D vision) {
 		Point2D dest;
@@ -63,9 +65,10 @@ public class Ball extends Actor {
 	}
 
 	/**
-	 * @param speed velocidad a la que se dispara.
-	 * @param direction	direccion en la que se dispara.
-	 * realiza la accion de disparar el balon.
+	 * realiza la accion de disparar el balon a "speed" velocidad en la direccion "direction".
+	 * @param speed 
+	 * @param direction	
+	 * 
 	 */
 	public void shot(int speed, int direction) {
 		setSpeed(speed);

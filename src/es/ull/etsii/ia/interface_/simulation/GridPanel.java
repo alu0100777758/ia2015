@@ -40,8 +40,8 @@ public class GridPanel extends JPanel implements CoordinateSystem2D {
 		}
 	}
 	/**
-	 * @param g
 	 * metodo encargado de dibujar graficamente la rejilla.
+	 * @param g
 	 */
 	public void drawGrid(Graphics g){
 		 int x = getInsets().left;

@@ -10,8 +10,8 @@ import es.ull.utils.Array2D;
 public class Vision2D extends Array2D<Actor>{
 	private Point2D relativePos;	//	Posicion del actor respecto a su percepcion.
 	/**
-	 * @param array mapa con los objetivos observables.
-	 * @param relativePos posicion relativa del actor.
+	 * @param array 
+	 * @param relativePos.
 	 */
 	public Vision2D(Array2D<Actor> array, Point2D relativePos) {
 		super(array);

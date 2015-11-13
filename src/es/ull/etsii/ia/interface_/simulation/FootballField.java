@@ -48,8 +48,8 @@ public class FootballField extends GridPanel implements SensitiveEnviroment,
 	}
 
 	/**
-	 * @param actor actor a incluir. 
-	 *            incluye el nuevo actor en el campo.
+	 * incluye el nuevo actor en el campo.
+	 * @param actor
 	 */
 	public void addActor(Actor actor) {
 		getActors().add(actor);
@@ -59,8 +59,8 @@ public class FootballField extends GridPanel implements SensitiveEnviroment,
 	}
 
 	/**
-	 * @param metodo
-	 *            encargado de dibujar las porterias
+	 *            metodo encargado de dibujar las porterias
+	 * @param g
 	 */
 	private void drawGoals(Graphics2D g) {
 		int size = getVBounds() / 3;
@@ -84,8 +84,8 @@ public class FootballField extends GridPanel implements SensitiveEnviroment,
 	}
 
 	/**
-	 * @param gr
 	 *            metodo encargado de dibujar las lineas del campo.
+	 * @param gr
 	 */
 	private void drawLines(Graphics2D gr) {
 		Graphics2D g = (Graphics2D) gr.create();
