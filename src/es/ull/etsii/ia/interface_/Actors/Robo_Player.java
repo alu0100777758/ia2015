@@ -135,8 +135,7 @@ public class Robo_Player extends Actor {
 	private boolean isOutOfBounds(int direction) {
 		Point2D pos = getView().getRelativePos().add(MOVEMENT[direction]);
 		return (pos.x() < 0 || pos.y() < 0
-				|| pos.x() >= (getCoordinates().getHBounds() - 2) || pos.y() >= (getCoordinates()
-				.getVBounds() - 3));
+				|| pos.x() >= (getView().getColumns()) || pos.y() >= (getView().getRows()));
 	}
 
 	/**

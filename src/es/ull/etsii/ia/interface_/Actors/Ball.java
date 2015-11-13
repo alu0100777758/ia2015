@@ -39,7 +39,7 @@ public class Ball extends Actor {
 				dest = dest.add(MOVEMENT[new Random()
 						.nextInt(MOVEMENT.length - 1)]);
 			}
-			if(dest.x() < 2 || dest.y() < 2 || dest.x() > (vision.getColumns() -2) || dest.y() > (vision.getRows() -2)){
+			if(dest.x() < 2 || dest.y() < 2 || dest.x() >(vision.getColumns() - 2) || dest.y() >(vision.getRows()- 2)){
 				dest = randomPosition(vision);
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -102,12 +102,15 @@ public class Ball extends Actor {
 					setSpeed(0);
 				}
 			}
+			Vision2D vision = getMap().perceive(this);
 			if (getPos().equals(dest)) {
-				Vision2D vision = getMap().perceive(this);
 				while (vision.get((int) dest.y(), (int) dest.x()) != null) {
 					dest = dest.add(MOVEMENT[new Random()
 							.nextInt(MOVEMENT.length - 1)]);
 				}
+			}
+			if(dest.x() < 2 || dest.y() < 2 || dest.x() >(vision.getColumns() - 2) || dest.y() >(vision.getRows()- 2)){
+				dest = randomPosition(vision);
 			}
 			setPos(dest);
 		}
