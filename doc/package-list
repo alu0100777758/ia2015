@@ -4,4 +4,5 @@ es.ull.etsii.ia.interface_.geometry
 es.ull.etsii.ia.interface_.geometry.drawable
 es.ull.etsii.ia.interface_.gui
 es.ull.etsii.ia.interface_.listeners
+es.ull.etsii.ia.interface_.simulation
 es.ull.utils
