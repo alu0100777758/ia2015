@@ -1,6 +1,5 @@
 package es.ull.etsii.ia.interface_.Actors;
 
-import es.ull.utils.Array2D;
 
 /**
  * @author alu4550
@@ -8,8 +7,8 @@ import es.ull.utils.Array2D;
  */
 public interface SensitiveEnviroment {
 	/**
-	 * @param sensor el sensor que solicita los datos
-	 * @return Array con el mapa de la vision del sensor
+	 * @param sensor el sensor que solicita los datos.
+	 * @return Array con el mapa de la vision del sensor.
 	 */
-	Vision2D getVision(Actor sensor);
+	Vision2D perceive(Actor sensor);
 }

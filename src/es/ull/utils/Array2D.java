@@ -1,26 +1,43 @@
 package es.ull.utils;
 
 import java.util.Iterator;
-import java.util.function.UnaryOperator;
 
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 
+/**
+ * @author Javier Martin hernandez
+ *
+ * @param <Type> tipo de datos que contendrá el array.
+ * clase encargada de representar un array bidimensional.
+ */
 public class Array2D<Type> implements Iterable<Type> {
 	private Object array[];
 	private int rows;
 	private int columns;
 
+	/**
+	 * @param m filas.
+	 * @param n columnas.
+	 */
 	public Array2D(int m, int n) {
 		setArray(new Object[m * n]);
 		setM(m);
 		setN(n);
 	}
+	/**
+	 * @param array constructor de copia.
+	 */
 	public Array2D(Array2D<Type> array){
 		setArray(array.getArray());
 		setM(array.getRows());
 		setN(array.getColumns());
 	}
 
+	/**
+	 * @param row fila.
+	 * @param column columna.
+	 * @return indice en el array unidimensional.
+	 */
 	private int getIndex(int row, int column) {
 		if ((row > getRows()) || (column > getColumns())) {
 			System.out.println("ERROR: row : " + row + "    column: " + column);
@@ -29,22 +46,25 @@ public class Array2D<Type> implements Iterable<Type> {
 		return (getColumns() * row) + column;
 	}
 
+	/**
+	 * @param row
+	 * @param column
+	 * @return el elemento en la fila "row" y columna "column".
+	 */
 	@SuppressWarnings("unchecked")
 	// la funcion "set" asegura el tipo.
 	public Type get(int row, int column) {
 		int index = getIndex(row, column);
 		return index < getRows()*getColumns()? (Type)getArray()[getIndex(row, column)] : null;
 	}
-	public Type get(Point2D pos){
-		System.out.println("pointToGotcha: " + pos);
-		System.out.println("rows: " + getRows() + " columns: "+ getColumns() + " index: "+ getIndex((int)pos.y(),(int)pos.x()));
-		return get((int)pos.y(),(int)pos.x());
-	}
 
-	public void set(int row, int column, Type value) {
-		set(value, row, column);
-	}
-
+	/**
+	 * @param row1 fila inicial.
+	 * @param column1 columna inicial.
+	 * @param row2 fila final.
+	 * @param column2 columna final.
+	 * @return Array2D<Type> con los datos ubicados desde row1,column1 hasta row2,column2.
+	 */
 	public Array2D<Type> copy(int row1, int column1, int row2, int column2) {
 		Array2D<Type> array = new Array2D<Type>(row2 - (row1 - 1), column2
 				- (column1 - 1));
@@ -56,6 +76,19 @@ public class Array2D<Type> implements Iterable<Type> {
 		return array;
 	}
 
+	/**
+	 * @param row1
+	 * @param col1
+	 * @param row2
+	 * @param col2
+	 * intercambia el objeto en la  fila "row1" columna "col1" por el de la fila "row2" columna "col2".
+	 */
+	public void switchElements(int row1, int col1, int row2, int col2) {
+		Object dummy = get(row1, col1);
+		set(row1, col1, get(row2, col2));
+		set(dummy, row2, col2);
+	}
+	@Override
 	public String toString() {
 		String string = new String();
 		for (int i = 0; i < getRows(); i++) {
@@ -67,12 +100,14 @@ public class Array2D<Type> implements Iterable<Type> {
 		return string;
 	}
 
-	public void switchElements(int row1, int col1, int row2, int col2) {
-		Object dummy = get(row1, col1);
-		set(row1, col1, get(row2, col2));
-		set(dummy, row2, col2);
+	// ******************Getters & Setters********************
+	public Type get(Point2D pos){
+		return get((int)pos.y(),(int)pos.x());
 	}
-
+	
+	public void set(int row, int column, Type value) {
+		set(value, row, column);
+	}
 	private void set(Object value, int row, int column) {
 		getArray()[getIndex(row, column)] = value;
 	}
@@ -101,25 +136,30 @@ public class Array2D<Type> implements Iterable<Type> {
 		this.columns = n;
 	}
 
+
+	@Override
+	public Iterator<Type> iterator() {
+		return new Array2DIterator<Type>();
+	}
+	/**
+	 * @author Javier Martin Hernandez
+	 *
+	 * @param <Typein> tipo del contenido del array.
+	 */
 	private class Array2DIterator<Typein> implements Iterator<Typein> {
 		int index = 0;
-
+		
 		@Override
 		public boolean hasNext() {
 			return index < getArray().length;
 		}
-
+		
 		@SuppressWarnings("unchecked")
 		@Override
 		public Typein next() {
 			index++;
 			return (Typein) getArray()[index - 1];
 		}
-	}
-
-	@Override
-	public Iterator<Type> iterator() {
-		return new Array2DIterator<Type>();
 	}
 
 }

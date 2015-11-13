@@ -11,10 +11,9 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import es.ull.etsii.ia.interface_.CoordinateSystem2D;
-import es.ull.etsii.ia.interface_.Positionable;
 import es.ull.etsii.ia.interface_.geometry.Point2D;
 import es.ull.etsii.ia.interface_.geometry.drawable.Drawable;
+import es.ull.etsii.ia.interface_.simulation.CoordinateSystem2D;
 
 public abstract class Actor implements Drawable, Positionable {
 	public static final int FACE_NORTH = 0;
@@ -84,8 +83,9 @@ public abstract class Actor implements Drawable, Positionable {
 	
 	@Override
 	public void setPos(Point2D newpos) {
-		for(MovementListener listener : getMovListeners())
+		for(MovementListener listener : getMovListeners()){
 			listener.update(getPos(), newpos);
+		}
 		this.position = newpos;
 	}
 	public BufferedImage getSprite() {
@@ -129,21 +129,5 @@ public abstract class Actor implements Drawable, Positionable {
 	public void setMap(SensitiveEnviroment map) {
 		this.map = map;
 	}
-
-//	public static int getHcellSize() {
-//		return hcellSize;
-//	}
-//	
-//	public static void setHcellSize(int hcellSize) {
-//		Actor.hcellSize = hcellSize;
-//	}
-//	
-//	public static int getVcellSize() {
-//		return vcellSize;
-//	}
-//	
-//	public static void setVcellSize(int vcellSize) {
-//		Actor.vcellSize = vcellSize;
-//	}
 	
 }

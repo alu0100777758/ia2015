@@ -15,6 +15,8 @@ import es.ull.etsii.ia.interface_.gui.GridControls;
 import es.ull.etsii.ia.interface_.listeners.ControlsEventManager;
 import es.ull.etsii.ia.interface_.listeners.MouseControl;
 import es.ull.etsii.ia.interface_.listeners.TimerEventManager;
+import es.ull.etsii.ia.interface_.simulation.FootballField;
+import es.ull.etsii.ia.interface_.simulation.HiveMemory;
 
 /**
  * @author Javier Martin Hernandez y Tomas Rodriguez Martin 
@@ -24,7 +26,7 @@ public final class Control {
 	private static Control instance = null;					//	Instancia Singleton.
 	private int stepDelay = GridControls.DEFAULT_FPS*1000;	//	Delay por defecto.
 	private CellRoboCup window = new CellRoboCup();			//	Ventana de la aplicacion.
-	private FootballField grid = new FootballField();//= new GridStatusPanel();	// 	Panel donde se dibuja la simulacion.
+	private FootballField grid = new FootballField();		// 	Panel donde se dibuja la simulacion.
 	private GridControls gridControls = new GridControls();	// 	Panel donde se dibujan los controles.
 	private ControlsEventManager controlPanelEventManager;	// 	Manejador de eventos de los controles.
 	private TimerEventManager timerManager;					//	Manejador de eventos del temporizador.
@@ -143,7 +145,9 @@ public final class Control {
 	 * m�todo que reinicia y limpia el estado mostrado por pantalla.
 	 */
 	public void reset() {
-		setBall(null);
+		setWalking(false);
+		getGridControls().startPath.setText(GridControls.START_TEXT);
+		getControlPanelEventManager().setStart(false);
 		grid.reset();
 	}
 
@@ -201,44 +205,47 @@ public final class Control {
 			}
 			else{
 				if(getGrid().getBall() == null){
-//					setBall(new Ball(getGrid(),  getGrid().toSystem(point)));
 					getGrid().setBall(new Ball(getGrid(),  getGrid().toSystem(point)));
-					getGrid().getBall().setMap(getGrid());
-					getGrid().getBall().addMovListener(getGrid());
 				}
 			}
-				
 			window.repaint();
 		}
 	}
 
 	public void clickReleased(Point2D point2d) {
+		if(getLast_bot() == null){
+			getGrid().getBall().setPos(getGrid().toSystem(point2d)); // TODO la bola no se situa correctamente en la grid
+
+		}else
 		setLast_bot(null);
 	}
 
 	public void dragged(Point2D point) {
 		if (getLast_bot() != null) {
-			Point2D difference = grid.toSystem(point).substract(
-					getLast_bot().getPos());
-//			System.out.println("difference : " + difference);
-			if (Math.abs(difference.x()) > Math.abs(difference.y())) {
-				if (difference.x() < 0)
-					getLast_bot().setFacing(Actor.FACE_WEST);
-				else
-					getLast_bot().setFacing(Actor.FACE_EAST);
-			}
-			else{
-				if (difference.y() < 0)
-					getLast_bot().setFacing(Actor.FACE_NORTH);
-				else
-					getLast_bot().setFacing(Actor.FACE_SOUTH);
-			}
+			setRobotRotation(point);
 		}
 		else if(getGrid().getBall() != null){
 //			getGrid().moveBall(grid.toSystem(point));
 			getGrid().getBall().setPos(grid.toSystem(point)); // TODO la bola no se situa correctamente en la grid
 		}
 		window.repaint();
+	}
+
+	private void setRobotRotation(Point2D point) {
+		Point2D difference = grid.toSystem(point).substract(
+				getLast_bot().getPos());
+		if (Math.abs(difference.x()) > Math.abs(difference.y())) {
+			if (difference.x() < 0)
+				getLast_bot().setFacing(Actor.FACE_WEST);
+			else
+				getLast_bot().setFacing(Actor.FACE_EAST);
+		}
+		else{
+			if (difference.y() < 0)
+				getLast_bot().setFacing(Actor.FACE_NORTH);
+			else
+				getLast_bot().setFacing(Actor.FACE_SOUTH);
+		}
 	}
 	// ******************Getters & Setters********************
 	public Ball getBall() {

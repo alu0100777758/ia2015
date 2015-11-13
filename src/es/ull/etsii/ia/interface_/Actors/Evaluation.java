@@ -1,11 +1,10 @@
 package es.ull.etsii.ia.interface_.Actors;
 
-import es.ull.etsii.ia.interface_.geometry.Point2D;
 
-public class Evaluation<Type> {
+public class Evaluation<Type> implements Comparable<Evaluation<Type>> {
 	private Decision<Type> decision;
 	private int pos;
-	private int value;
+	private double value;
 	public Evaluation(){
 		
 	}
@@ -14,6 +13,8 @@ public class Evaluation<Type> {
 		setPos(pos);
 		setValue(val);
 	}
+	
+	// ******************Getters & Setters********************
 	public Decision<Type> getDecision() {
 		return decision;
 	}
@@ -27,14 +28,19 @@ public class Evaluation<Type> {
 	public void setPos(int pos) {
 		this.pos = pos;
 	}
-	public int getValue() {
+	public double getValue() {
 		return value;
 	}
-	public void setValue(int value) {
-		this.value = value;
+	public void setValue(double d) {
+		this.value = d;
 	}
 	@Override
 	public String toString() {
 		return "" + getPos() +" val: " + getValue();
+	}
+	@Override
+	public int compareTo(Evaluation<Type> o) {
+		Evaluation<Type>  o1 = (Evaluation<Type>)o;
+		return (int)(getValue() - o1.getValue())*100 ;
 	}
 }

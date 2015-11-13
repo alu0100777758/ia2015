@@ -2,7 +2,7 @@ package es.ull.etsii.ia.interface_.geometry.drawable;
 
 import java.awt.Graphics;
 
-import es.ull.etsii.ia.interface_.Positionable;
+import es.ull.etsii.ia.interface_.Actors.Positionable;
 /**
  * @author Javier Martin Hernandez
  *	interfaz que define la comunicacion con cualquier objeto dibujable en pantalla.
